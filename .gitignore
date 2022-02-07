@@ -1,0 +1,27 @@
+# assembled binaries
+*.prg
+*.PRG
+*.bin
+*.BIN
+*.BIN.PAL
+*.list
+
+# symbolic link to emulator
+x16emu
+
+# other files
+*.tiled-session
+
+# dumps
+dump*.bin
+
+# gifs
+*.gif
+
+# vim stuff
+*.swp
+*.un~
+*.swo
+
+# git stats
+stats/*
