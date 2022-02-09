@@ -16,27 +16,30 @@ default_irq			= $8000
 zp_vsync_trig		= $30
 tile_vram_data		= $04000
 tile_map_vram_data	= $00000
+tile_map_2_vram_data	= $10000
 
 main:
 	; set video mode
-	lda #%00100001		; sprites and l1 enabled
+	lda #%00110001		; sprites and l1 enabled
 	sta veradcvideo
 
 	lda #64
 	sta veradchscale
 	sta veradcvscale
 
-	; set the tile mode	
+	; set the l0 tile mode	
 	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
 					; width (2-bits) - 1 (64 tiles
 					; T256C - 0
 					; bitmap mode - 0
 					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
 	sta veral1config
 
- 	; set the tile base address
+ 	; set the l0 tile base address
 	lda #(<(tile_vram_data >> 9) | (1 << 1) | 1)
 								;  height    |  width
+	sta veral0tilebase
 	sta veral1tilebase
 
 	; read tile file into memory
@@ -55,7 +58,7 @@ main:
 
 	; set the tile map base address
 	lda #<(tile_map_vram_data >> 9)
-	sta veral1mapbase
+	sta veral0mapbase
 
 	; read tile map file into memory
 	lda #1
@@ -69,6 +72,25 @@ main:
 	lda #(^tile_map_vram_data + 2)
 	ldx #<tile_map_vram_data
 	ldy #>tile_map_vram_data
+	jsr LOAD
+
+
+	; set the tile map base address
+	lda #<(tile_map_2_vram_data >> 9)
+	sta veral1mapbase
+
+	; read tile map file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_tilemap2filename-tilemap2filename)
+	ldx #<tilemap2filename
+	ldy #>tilemap2filename
+	jsr SETNAM
+	lda #(^tile_map_2_vram_data + 2)
+	ldx #<tile_map_2_vram_data
+	ldy #>tile_map_2_vram_data
 	jsr LOAD
 
 	jsr init_irq
@@ -133,11 +155,20 @@ check_vsync:
 ; tick
 ;==================================================
 tick:
+	inc veral0hscrolllo
 	inc veral1hscrolllo
-	bne @end
+	bne @vertical
+	inc veral0hscrollhi
 	inc veral1hscrollhi
+
+@vertical:
+	inc veral0vscrolllo
+	inc veral1vscrolllo
+	beq @end
+	inc veral0vscrolllo
 	inc veral1vscrolllo
 	bne @end
+	inc veral0vscrollhi
 	inc veral1vscrollhi
 @end:
 	rts
