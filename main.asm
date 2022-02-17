@@ -29,7 +29,7 @@ main:
 
 	; set the l0 tile mode	
 	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
-					; width (2-bits) - 1 (64 tiles
+					; width (2-bits) - 2 (128 tiles
 					; T256C - 0
 					; bitmap mode - 0
 					; color depth (2-bits) - 3 (8bpp)
