@@ -29,3 +29,8 @@ run: all resources
 
 clean:
 	rm $(PROG) $(LIST)
+
+clean_resources:
+	rm $(RESOURCES)
+
+cleanall: clean clean_resources
