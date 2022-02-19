@@ -8,15 +8,24 @@ MAIN = main.asm
 SOURCES = $(MAIN) \
 		  x16.inc \
 		  vera.inc
+RESOURCES = L0MAP.BIN \
+			L1MAP.BIN
 
 all: $(PROG)
 
 $(PROG): $(SOURCES)
 	$(ASSEMBLER6502) $(ASFLAGS) -o $(PROG) $(MAIN)
 
-run: all
+resources: $(RESOURCES)
+
+L0MAP.BIN: airship_game_map.tmx
+	tmx2vera airship_game_map.tmx L0MAP.BIN -l terrain
+
+L1MAP.BIN: airship_game_map.tmx
+	tmx2vera airship_game_map.tmx L1MAP.BIN -l things
+
+run: all resources
 	x16emu -prg $(PROG) -run -scale 2 -debug
 
 clean:
 	rm $(PROG) $(LIST)
-	

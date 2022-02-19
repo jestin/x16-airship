@@ -2,8 +2,8 @@
 tilefilename: .literal "TILES.BIN"
 end_tilefilename:
 
-tilemapfilename: .literal "TILEMAP.0.BIN"
+tilemapfilename: .literal "L0MAP.BIN"
 end_tilemapfilename:
 
-tilemap2filename: .literal "TILEMAP.1.BIN"
+tilemap2filename: .literal "L1MAP.BIN"
 end_tilemap2filename:
