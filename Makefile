@@ -28,9 +28,9 @@ run: all resources
 	x16emu -prg $(PROG) -run -scale 2 -debug
 
 clean:
-	rm $(PROG) $(LIST)
+	rm  -f $(PROG) $(LIST)
 
 clean_resources:
-	rm $(RESOURCES)
+	rm  -f $(RESOURCES)
 
 cleanall: clean clean_resources
