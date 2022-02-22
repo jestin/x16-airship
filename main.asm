@@ -8,15 +8,13 @@
 
 .include "x16.inc"
 .include "vera.inc"
+.include "vram.inc"
 .include "resources.asm"
 
 ; replace this with separate memory include file
 
 default_irq			= $8000
 zp_vsync_trig		= $30
-tile_vram_data		= $04000
-tile_map_vram_data	= $00000
-tile_map_2_vram_data	= $10000
 
 main:
 	; set video mode
@@ -37,7 +35,7 @@ main:
 	sta veral1config
 
  	; set the l0 tile base address
-	lda #(<(tile_vram_data >> 9) | (1 << 1) | 1)
+	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
 								;  height    |  width
 	sta veral0tilebase
 	sta veral1tilebase
@@ -51,13 +49,13 @@ main:
 	ldx #<tilefilename
 	ldy #>tilefilename
 	jsr SETNAM
-	lda #(^tile_vram_data + 2)
-	ldx #<tile_vram_data
-	ldy #>tile_vram_data
+	lda #(^vram_tile_data + 2)
+	ldx #<vram_tile_data
+	ldy #>vram_tile_data
 	jsr LOAD
 
 	; set the tile map base address
-	lda #<(tile_map_vram_data >> 9)
+	lda #<(vram_l0_map_data >> 9)
 	sta veral0mapbase
 
 	; read tile map file into memory
@@ -69,14 +67,14 @@ main:
 	ldx #<tilemapfilename
 	ldy #>tilemapfilename
 	jsr SETNAM
-	lda #(^tile_map_vram_data + 2)
-	ldx #<tile_map_vram_data
-	ldy #>tile_map_vram_data
+	lda #(^vram_l0_map_data + 2)
+	ldx #<vram_l0_map_data
+	ldy #>vram_l0_map_data
 	jsr LOAD
 
 
 	; set the tile map base address
-	lda #<(tile_map_2_vram_data >> 9)
+	lda #<(vram_l1_map_data >> 9)
 	sta veral1mapbase
 
 	; read tile map file into memory
@@ -88,9 +86,9 @@ main:
 	ldx #<tilemap2filename
 	ldy #>tilemap2filename
 	jsr SETNAM
-	lda #(^tile_map_2_vram_data + 2)
-	ldx #<tile_map_2_vram_data
-	ldy #>tile_map_2_vram_data
+	lda #(^vram_l1_map_data + 2)
+	ldx #<vram_l1_map_data
+	ldy #>vram_l1_map_data
 	jsr LOAD
 
 	jsr init_irq
