@@ -18,7 +18,7 @@ zp_vsync_trig		= $30
 
 main:
 	; set video mode
-	lda #%00110001		; sprites and l1 enabled
+	lda #%01110001		; sprites, l0, and l1 enabled
 	sta veradcvideo
 
 	lda #64
@@ -90,6 +90,66 @@ main:
 	ldx #<vram_l1_map_data
 	ldy #>vram_l1_map_data
 	jsr LOAD
+
+	; read sprites into vram
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_spritefile-spritefile)
+	ldx #<spritefile
+	ldy #>spritefile
+	jsr SETNAM
+	lda #(^vram_sprites + 2)
+	ldx #<vram_sprites
+	ldy #>vram_sprites
+	jsr LOAD
+
+	; load sprites
+	lda #0
+	sta veractl
+	lda #<(vram_sprd >> 16) | $10
+	sta verahi
+	lda #<(vram_sprd >> 8)
+	sta veramid
+	lda #<(vram_sprd)
+	sta veralo
+
+	; create Rorie sprite
+	lda #<(vram_sprites >> 5)
+	sta veradat
+	lda #>(vram_sprites >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$7f		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$7f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
+
+	; create Rorie sprite
+	lda #<((vram_sprites + 256) >> 5)
+	sta veradat
+	lda #>((vram_sprites + 256) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$8f		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$7f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
 
 	jsr init_irq
 
