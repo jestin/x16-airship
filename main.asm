@@ -133,12 +133,30 @@ main:
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
 
-	; create Rorie sprite
+	; create Luna sprite
 	lda #<((vram_sprites + 256) >> 5)
 	sta veradat
 	lda #>((vram_sprites + 256) >> 5) | 1 << 7 ; mode=0
 	sta veradat
 	lda #$8f		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$7f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
+
+	; create Connor sprite
+	lda #<((vram_sprites + 512) >> 5)
+	sta veradat
+	lda #>((vram_sprites + 512) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$9f		; X
 	sta veradat
 	lda #0
 	sta veradat
