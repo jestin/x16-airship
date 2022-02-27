@@ -1,3 +1,5 @@
+.ifndef RESOURCES_INC
+RESOURCES_INC = 1
 
 tilefilename: .literal "TILES.BIN"
 end_tilefilename:
@@ -10,3 +12,5 @@ end_tilemap2filename:
 
 spritefile: .literal "SPRITES.BIN"	
 end_spritefile:
+
+.endif ; RESOURCES_INC

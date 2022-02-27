@@ -1,4 +1,6 @@
 ; License: Public Domain
+.ifndef VERA_INC
+VERA_INC = 1
 
 verareg =$9f20
 
@@ -175,3 +177,5 @@ SPRITE_SIZE_64	= $3
 	lda #1
 	sta veradat ; VGA output
 .endmacro
+
+.endif
