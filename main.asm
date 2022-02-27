@@ -15,8 +15,19 @@
 
 default_irq			= $8000
 zp_vsync_trig		= $30
+xofflo				= $22
+xoffhi				= $23
+yofflo				= $24
+yoffhi				= $25
 
 main:
+	; initialize scroll variables
+	lda #0
+	sta xofflo
+	sta yofflo
+	stz xoffhi
+	stz yoffhi
+
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
 	sta veradcvideo
@@ -128,7 +139,7 @@ main:
 	sta veradat
 	lda #0
 	sta veradat
-	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	lda #%00001000	; Collision/Z-depth/vflip/hflip
 	sta veradat
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
@@ -146,7 +157,7 @@ main:
 	sta veradat
 	lda #0
 	sta veradat
-	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	lda #%00001000	; Collision/Z-depth/vflip/hflip
 	sta veradat
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
@@ -164,7 +175,7 @@ main:
 	sta veradat
 	lda #0
 	sta veradat
-	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	lda #%00001000	; Collision/Z-depth/vflip/hflip
 	sta veradat
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
@@ -204,12 +215,12 @@ handle_irq:
 	; check for VSYNC
 	lda veraisr
 	and #$01
-	beq @end
+	beq @return
 	sta zp_vsync_trig
 	; clear vera irq flag
 	sta veraisr
 
-@end:
+@return:
 	jmp (default_irq)
 
 ;==================================================
@@ -217,13 +228,13 @@ handle_irq:
 ;==================================================
 check_vsync:
 	lda zp_vsync_trig
-	beq @end
+	beq @return
 
 	; VSYNC has occurred, handle
 
 	jsr tick
 
-@end:
+@return:
 	stz zp_vsync_trig
 	rts
 
@@ -231,21 +242,91 @@ check_vsync:
 ; tick
 ;==================================================
 tick:
-	inc veral0hscrolllo
-	inc veral1hscrolllo
-	bne @vertical
-	inc veral0hscrollhi
-	inc veral1hscrollhi
-
-@vertical:
-	inc veral0vscrolllo
-	inc veral1vscrolllo
-	beq @end
-	inc veral0vscrolllo
-	inc veral1vscrolllo
-	bne @end
-	inc veral0vscrollhi
-	inc veral1vscrollhi
-@end:
+	jsr move;
+; 	inc veral0hscrolllo
+; 	inc veral1hscrolllo
+; 	bne @vertical
+; 	inc veral0hscrollhi
+; 	inc veral1hscrollhi
+; 
+; @vertical:
+; 	inc veral0vscrolllo
+; 	inc veral1vscrolllo
+; 	beq @return
+; 	inc veral0vscrolllo
+; 	inc veral1vscrolllo
+; 	bne @return
+; 	inc veral0vscrollhi
+; 	inc veral1vscrollhi
+@return:
 	rts
 
+;==================================================
+; move
+;==================================================
+move:
+	lda #0
+	jsr joystick_get
+
+	bit#$8
+	beq @up
+	bit#$4
+	beq @down
+	bit#$2
+	beq @left
+	bit #$1
+	beq @right
+	bra @update
+@up:
+	dec yofflo
+	lda yofflo
+	cmp #$ff
+	bne @update
+	dec yoffhi
+	bra @update
+@down:
+	inc yofflo
+	bne @update
+	inc yoffhi
+	bra @update
+@left:
+	dec xofflo
+	lda xofflo
+	cmp #$ff
+	bne @update
+	dec xoffhi
+	bra @update
+@right:
+	inc xofflo
+	bne @update
+	inc xoffhi
+	
+	; calculate and set the correct vera scroll offsets
+@update:
+	lda xoffhi
+	cmp #$08
+	bne @updatex
+	stz xoffhi
+@updatex:
+	lda xofflo
+	sta veral0hscrolllo
+	sta veral1hscrolllo
+	lda xoffhi
+	sta veral0hscrollhi
+	sta veral1hscrollhi
+
+	lda yoffhi
+	cmp #$04
+	bne @updatey
+	stz yoffhi
+
+@updatey:
+	lda yofflo
+	sta veral0vscrolllo
+	sta veral1vscrolllo
+	lda yoffhi
+	sta veral0vscrollhi
+	sta veral1vscrollhi
+	
+@return: 
+	rts

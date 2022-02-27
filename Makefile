@@ -25,7 +25,7 @@ L1MAP.BIN: airship_game_map.tmx
 	tmx2vera airship_game_map.tmx L1MAP.BIN -l things
 
 run: all resources
-	x16emu -prg $(PROG) -run -scale 2 -debug
+	x16emu -prg $(PROG) -run -scale 2 -debug -joy1
 
 clean:
 	rm  -f $(PROG) $(LIST)
