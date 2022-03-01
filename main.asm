@@ -163,9 +163,9 @@ main:
 	sta veradat
 
 	; create Connor sprite
-	lda #<((vram_sprites + 512) >> 5)
+	lda #<((vram_sprites + (256 * 2)) >> 5)
 	sta veradat
-	lda #>((vram_sprites + 512) >> 5) | 1 << 7 ; mode=0
+	lda #>((vram_sprites + (256 * 2)) >> 5) | 1 << 7 ; mode=0
 	sta veradat
 	lda #$9f		; X
 	sta veradat
@@ -180,6 +180,41 @@ main:
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
 
+	; create Elliot sprite
+	lda #<((vram_sprites + (256 * 3)) >> 5)
+	sta veradat
+	lda #>((vram_sprites + (256 * 3)) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$af		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$7f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001000	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
+
+	; create George sprite
+	lda #<((vram_sprites + (256 * 3)) >> 5)
+	sta veradat
+	lda #>((vram_sprites + (256 * 3)) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$bf		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$7f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001001	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
 	jsr init_irq
 
 ;==================================================
