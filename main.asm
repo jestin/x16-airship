@@ -19,6 +19,7 @@ xofflo				= $22
 xoffhi				= $23
 yofflo				= $24
 yoffhi				= $25
+tickcount			= $26
 
 main:
 	; initialize scroll variables
@@ -277,22 +278,65 @@ check_vsync:
 ; tick
 ;==================================================
 tick:
-	jsr move;
-; 	inc veral0hscrolllo
-; 	inc veral1hscrolllo
-; 	bne @vertical
-; 	inc veral0hscrollhi
-; 	inc veral1hscrollhi
-; 
-; @vertical:
-; 	inc veral0vscrolllo
-; 	inc veral1vscrolllo
-; 	beq @return
-; 	inc veral0vscrolllo
-; 	inc veral1vscrolllo
-; 	bne @return
-; 	inc veral0vscrollhi
-; 	inc veral1vscrollhi
+	inc tickcount
+	jsr move
+	jsr animate
+@return:
+	rts
+
+;==================================================
+; animate
+;==================================================
+animate:
+	; calculate frame and sprite - 0-0, 1-1, 2-0, 3-2
+	lda tickcount
+	lsr			; shift down a bit
+	and #$0f	; take lower nibble
+	cmp #$0c
+	bcs @fourth
+	cmp #$08
+	bcs @third
+	cmp #$04
+	bcs @second
+	cmp #$00
+	bcs @first
+	bra @return
+@first:
+	lda #0
+	pha
+	bra @sprites
+@second:
+	lda #1
+	pha
+	bra @sprites
+@third:
+	lda #0
+	pha
+	bra @sprites
+@fourth:
+	lda #2
+	pha
+
+@sprites:
+
+	; Rorie
+	ldx #0
+	pla		; pull frame number
+	; multiply by $08 using asl so it can be used as the high byte, effectively
+	; adding (index * 2048) to the address
+	asl
+	asl
+	asl
+	asl
+	asl
+	; add to high byte of vram_sprites
+	clc
+	adc #>(vram_sprites + (0 * 256))
+	asl
+	clc
+	adc #<((vram_sprites + (0 * 256)) >> 5)
+	sprstore 0
+
 @return:
 	rts
 

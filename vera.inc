@@ -99,25 +99,25 @@ SPRITE_SIZE_64	= $3
 
 .macro vstore addr
 	pha
-	+vset addr
+	vset addr
 	pla
 	sta veradat
 .endmacro
 
 .macro vstore2 addr
 	pha
-	+vset addr
+	vset addr
 	pla
 	sta veradat2
 .endmacro
 
 .macro vload addr
-	+vset addr
+	vset addr
 	lda veradat
 .endmacro
 
 .macro vload2 addr
-	+vset addr
+	vset addr
 	lda veradat2
 .endmacro
 
@@ -131,37 +131,37 @@ SPRITE_SIZE_64	= $3
 	lsr
 	lsr
 	clc
-	adc #<(vram_sprd + offset >> 8)
+	adc #<((vram_sprd + offset) >> 8)
 	sta veramid
 	txa
 	asl
 	asl
 	asl
 	clc
-	adc #<((vram_sprd + offset))
+	adc #<(vram_sprd + offset)
 	sta veralo
 .endmacro
 
 .macro sprload offset
-	+sprset offset
+	sprset offset
 	lda veradat
 .endmacro
 
 .macro sprload2 offset
-	+sprset offset
+	sprset offset
 	lda veradat2
 .endmacro
 
 .macro sprstore offset
 	pha
-	+sprset offset
+	sprset offset
 	pla
 	sta veradat
 .endmacro
 
 .macro sprstore2 offset
 	pha
-	+sprset offset
+	sprset offset
 	pla
 	sta veradat2
 .endmacro
