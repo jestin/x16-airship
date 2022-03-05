@@ -216,6 +216,43 @@ main:
 	sta veradat
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
+
+	; create airship left sprite
+	lda #<((vram_sprites + (256 * 62)) >> 5)
+	sta veradat
+	lda #>((vram_sprites + (256 * 62)) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$4f		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$4f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
+
+	; create airship right sprite
+	lda #<((vram_sprites + (256 * 63)) >> 5)
+	sta veradat
+	lda #>((vram_sprites + (256 * 63)) >> 5) | 1 << 7 ; mode=0
+	sta veradat
+	lda #$5f		; X
+	sta veradat
+	lda #0
+	sta veradat
+	lda #$4f		; Y
+	sta veradat
+	lda #0
+	sta veradat
+	lda #%00001100	; Collision/Z-depth/vflip/hflip
+	sta veradat
+	lda #%01010000	; Height/Width/Paloffset
+	sta veradat
+
 	jsr init_irq
 
 ;==================================================
