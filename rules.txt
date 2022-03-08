@@ -1,1 +1,2 @@
 ./terrain_fixes.tmx
+./collision_generation.tmx
