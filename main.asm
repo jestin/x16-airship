@@ -8,6 +8,7 @@
 
 .include "x16.inc"
 .include "vera.inc"
+.include "ram.inc"
 .include "vram.inc"
 .include "resources.asm"
 
@@ -252,6 +253,33 @@ main:
 	sta veradat
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
+
+	; read collision file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_collisionfile-collisionfile)
+	ldx #<collisionfile
+	ldy #>collisionfile
+	jsr SETNAM
+	lda #0
+	ldx #<collision_tile_data
+	ldy #>collision_tile_data
+	jsr LOAD
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_collisionmapfile-collisionmapfile)
+	ldx #<collisionmapfile
+	ldy #>collisionmapfile
+	jsr SETNAM
+	lda #0
+	ldx #<collision_map_data
+	ldy #>collision_map_data
+	jsr LOAD
 
 	jsr init_irq
 

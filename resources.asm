@@ -13,4 +13,10 @@ end_tilemap2filename:
 spritefile: .literal "SPRITES.BIN"	
 end_spritefile:
 
+collisionfile: .literal "CLSN.BIN"
+end_collisionfile:
+
+collisionmapfile: .literal "CLSNMAP.BIN"
+end_collisionmapfile:
+
 .endif ; RESOURCES_INC
