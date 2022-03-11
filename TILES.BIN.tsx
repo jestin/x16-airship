@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/TILES.BIN" tilewidth="16" tileheight="16" tilecount="256" columns="16">
  <image source="TILES.BIN.bmp" trans="000000" width="256" height="256"/>
+ <tile id="3" probability="0.05"/>
+ <tile id="4" probability="0.05"/>
+ <tile id="5" probability="0.05"/>
+ <tile id="6" probability="0.05"/>
+ <tile id="7" probability="0.05"/>
+ <tile id="8" probability="0.05"/>
+ <tile id="16" probability="0.05"/>
+ <tile id="32" probability="0.05"/>
+ <tile id="48" probability="0.05"/>
  <wangsets>
   <wangset name="Land/Water" type="mixed" tile="-1">
    <wangcolor name="Water" color="#ff0000" tile="-1" probability="1"/>
