@@ -44,8 +44,7 @@ animation_calculate_frame:
 ; void animation_calculate_frame(
 ; 					byte animation_frame: a
 ; 					byte sprite_index: x
-; 					byte sprite_tile_index: y,
-;					word base_sprite_tiles: u0)
+; 					byte sprite_tile_index: y)
 ;==================================================
 set_sprite_frame:
 	pha			; push to preseve the frame

@@ -352,112 +352,30 @@ animate:
 	jsr animation_calculate_frame
 
 	; Rorie
-	pha			; push to preseve the frame
-	ldx #0		; This is the index of the sprite, but not necessarily the address offset
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
-	asl
-	asl
-	asl
-	asl
-	asl
-	; add to high byte of vram_sprites
-	clc
-	adc #>vram_sprites
-	asl
-	clc
-	; the `0` is the index of the address offset, but not necessarily the sprite
-	adc #<((vram_sprites + (0 * 256)) >> 5)
-	sprstore 0
-	pla			; pull to restore the frame
-
-	pha			; push to preseve the frame
+	ldx #0
+	ldy #0
+	jsr set_sprite_frame
 
 	; Luna
-	ldx #1		; This is the index of the sprite, but not necessarily the address offset
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
-	asl
-	asl
-	asl
-	asl
-	asl
-	; add to high byte of vram_sprites
-	clc
-	adc #>vram_sprites
-	asl
-	clc
-	; the `0` is the index of the address offset, but not necessarily the sprite
-	adc #<((vram_sprites + (1 * 256)) >> 5)
-	sprstore 0
-	pla			; pull to restore the frame
+	ldx #1
+	ldy #1
+	jsr set_sprite_frame
 
-	pha			; push to preseve the frame
 
 	; Conner
-	ldx #2		; This is the index of the sprite, but not necessarily the address offset
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
-	asl
-	asl
-	asl
-	asl
-	asl
-	; add to high byte of vram_sprites
-	clc
-	adc #>vram_sprites
-	asl
-	clc
-	; the `0` is the index of the address offset, but not necessarily the sprite
-	adc #<((vram_sprites + (2 * 256)) >> 5)
-	sprstore 0
-	pla			; pull to restore the frame
-
-	pha			; push to preseve the frame
+	ldx #2
+	ldy #2
+	jsr set_sprite_frame
 
 	; Elliot
-	ldx #3		; This is the index of the sprite, but not necessarily the address offset
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
-	asl
-	asl
-	asl
-	asl
-	asl
-	; add to high byte of vram_sprites
-	clc
-	adc #>vram_sprites
-	asl
-	clc
-	; the `0` is the index of the address offset, but not necessarily the sprite
-	adc #<((vram_sprites + (3 * 256)) >> 5)
-	sprstore 0
-	pla			; pull to restore the frame
-
-
-	; George
-	; .byte $db
-	ldx #4		; This is the index of the sprite, but not necessarily the address offset
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
+	ldx #3
 	ldy #3
 	jsr set_sprite_frame
 
-	; pha			; push to preseve the frame
-	; asl
-	; asl
-	; asl
-	; asl
-	; asl
-	; ; add to high byte of vram_sprites
-	; clc
-	; adc #>vram_sprites
-	; asl
-	; clc
-	; ; the `0` is the index of the address offset, but not necessarily the sprite
-	; adc #<((vram_sprites + (3 * 256)) >> 5)
-	; sprstore 0
-	; pla			; pull to restore the frame
+	; George
+	ldx #4
+	ldy #3
+	jsr set_sprite_frame
 
 @return:
 	rts
