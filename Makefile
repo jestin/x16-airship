@@ -5,9 +5,8 @@ ASFLAGS = -t cx16 -l $(NAME).list
 PROG = $(NAME).PRG
 LIST = $(NAME).list
 MAIN = main.asm
-SOURCES = $(MAIN) \
-		  x16.inc \
-		  vera.inc
+SOURCES := $(wildcard *.asm) $(wildcard *.inc)
+
 RESOURCES = L0MAP.BIN \
 			L1MAP.BIN \
 			CLSNMAP.BIN
