@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/AURORA.BIN" tilewidth="16" tileheight="16" tilecount="12" columns="12">
- <image source="AURORA.BIN.bmp" trans="000000" width="192" height="16"/>
+<tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/AURORA.BIN" tilewidth="16" tileheight="16" tilecount="12" columns="3">
+ <image source="AURORA.BIN.bmp" trans="000000" width="48" height="64"/>
+ <tile id="0">
+  <animation>
+   <frame tileid="0" duration="133"/>
+   <frame tileid="1" duration="133"/>
+   <frame tileid="0" duration="133"/>
+   <frame tileid="2" duration="133"/>
+  </animation>
+ </tile>
  <tile id="3">
   <animation>
    <frame tileid="3" duration="133"/>
