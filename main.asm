@@ -99,18 +99,18 @@ main:
 	ldy #>vram_l1_map_data
 	jsr LOAD
 
-	; read sprites into vram
+	; read Aurora player sprites into vram as the player
 	lda #1
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_spritefile-spritefile)
-	ldx #<spritefile
-	ldy #>spritefile
+	lda #(end_aurorafile-aurorafile)
+	ldx #<aurorafile
+	ldy #>aurorafile
 	jsr SETNAM
-	lda #(^vram_sprites + 2)
-	ldx #<vram_sprites
-	ldy #>vram_sprites
+	lda #(^vram_player_sprites + 2)
+	ldx #<vram_player_sprites
+	ldy #>vram_player_sprites
 	jsr LOAD
 
 	; load sprites
@@ -123,10 +123,10 @@ main:
 	lda #<(vram_sprd)
 	sta veralo
 
-	; create Rorie sprite
-	lda #<(vram_sprites >> 5)
+	; create Aurora sprite
+	lda #<(vram_player_sprites >> 5)
 	sta veradat
-	lda #>(vram_sprites >> 5) | 1 << 7 ; mode=0
+	lda #>(vram_player_sprites >> 5) | 1 << 7 ; mode=0
 	sta veradat
 	lda #$7f		; X
 	sta veradat
@@ -141,115 +141,7 @@ main:
 	lda #%01010000	; Height/Width/Paloffset
 	sta veradat
 
-	; create Luna sprite
-	lda #<((vram_sprites + 256) >> 5)
-	sta veradat
-	lda #>((vram_sprites + 256) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$8f		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$7f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001000	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; create Connor sprite
-	lda #<((vram_sprites + (256 * 2)) >> 5)
-	sta veradat
-	lda #>((vram_sprites + (256 * 2)) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$9f		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$7f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001000	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; create Elliot sprite
-	lda #<((vram_sprites + (256 * 3)) >> 5)
-	sta veradat
-	lda #>((vram_sprites + (256 * 3)) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$af		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$7f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001000	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; create George sprite
-	lda #<((vram_sprites + (256 * 3)) >> 5)
-	sta veradat
-	lda #>((vram_sprites + (256 * 3)) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$bf		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$7f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001001	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; create airship left sprite
-	lda #<((vram_sprites + (256 * 62)) >> 5)
-	sta veradat
-	lda #>((vram_sprites + (256 * 62)) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$4f		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$4f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001100	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; create airship right sprite
-	lda #<((vram_sprites + (256 * 63)) >> 5)
-	sta veradat
-	lda #>((vram_sprites + (256 * 63)) >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda #$5f		; X
-	sta veradat
-	lda #0
-	sta veradat
-	lda #$4f		; Y
-	sta veradat
-	lda #0
-	sta veradat
-	lda #%00001100	; Collision/Z-depth/vflip/hflip
-	sta veradat
-	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
-
-	; read collision file into memory
+	; read collision tile file into memory
 	lda #1
 	ldx #8
 	ldy #0
@@ -263,6 +155,7 @@ main:
 	ldy #>collision_tile_data
 	jsr LOAD
 
+	; read collision tile map into memory
 	lda #1
 	ldx #8
 	ldy #0
@@ -339,6 +232,12 @@ check_vsync:
 ;==================================================
 tick:
 	inc tickcount
+
+	; get joystick data
+	lda #0
+	jsr joystick_get
+	sta joystick_data
+
 	jsr move
 	jsr animate
 @return:
@@ -348,33 +247,40 @@ tick:
 ; animate
 ;==================================================
 animate:
+	; put direction offset byte in y
+	lda joystick_data
+	bit#$8
+	beq @up
+	bit#$4
+	beq @down
+	bit#$2
+	beq @left
+	bit #$1
+	beq @right
+
+	ldy #0
+	lda #0
+	bra @set_sprite
+
+@down:
+	ldy #0
+	bra @calculate_frame
+@right:
+	ldy #3
+	bra @calculate_frame
+@left:
+	ldy #6
+	bra @calculate_frame
+@up:
+	ldy #9
+
+@calculate_frame:
 	; returns the correct animation frame in A
 	jsr animation_calculate_frame
 
-	; Rorie
+@set_sprite:
+	; Player
 	ldx #0
-	ldy #0
-	jsr set_sprite_frame
-
-	; Luna
-	ldx #1
-	ldy #1
-	jsr set_sprite_frame
-
-
-	; Conner
-	ldx #2
-	ldy #2
-	jsr set_sprite_frame
-
-	; Elliot
-	ldx #3
-	ldy #3
-	jsr set_sprite_frame
-
-	; George
-	ldx #4
-	ldy #3
 	jsr set_sprite_frame
 
 @return:
@@ -382,11 +288,10 @@ animate:
 
 ;==================================================
 ; move
+; void move()
 ;==================================================
 move:
-	lda #0
-	jsr joystick_get
-
+	lda joystick_data
 	bit#$8
 	beq @up
 	bit#$4

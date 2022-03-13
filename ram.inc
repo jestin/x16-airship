@@ -8,6 +8,7 @@ xoffhi				= $23
 yofflo				= $24
 yoffhi				= $25
 tickcount			= $26
+joystick_data		= $27
 
 ; Other addresses
 

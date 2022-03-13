@@ -41,10 +41,16 @@ animation_calculate_frame:
 ; set_sprite_frame
 ; Sets the sprite to the current frame
 ;
+; sprite_direction -
+;					0 - forward facing
+;					3 - right facing
+;					6 - left facing
+;					9 - rear facing
+;
 ; void animation_calculate_frame(
 ; 					byte animation_frame: a
 ; 					byte sprite_index: x
-; 					byte sprite_tile_index: y)
+; 					byte sprite_direction: y)
 ;==================================================
 set_sprite_frame:
 	pha			; push to preseve the frame
@@ -52,16 +58,16 @@ set_sprite_frame:
 	; This first part calculates the additional offset to apply determined by
 	; which animation frame is needed
 
-	; multiply by $08 using asl so it can be used as the high byte, effectively
-	; adding (index * 2048) to the address
+	; Because each sprite tile is 256 bytes, and the tiles are sequential, we
+	; need to add (animation_frame * $0100) to the address.
+
+	; multiply using asl so it can be used as the high byte, effectively adding
+	; (index * 256) to the address
 	asl
 	asl
-	asl
-	asl
-	asl
-	; add to high byte of base_sprite_tiles
+	; add to high byte of vram_player_sprites
 	clc
-	adc #>vram_sprites
+	adc #>vram_player_sprites
 	asl
 
 	; push result to stack for later
@@ -82,7 +88,7 @@ set_sprite_frame:
 	LsrW u15
 
 	; add to the pre-shifted address of the start of the sprite tiles
-	AddW u15, (vram_sprites >> 5)
+	AddW u15, (vram_player_sprites >> 5)
 
 	; u15 now has the VERA sprite-shifted address of the first frame of an animation set
 	

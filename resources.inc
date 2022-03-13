@@ -13,6 +13,9 @@ end_tilemap2filename:
 spritefile: .literal "SPRITES.BIN"	
 end_spritefile:
 
+aurorafile: .literal "AURORA.BIN"	
+end_aurorafile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 
