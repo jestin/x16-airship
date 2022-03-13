@@ -123,7 +123,7 @@ main:
 	lda #<(vram_sprd)
 	sta veralo
 
-	; create Aurora sprite
+	; create player sprite
 	lda #<(vram_player_sprites >> 5)
 	sta veradat
 	lda #>(vram_player_sprites >> 5) | 1 << 7 ; mode=0

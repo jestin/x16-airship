@@ -16,6 +16,9 @@ end_spritefile:
 aurorafile: .literal "AURORA.BIN"	
 end_aurorafile:
 
+connorfile: .literal "CONNOR.BIN"
+end_connorfile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 
