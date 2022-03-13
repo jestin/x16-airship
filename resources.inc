@@ -16,6 +16,9 @@ end_spritefile:
 aurorafile: .literal "AURORA.BIN"	
 end_aurorafile:
 
+lunafile: .literal "LUNA.BIN"
+end_lunafile:
+
 connorfile: .literal "CONNOR.BIN"
 end_connorfile:
 
