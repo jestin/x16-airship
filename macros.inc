@@ -19,8 +19,8 @@ MACROS = 1
 .endmacro
 
 .macro MoveW source, dest
-	+MoveB source+0, dest+0
-	+MoveB source+1, dest+1
+	MoveB source+0, dest+0
+	MoveB source+1, dest+1
 .endmacro
 
 .macro AddW dest, value

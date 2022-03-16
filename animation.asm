@@ -2,6 +2,49 @@
 ANIMATION_ASM = 1
 
 ;==================================================
+; animate_player
+;==================================================
+animate_player:
+	; put direction offset byte in y
+	lda joystick_data
+	bit#$8
+	beq @up
+	bit#$4
+	beq @down
+	bit#$2
+	beq @left
+	bit #$1
+	beq @right
+
+	ldy #0
+	lda #0
+	bra @set_sprite
+
+@down:
+	ldy #0
+	bra @calculate_frame
+@right:
+	ldy #3
+	bra @calculate_frame
+@left:
+	ldy #6
+	bra @calculate_frame
+@up:
+	ldy #9
+
+@calculate_frame:
+	; returns the correct animation frame in A
+	jsr animation_calculate_frame
+
+@set_sprite:
+	; Player
+	ldx #0
+	jsr set_sprite_frame
+
+@return:
+	rts
+
+;==================================================
 ; animation_calculate_frame
 ; Based on the current tick count, calculates which
 ; frame animations should use.

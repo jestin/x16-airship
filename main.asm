@@ -12,18 +12,41 @@
 .include "ram.inc"
 .include "vram.inc"
 .include "resources.inc"
+.include "movement.asm"
 .include "animation.asm"
+.include "collision.asm"
 
 ; replace this with separate memory include file
 
 
 main:
+	; initialize map width and height
+	LoadW map_width, 2048
+	LoadW map_height, 1024
+
+	; initialize player location on map
+	lda #0
+	sta xloc
+	sta xloc+1
+	sta yloc
+	sta yloc+1
+
+	; initialize player location on screen
+	lda #$a0
+	sta xplayer
+	lda #$0
+	sta xplayer+1
+	lda #$78
+	sta yplayer
+	lda #0
+	sta yplayer+1
+
 	; initialize scroll variables
 	lda #0
-	sta xofflo
-	sta yofflo
-	stz xoffhi
-	stz yoffhi
+	sta xoff
+	stz xoff+1
+	sta yoff
+	stz yoff+1
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
@@ -128,13 +151,13 @@ main:
 	sta veradat
 	lda #>(vram_player_sprites >> 5) | 1 << 7 ; mode=0
 	sta veradat
-	lda #$7f		; X
+	lda xplayer		; XL
 	sta veradat
-	lda #0
+	lda xplayer+1	; XH
 	sta veradat
-	lda #$7f		; Y
+	lda yplayer		; YL
 	sta veradat
-	lda #0
+	lda yplayer+1	; YH
 	sta veradat
 	lda #%00001000	; Collision/Z-depth/vflip/hflip
 	sta veradat
@@ -237,120 +260,11 @@ tick:
 	lda #0
 	jsr joystick_get
 	sta joystick_data
+	stx joystick_data+1
+	sty joystick_data+2
 
+	jsr animate_player
 	jsr move
-	jsr animate
 @return:
 	rts
 
-;==================================================
-; animate
-;==================================================
-animate:
-	; put direction offset byte in y
-	lda joystick_data
-	bit#$8
-	beq @up
-	bit#$4
-	beq @down
-	bit#$2
-	beq @left
-	bit #$1
-	beq @right
-
-	ldy #0
-	lda #0
-	bra @set_sprite
-
-@down:
-	ldy #0
-	bra @calculate_frame
-@right:
-	ldy #3
-	bra @calculate_frame
-@left:
-	ldy #6
-	bra @calculate_frame
-@up:
-	ldy #9
-
-@calculate_frame:
-	; returns the correct animation frame in A
-	jsr animation_calculate_frame
-
-@set_sprite:
-	; Player
-	ldx #0
-	jsr set_sprite_frame
-
-@return:
-	rts
-
-;==================================================
-; move
-; void move()
-;==================================================
-move:
-	lda joystick_data
-	bit#$8
-	beq @up
-	bit#$4
-	beq @down
-	bit#$2
-	beq @left
-	bit #$1
-	beq @right
-	bra @update
-@up:
-	dec yofflo
-	lda yofflo
-	cmp #$ff
-	bne @update
-	dec yoffhi
-	bra @update
-@down:
-	inc yofflo
-	bne @update
-	inc yoffhi
-	bra @update
-@left:
-	dec xofflo
-	lda xofflo
-	cmp #$ff
-	bne @update
-	dec xoffhi
-	bra @update
-@right:
-	inc xofflo
-	bne @update
-	inc xoffhi
-	
-	; calculate and set the correct vera scroll offsets
-@update:
-	lda xoffhi
-	cmp #$08
-	bne @updatex
-	stz xoffhi
-@updatex:
-	lda xofflo
-	sta veral0hscrolllo
-	sta veral1hscrolllo
-	lda xoffhi
-	sta veral0hscrollhi
-	sta veral1hscrollhi
-
-	lda yoffhi
-	cmp #$04
-	bne @updatey
-	stz yoffhi
-
-@updatey:
-	lda yofflo
-	sta veral0vscrolllo
-	sta veral1vscrolllo
-	lda yoffhi
-	sta veral0vscrollhi
-	sta veral1vscrollhi
-	
-@return: 
-	rts

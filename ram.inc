@@ -2,13 +2,32 @@
 RAM_INC = 1
 
 ; Zero Page
-zp_vsync_trig		= $30
-xofflo				= $22
-xoffhi				= $23
-yofflo				= $24
-yoffhi				= $25
-tickcount			= $26
-joystick_data		= $27
+
+map_width			= $22	; 2 bytes
+map_height			= $24	; 2 bytes
+
+; scroll offsets
+xoff				= $26	; 2 bytes
+yoff				= $28	; 2 bytes
+
+xplayer				= $30	; 2 bytes
+yplayer				= $32	; 2 bytes
+
+xloc				= $34	; 2 bytes
+yloc				= $36	; 2 bytes
+
+active_tile_x		= $38
+active_tile_y		= $39
+
+; 256 repeating ticks
+tickcount			= $40
+joystick_data		= $41 ; 3 bytes
+
+; vsync trigger for running the game loop
+zp_vsync_trig		= $58
+
+
+
 
 ; Other addresses
 

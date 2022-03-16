@@ -1,0 +1,4 @@
+.ifndef COLLISION_ASM
+COLLISION_ASM = 1
+
+.endif ; COLLISION_ASM
