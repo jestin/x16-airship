@@ -26,11 +26,23 @@ set_active_tile:
 	LsrW active_tile_y
 
 	rts
+;==================================================
+; calculate_map_location
+;
+; Based on the player's location on the screen and
+; the scroll, calculate and set the xy location of
+; the player on the map.
+;
+; void calculate_map_location()
+;==================================================
+calculate_map_location:
+
+	rts
 
 ;==================================================
 ; set_scroll_offset
 ;
-; Based on the player's location on the map,
+; Based on the player's location on the screen,
 ; set the display's scroll offset values
 ;
 ; void set_scroll_offset()
@@ -39,32 +51,7 @@ set_scroll_offset:
 	; If the player falls outside a box in the center of the screen, force the
 	; screen to scroll.  Do NOT scroll if the location is within the box, or
 	; within a certain distance from the edge of the map.
-	
-	; check if xloc is lower than 64 by subtracting 64 from xloc
-	MoveW xloc, u0					; use u0 as a scratchpad
-	SubW u0, $40
-	bcs @check_v_scroll				; if carry is set, it means we are on the
-									; left edge of the map, so no H scroll
 
-	; check if xloc is greater than (map_width - 64)
-	MoveW map_width, u0				; use u0 as a scratchpad
-	lda u0L
-	sec
-	sbc xloc
-	sta u0L
-	lda u0H
-	sbc xloc+1
-	sta u0H
-	cmp #0							; if the high byte is non-zero, we know we
-	bne @calc_h_scroll				; are at least 256 away from the right edge
-	lda u0L
-	cmp #$40
-	bcc @check_v_scroll				; if the difference are less than 64, we
-									; are on the right edge of the map, so no H
-									; scroll
-
-	; If we've made it here, it means we are not on the left or right edges of
-	; the map.  We may need to H scroll, depending on xplayer.
 @calc_h_scroll:
 @check_left_edge:
 
@@ -79,9 +66,20 @@ set_scroll_offset:
 	sbc xplayer
 	bcc @check_right_edge			; if carry is clear, it means we are not on
 									; the left edge of the screen, so skip ahead
-
 	sta u0L							; store the result so we can subtract it from xoff
 
+
+	; check if xoff is already 0 (or less)
+	lda xoff+1
+	cmp #0
+	beq @check_xoff_low
+	bra @scroll_left
+@check_xoff_low:
+	lda xoff
+	cmp #0
+	beq @check_right_edge
+
+@scroll_left:
 	sec								; subtract the result from xoff (to scroll)
 	lda xoff
 	sbc u0L
@@ -105,6 +103,24 @@ set_scroll_offset:
 	cmp #0
 	beq @check_v_scroll				; if the high byte is zero, we are under 256
 
+	; check if the scroll is already at the max
+	sec
+	lda map_width
+	sbc #<(320)						; subtract the screen width from the map width
+	sta u0L
+	lda map_width+1
+	sbc #>(320)						; subtract the screen width from the map width
+	sta u0H							; u0 now contains the max H scroll allowed
+	
+	lda xoff+1						; load xoff high byte for compare
+	cmp u0H							; if the offset is greater than the max,
+	bpl @check_v_scroll				; don't scroll any further
+	bne @scroll_right				; if not equal, don't bother checking low byte
+	lda u0L
+	cmp xoff						; if low byte of xoff is greater than or
+	bcs @check_v_scroll				; equal to the low byte of the max scroll, don't scroll
+
+@scroll_right:
 	; the low byte of xplayer is precisely how much we need to scroll right
 	clc
 	lda xoff
@@ -117,8 +133,85 @@ set_scroll_offset:
 	lda #0
 	sta xplayer						; to subtract back down to 256, just zero out the low byte
 
-
 @check_v_scroll:
+	; check if yplayer is lower than 64
+	lda yplayer+1
+	cmp #0
+	bne @check_bottom_edge			; if high byte is non-zero, we are
+									; definitely larger than 64
+
+	lda #$40						; load 64 and subtract low byte of yplayer
+	sec
+	sbc yplayer
+	bcc @check_bottom_edge			; if carry is clear, it means we are not on
+									; the left edge of the screen, so skip ahead
+	sta u0L							; store the result so we can subtract it from yoff
+
+	; check if yoff is already 0 (or less)
+	lda yoff+1
+	cmp #0
+	beq @check_yoff_low
+	bra @scroll_up
+@check_yoff_low:
+	lda yoff
+	cmp #0
+	beq @check_bottom_edge
+
+@scroll_up:
+	sec								; subtract the result from yoff (to scroll)
+	lda yoff
+	sbc u0L
+	sta yoff
+	lda yoff+1
+	sbc #0							; no high byte, so substract 0 to account for borrow
+	sta yoff+1
+
+	clc								; add the result to yplayer (to reposition within the box)
+	lda yplayer
+	adc u0L
+	sta yplayer
+	lda yplayer+1
+	adc #0							; no high byte, so add 0 to account for carry
+	sta yplayer+1
+	bra @return						; if we H scrolled, we can skip to V scroll
+
+@check_bottom_edge:
+	; check if yplayer is higher than 176 (240-64)
+	sec
+	lda yplayer
+	sbc #$b0
+	bcc @return						; we are lower than 176 if we needed to barrow
+	sta u1L
+
+	; check if the scroll is already at the max
+	sec
+	lda map_height
+	sbc #<(240)						; subtract the screen height from the map height
+	sta u0L
+	lda map_height+1
+	sbc #>(240)						; subtract the screen height from the map height
+	sta u0H							; u0 now contains the max V scroll allowed
+
+	lda yoff+1						; load yoff high byte for compare
+	cmp u0H							; if the offset is greater than the max,
+	bpl @return						; don't scroll any further
+	bne @scroll_down				; if not equal, don't bother checking low byte
+	lda u0L
+	cmp yoff						; if low byte of yoff is greater than or
+	bcs @return						; equal to the low byte of the max scroll, don't scroll
+
+@scroll_down:
+	; add the result of the subtraction to yoff, as it's how much we need to scroll
+	clc
+	lda u1L
+	adc yoff
+	sta yoff
+	lda yoff+1
+	adc #0							; no high byte, so add 0 to account for carry
+	sta yoff+1
+
+	lda #$b0
+	sta yplayer						; to subtract back down to 256, just zero out the low byte
 
 @return:
 	rts
@@ -141,44 +234,54 @@ move:
 	beq @left
 	bit #$1
 	beq @right
-	bra @update_scroll
+	bra @update
 
 @up:
 	DecW yplayer
-	bra @update_scroll
+	bra @update
 @down:
 	IncW yplayer
-	bra @update_scroll
+	bra @update
 @left:
 	DecW xplayer
-	bra @update_scroll
+	bra @update
 @right:
 	IncW xplayer
-	bra @update_scroll
-; @up:
-; 	dec yoff
-; 	lda yoff
-; 	cmp #$ff
-; 	bne @update
-; 	dec yoff+1
-; 	bra @update
-; @down:
-; 	inc yoff
-; 	bne @update
-; 	inc yoff+1
-; 	bra @update
-; @left:
-; 	dec xoff
-; 	lda xoff
-; 	cmp #$ff
-; 	bne @update
-; 	dec xoff+1
-; 	bra @update
-; @right:
-; 	inc xoff
-; 	bne @update
-; 	inc xoff+1
+	bra @update
 	
+@update:
+@cap_player_x_lower:
+	lda xplayer+1
+	cmp #$ff
+	bne @cap_player_x_higher
+	lda #0
+	sta xplayer
+	sta xplayer+1
+
+@cap_player_x_higher:
+	lda xplayer+1
+	cmp #0
+	beq @cap_player_y_lower
+	lda xplayer
+	cmp #$30	; 64 - 16
+	bcc @cap_player_y_lower
+	lda #$30
+	sta xplayer
+
+@cap_player_y_lower:
+	lda yplayer+1
+	cmp #$ff
+	bne @cap_player_y_higher
+	lda #0
+	sta yplayer
+	sta yplayer+1
+
+@cap_player_y_higher:
+	lda yplayer
+	cmp #$e0	; 240 - 16
+	bcc @update_scroll
+	lda #$e0
+	sta yplayer
 
 @update_scroll:
 	jsr set_scroll_offset

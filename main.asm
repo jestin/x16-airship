@@ -24,13 +24,6 @@ main:
 	LoadW map_width, 2048
 	LoadW map_height, 1024
 
-	; initialize player location on map
-	lda #0
-	sta xloc
-	sta xloc+1
-	sta yloc
-	sta yloc+1
-
 	; initialize player location on screen
 	lda #$a0
 	sta xplayer
@@ -127,9 +120,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_aurorafile-aurorafile)
-	ldx #<aurorafile
-	ldy #>aurorafile
+	lda #(end_connorfile-connorfile)
+	ldx #<connorfile
+	ldy #>connorfile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
