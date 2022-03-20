@@ -113,12 +113,11 @@ set_scroll_offset:
 	sta u0H							; u0 now contains the max H scroll allowed
 	
 	lda xoff+1						; load xoff high byte for compare
-	cmp u0H							; if the offset is greater than the max,
-	bpl @check_v_scroll				; don't scroll any further
+	cmp u0H							; compare to max
 	bne @scroll_right				; if not equal, don't bother checking low byte
 	lda u0L
-	cmp xoff						; if low byte of xoff is greater than or
-	bcs @check_v_scroll				; equal to the low byte of the max scroll, don't scroll
+	cmp xoff						; if low byte of max is less than xoff low byte
+	bcc @check_v_scroll				; don't scroll
 
 @scroll_right:
 	; the low byte of xplayer is precisely how much we need to scroll right
@@ -193,12 +192,11 @@ set_scroll_offset:
 	sta u0H							; u0 now contains the max V scroll allowed
 
 	lda yoff+1						; load yoff high byte for compare
-	cmp u0H							; if the offset is greater than the max,
-	bpl @return						; don't scroll any further
+	cmp u0H							; compare to max
 	bne @scroll_down				; if not equal, don't bother checking low byte
 	lda u0L
-	cmp yoff						; if low byte of yoff is greater than or
-	bcs @return						; equal to the low byte of the max scroll, don't scroll
+	cmp yoff						; if low byte of max is less than yoff low byte
+	bcc @return						; don't scroll
 
 @scroll_down:
 	; add the result of the subtraction to yoff, as it's how much we need to scroll
