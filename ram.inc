@@ -16,8 +16,8 @@ yplayer				= $32	; 2 bytes
 xloc				= $34	; 2 bytes
 yloc				= $36	; 2 bytes
 
-active_tile_x		= $38
-active_tile_y		= $39
+; index of active tile (0 through w*h-1)
+active_tile			= $38	; 2 bytes
 
 ; 256 repeating ticks
 tickcount			= $40

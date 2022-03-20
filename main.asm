@@ -27,7 +27,7 @@ main:
 	; initialize player location on screen
 	lda #$a0
 	sta xplayer
-	lda #$0
+	lda #0
 	sta xplayer+1
 	lda #$78
 	sta yplayer
@@ -258,6 +258,7 @@ tick:
 
 	jsr animate_player
 	jsr move
+	jsr set_active_tile
 @return:
 	rts
 
