@@ -36,6 +36,10 @@ collision_tile_data	= $0400
 ; for a 128x64 tile map this takes $2000 bytes
 collision_map_data	= $2000
 
+; for the single constructed collision tile to be compared against the player
+; this takes $20 bytes
+construct_tile		= $4000
+
 default_irq			= $8000
 
 .endif ; RAM_INC
