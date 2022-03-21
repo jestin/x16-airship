@@ -76,18 +76,6 @@ set_active_tile:
 	sta active_tile+1
 
 	rts
-;==================================================
-; calculate_map_location
-;
-; Based on the player's location on the screen and
-; the scroll, calculate and set the xy location of
-; the player on the map.
-;
-; void calculate_map_location()
-;==================================================
-calculate_map_location:
-
-	rts
 
 ;==================================================
 ; set_scroll_offset

@@ -13,15 +13,12 @@ yoff				= $28	; 2 bytes
 xplayer				= $30	; 2 bytes
 yplayer				= $32	; 2 bytes
 
-xloc				= $34	; 2 bytes
-yloc				= $36	; 2 bytes
-
 ; index of active tile (0 through w*h-1)
-active_tile			= $38	; 2 bytes
+active_tile			= $36	; 2 bytes
 
 ; 256 repeating ticks
-tickcount			= $40
-joystick_data		= $41 ; 3 bytes
+tickcount			= $38
+joystick_data		= $39 ; 3 bytes
 
 ; vsync trigger for running the game loop
 zp_vsync_trig		= $58
