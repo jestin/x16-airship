@@ -261,6 +261,24 @@ set_scroll_offset:
 ; void move()
 ;==================================================
 move:
+	; push the existing location variables to the stack, low first
+	lda xoff
+	pha
+	lda xoff+1
+	pha
+	lda yoff
+	pha
+	lda yoff+1
+	pha
+	lda xplayer
+	pha
+	lda xplayer+1
+	pha
+	lda yplayer
+	pha
+	lda yplayer+1
+	pha
+
 	lda joystick_data
 	bit#$8
 	beq @up
@@ -286,6 +304,39 @@ move:
 	bra @update
 	
 @update:
+	jsr check_collisions
+	cmp #0
+	bne @dump_loc_cache
+
+@restore_loc_cache:
+	pla
+	sta yplayer+1
+	pla
+	sta yplayer
+	pla
+	sta xplayer+1
+	pla
+	sta xplayer
+	pla
+	sta yoff+1
+	pla
+	sta yoff
+	pla
+	sta xoff+1
+	pla
+	sta xoff
+	bra @update_scroll
+
+@dump_loc_cache:
+	pla
+	pla
+	pla
+	pla
+	pla
+	pla
+	pla
+	pla
+
 @cap_player_x_lower:
 	lda xplayer+1
 	cmp #$ff
@@ -357,7 +408,7 @@ move:
 	sprstore 4
 	lda yplayer+1
 	sprstore 5
-	
+
 @return: 
 	rts
 
