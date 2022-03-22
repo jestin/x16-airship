@@ -400,6 +400,7 @@ move:
 	sta veral1vscrollhi
 
 @update_sprite:
+	ldx #0							; Player sprite index
 	lda xplayer
 	sprstore 2
 	lda xplayer+1
