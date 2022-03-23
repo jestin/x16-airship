@@ -16,7 +16,53 @@ COLLISION_ASM = 1
 check_collisions:
 	jsr construct_collision_tile
 
+	ldy #0
+@collision_loop:
+
+	LoadW u0, %00111100
+	lda construct_tile,y
+	sta u1L
+	lda construct_tile+1,y
+	sta u1H
+	jsr check_row
+	bne @collision
+
+	iny		; increment by 2
+	iny
+	cpy #32
+	bne @collision_loop
+@end_collision_loop:
+
 	lda #1
+	bra @return
+
+@collision:
+	lda #0
+	rts
+
+@return:
+	rts
+
+;==================================================
+; check_row
+; sets Z if no collision
+;
+; void concheck_row(word player_tile_row: u0,
+;					word collision_tile_row: u1)
+;==================================================
+check_row:
+	; left
+	lda u0L
+	and u1L
+	eor u1L
+	cmp u1L
+	bne @return	; return early
+	; right
+	lda u0H
+	and u1H
+	eor u1H
+	cmp u1H
+
 @return:
 	rts
 

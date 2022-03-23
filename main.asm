@@ -29,7 +29,7 @@ main:
 	sta xplayer
 	lda #0
 	sta xplayer+1
-	lda #$78
+	lda #$88
 	sta yplayer
 	lda #0
 	sta yplayer+1
