@@ -48,7 +48,7 @@ construct_collision_tile:
 
 	; First, load the 4 relevant tiles into our collision tile memory
 	ldx #0
-@construct_tile_loop:
+@populate_pad_loop:
 	clc
 	lda #<(collision_map_data)
 	adc active_tile
@@ -114,8 +114,80 @@ construct_collision_tile:
 
 	inx
 	cpx #4
-	bcc @construct_tile_loop
-@construct_tile_loop_end:
+	bcc @populate_pad_loop
+@populate_pad_loop_end:
+
+	; Now that we have populated the 4-tile "pad", we need to shift the correct
+	; bits into the first tile.  This is the only tile that will be compared
+	; against.  The lowest nibbles of u0 and u1 contain how far the tiles need
+	; to be shifted.
+
+	; shift X first, which will be simply be bit shifts
+
+	lda u0L							; Move lower nibble of u0 into X
+	and #$0f
+	tax
+
+@left_shift_loop:
+	cpx #0
+	beq @end_left_shift_loop
+
+	; since we no longer need it, use u2L as a loop counter
+	lda #0
+	sta u2L
+@row_shift_loop:
+	; shift a single row
+
+	; set u3 to the address of the row, which will be construct_tile + (u2L*2)
+	lda u2L
+	asl
+	sta u3L							; u3L now contains u2L*2 (no reason to bother with high byte)
+	clc
+	adc #<(construct_tile)
+	sta u3L
+	lda #0
+	adc #>(construct_tile)			; now u3 contains the address of the row
+	sta u3H
+
+	; the address of the last byte will be u3 + 32 + 1, which we can do through zp indirect y addressing
+	ldy #(32+1)
+	lda (u3),y
+	asl
+	sta (u3),y
+	ldy #(32)
+	lda (u3),y
+	rol
+	sta (u3),y
+	ldy #1	
+	lda (u3),y
+	rol
+	sta (u3),y
+	ldy #0
+	lda (u3),y
+	rol
+	sta (u3),y
+
+	inc u2L
+	lda u2L
+	cmp #16
+	bcc @row_shift_loop
+@end_row_shift_loop:
+	
+	dex
+	bra @left_shift_loop
+@end_left_shift_loop:
+
+; now with the x shifted to the left, we need to move on to shifting upwards
+
+	lda u1L							; Move lower nibble of u1 into X
+	and #$0f
+	tax
+
+@up_shift_loop:
+
+	dex
+	bra @up_shift_loop
+@end_up_shift_loop:
 
 @return:
 	rts
