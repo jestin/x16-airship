@@ -129,6 +129,7 @@ construct_collision_tile:
 	tax
 
 @left_shift_loop:
+	; each pass shifts the bits left once
 	cpx #0
 	beq @end_left_shift_loop
 
@@ -197,31 +198,74 @@ construct_collision_tile:
 	bra @left_shift_loop
 @end_left_shift_loop:
 
-; now with the x shifted to the left, we need to move on to shifting upwards
+	; now with the x shifted to the left, we need to move on to shifting
+	; upwards
 
-; 	lda u1L							; Move lower nibble of u1 into X
-; 	and #$0f
-; 	tax
-; 
-; @up_shift_loop:
-; 	cpx #0
-; 	beq @end_up_shift_loop
-; 
-; 	; since we no longer need it, use u2L as a loop counter
-; 	lda #0
-; 	sta u2L
-; @byte_shift_loop:
-; 	; moves a each all bytes upwards per pass
-; 
-; 	inc u2L
-; 	lda u2L
-; 	cmp #16
-; 	bcc @row_shift_loop
-; @end_byte_shift_loop:
-; 
-; 	dex
-; 	bra @up_shift_loop
-; @end_up_shift_loop:
+	; NOTE: we no longer have to deal with the left tiles, since they have been
+	; shifted into the right tiles
+
+	lda u1L							; Move lower nibble of u1 into X
+	and #$0f
+	tax
+
+@up_shift_loop:
+	; each pass shifts the bytes up once
+	cpx #0
+	beq @end_up_shift_loop
+
+	; since we no longer need it, use u2L as a loop counter
+	lda #0
+	sta u2L
+	LoadW u3, construct_tile		; initialize u3 to the start of the construct_tile
+	ldy #2							; Y will be 2 for addressing purposes
+@top_byte_shift_loop:
+	; each byte needs to copy the byte 2 address down from it
+
+	lda (u3),y						; load from 2 bytes down
+	sta (u3)						; store in current byte
+
+	IncW u3							; increment the current byte
+	inc u2L
+	lda u2L
+	cmp #30							; don't bother with the last two bytes,
+									; since those will be copied manually
+	bcc @top_byte_shift_loop
+@end_top_byte_shift_loop:
+
+	; now the top byte is shifted, except the last row which gets copied from
+	; different addresses, so we do them manually
+
+	; u3 is already at the first of the two manual bytes, but Y needs to be set to (32+2)
+	ldy #(32+2)
+	lda (u3),y
+	sta (u3)
+	IncW u3
+	lda (u3),y
+	sta (u3)
+
+	; we still need to shift the bottom tile so that it can be read from during
+	; additional passes of the up shift loop
+
+	; for the second byte loop, set Y back to 2 and u3 to construct_tile+64
+	LoadW u3, construct_tile+64
+	ldy #2
+@bottom_byte_shift_loop:
+	; each byte needs to copy the byte 2 address down from it
+
+	lda (u3),y						; load from 2 bytes down
+	sta (u3)						; store in current byte
+
+	IncW u3							; increment the current byte
+	inc u2L
+	lda u2L
+	cmp #30							; don't bother with the last two bytes,
+									; since those will be copied manually
+	bcc @bottom_byte_shift_loop
+@end_bottom_byte_shift_loop:
+
+	dex
+	bra @up_shift_loop
+@end_up_shift_loop:
 
 @return:
 	rts
