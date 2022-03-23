@@ -136,7 +136,7 @@ construct_collision_tile:
 	lda #0
 	sta u2L
 @row_shift_loop:
-	; shift a single row
+	; shift a single row left by one bit, twice (once for upper and lower pairs)
 
 	; set u3 to the address of the row, which will be construct_tile + (u2L*2)
 	lda u2L
@@ -149,6 +149,7 @@ construct_collision_tile:
 	adc #>(construct_tile)			; now u3 contains the address of the row
 	sta u3H
 
+	; top pair
 	; the address of the last byte will be u3 + 32 + 1, which we can do through zp indirect y addressing
 	ldy #(32+1)
 	lda (u3),y
@@ -167,6 +168,25 @@ construct_collision_tile:
 	rol
 	sta (u3),y
 
+	; bottom pair
+	; the address of the last byte will be u3 + 96 + 1, which we can do through zp indirect y addressing
+	ldy #(96+1)
+	lda (u3),y
+	asl
+	sta (u3),y
+	ldy #(96)
+	lda (u3),y
+	rol
+	sta (u3),y
+	ldy #(64+1)
+	lda (u3),y
+	rol
+	sta (u3),y
+	ldy #64
+	lda (u3),y
+	rol
+	sta (u3),y
+
 	inc u2L
 	lda u2L
 	cmp #16
@@ -179,15 +199,29 @@ construct_collision_tile:
 
 ; now with the x shifted to the left, we need to move on to shifting upwards
 
-	lda u1L							; Move lower nibble of u1 into X
-	and #$0f
-	tax
-
-@up_shift_loop:
-
-	dex
-	bra @up_shift_loop
-@end_up_shift_loop:
+; 	lda u1L							; Move lower nibble of u1 into X
+; 	and #$0f
+; 	tax
+; 
+; @up_shift_loop:
+; 	cpx #0
+; 	beq @end_up_shift_loop
+; 
+; 	; since we no longer need it, use u2L as a loop counter
+; 	lda #0
+; 	sta u2L
+; @byte_shift_loop:
+; 	; moves a each all bytes upwards per pass
+; 
+; 	inc u2L
+; 	lda u2L
+; 	cmp #16
+; 	bcc @row_shift_loop
+; @end_byte_shift_loop:
+; 
+; 	dex
+; 	bra @up_shift_loop
+; @end_up_shift_loop:
 
 @return:
 	rts
