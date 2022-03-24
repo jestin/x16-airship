@@ -13,6 +13,13 @@ MACROS = 1
 	sta dest+1
 .endmacro
 
+.macro LoadWBE dest, value
+	lda #>(value)
+	sta dest
+	lda #<(value)
+	sta dest+1
+.endmacro
+
 .macro MoveB source, dest
 	lda source
 	sta dest

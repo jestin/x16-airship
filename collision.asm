@@ -19,7 +19,10 @@ check_collisions:
 	ldy #0
 @collision_loop:
 
-	LoadW u0, %0011111111111100
+	lda player_collision_tile,y
+	sta u0L
+	lda player_collision_tile+1,y
+	sta u0H
 	lda construct_tile,y
 	sta u1L
 	lda construct_tile+1,y
@@ -287,6 +290,9 @@ construct_collision_tile:
 	; we still need to shift the bottom tile so that it can be read from during
 	; additional passes of the up shift loop
 
+	; use u2L as a loop counter
+	lda #0
+	sta u2L
 	; for the second byte loop, set Y back to 2 and u3 to construct_tile+64
 	LoadW u3, construct_tile+64
 	ldy #2

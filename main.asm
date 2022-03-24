@@ -120,14 +120,31 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_connorfile-connorfile)
-	ldx #<connorfile
-	ldy #>connorfile
+	lda #(end_aurorafile-aurorafile)
+	ldx #<aurorafile
+	ldy #>aurorafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
 	ldy #>vram_player_sprites
 	jsr LOAD
+
+	LoadWBE player_collision_tile+00, %0000000000000000
+	LoadWBE player_collision_tile+02, %0000000000000000
+	LoadWBE player_collision_tile+04, %0000000000000000
+	LoadWBE player_collision_tile+06, %0000000000000000
+	LoadWBE player_collision_tile+08, %0000000000000000
+	LoadWBE player_collision_tile+10, %0000000000000000
+	LoadWBE player_collision_tile+12, %0000000000000000
+	LoadWBE player_collision_tile+14, %0000000000000000
+	LoadWBE player_collision_tile+16, %0000111111110000
+	LoadWBE player_collision_tile+18, %0000111111110000
+	LoadWBE player_collision_tile+20, %0000111111110000
+	LoadWBE player_collision_tile+22, %0000111111110000
+	LoadWBE player_collision_tile+24, %0000111111110000
+	LoadWBE player_collision_tile+26, %0000111111110000
+	LoadWBE player_collision_tile+28, %0000111111110000
+	LoadWBE player_collision_tile+30, %0000111111110000
 
 	; load sprites
 	lda #0

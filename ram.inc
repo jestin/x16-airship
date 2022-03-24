@@ -40,6 +40,9 @@ collision_map_data	= $2000
 ; this is stored in $20 bytes, but will take $80 to calculate
 construct_tile		= $4000
 
+; player collision tile
+player_collision_tile = $4080
+
 default_irq			= $8000
 
 .endif ; RAM_INC
