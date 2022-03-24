@@ -257,7 +257,6 @@ tick:
 	sty joystick_data+2
 
 	jsr animate_player
-	jsr set_active_tile
 	jsr move
 @return:
 	rts

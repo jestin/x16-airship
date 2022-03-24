@@ -304,6 +304,7 @@ move:
 	bra @update
 	
 @update:
+	jsr set_active_tile
 	jsr check_collisions
 	cmp #0
 	bne @dump_loc_cache

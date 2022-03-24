@@ -19,7 +19,7 @@ check_collisions:
 	ldy #0
 @collision_loop:
 
-	LoadW u0, %00111100
+	LoadW u0, %0011111111111100
 	lda construct_tile,y
 	sta u1L
 	lda construct_tile+1,y
@@ -34,13 +34,10 @@ check_collisions:
 @end_collision_loop:
 
 	lda #1
-	bra @return
+	rts
 
 @collision:
 	lda #0
-	rts
-
-@return:
 	rts
 
 ;==================================================
@@ -54,14 +51,12 @@ check_row:
 	; left
 	lda u0L
 	and u1L
-	eor u1L
-	cmp u1L
+	cmp #0
 	bne @return	; return early
 	; right
 	lda u0H
 	and u1H
-	eor u1H
-	cmp u1H
+	cmp #0
 
 @return:
 	rts
