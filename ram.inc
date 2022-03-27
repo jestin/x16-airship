@@ -28,20 +28,20 @@ zp_vsync_trig		= $58
 
 ; Other addresses
 
-; for 16 16x16 1bpp tiles this takes $400 bytes
-collision_tile_data	= $0400
-
 ; the program is loaded at $800
 
 ; for a 128x64 tile map this takes $2000 bytes
 collision_map_data	= $2000
 
+; for 32 16x16 1bpp tiles this takes $800 bytes
+collision_tile_data	= $4000
+
 ; for the single constructed collision tile to be compared against the player
 ; this is stored in $20 bytes, but will take $80 to calculate
-construct_tile		= $4000
+construct_tile		= $4800
 
 ; player collision tile
-player_collision_tile = $4080
+player_collision_tile = $4880
 
 default_irq			= $8000
 
