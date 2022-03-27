@@ -25,21 +25,12 @@ main:
 	LoadW map_height, 1024
 
 	; initialize player location on screen
-	lda #$a0
-	sta xplayer
-	lda #0
-	sta xplayer+1
-	lda #$88
-	sta yplayer
-	lda #0
-	sta yplayer+1
+	LoadW xplayer, $008a
+	LoadW yplayer, $0088
 
 	; initialize scroll variables
-	lda #0
-	sta xoff
-	stz xoff+1
-	sta yoff
-	stz yoff+1
+	LoadW xoff, $008f
+	LoadW yoff, $00af
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
@@ -69,9 +60,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_tilefilename-tilefilename)
-	ldx #<tilefilename
-	ldy #>tilefilename
+	lda #(end_pixryn_tile_file-pixryn_tile_file)
+	ldx #<pixryn_tile_file
+	ldy #>pixryn_tile_file
 	jsr SETNAM
 	lda #(^vram_tile_data + 2)
 	ldx #<vram_tile_data
@@ -87,9 +78,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_tilemapfilename-tilemapfilename)
-	ldx #<tilemapfilename
-	ldy #>tilemapfilename
+	lda #(end_pixryn_l0_map_file-pixryn_l0_map_file)
+	ldx #<pixryn_l0_map_file
+	ldy #>pixryn_l0_map_file
 	jsr SETNAM
 	lda #(^vram_l0_map_data + 2)
 	ldx #<vram_l0_map_data
@@ -106,9 +97,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_tilemap2filename-tilemap2filename)
-	ldx #<tilemap2filename
-	ldy #>tilemap2filename
+	lda #(end_pixryn_l1_map_file-pixryn_l1_map_file)
+	ldx #<pixryn_l1_map_file
+	ldy #>pixryn_l1_map_file
 	jsr SETNAM
 	lda #(^vram_l1_map_data + 2)
 	ldx #<vram_l1_map_data
@@ -120,9 +111,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_aurorafile-aurorafile)
-	ldx #<aurorafile
-	ldy #>aurorafile
+	lda #(end_lunafile-lunafile)
+	ldx #<lunafile
+	ldy #>lunafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
@@ -193,9 +184,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_collisionmapfile-collisionmapfile)
-	ldx #<collisionmapfile
-	ldy #>collisionmapfile
+	lda #(end_pixryn_collision_map_file-pixryn_collision_map_file)
+	ldx #<pixryn_collision_map_file
+	ldy #>pixryn_collision_map_file
 	jsr SETNAM
 	lda #0
 	ldx #<collision_map_data
