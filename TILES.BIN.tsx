@@ -50,5 +50,33 @@
    <wangtile tileid="69" wangid="1,2,1,1,1,1,1,1"/>
    <wangtile tileid="70" wangid="1,1,1,1,1,1,1,2"/>
   </wangset>
+  <wangset name="Grass/Dirt" type="mixed" tile="-1">
+   <wangcolor name="Dirt" color="#ff0000" tile="-1" probability="1"/>
+   <wangcolor name="Grass" color="#00ff00" tile="-1" probability="1"/>
+   <wangtile tileid="2" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="3" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="4" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="5" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="6" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="7" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="8" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="64" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="81" wangid="2,2,2,1,2,2,2,2"/>
+   <wangtile tileid="82" wangid="2,2,2,1,1,1,2,2"/>
+   <wangtile tileid="83" wangid="2,2,2,1,1,1,2,2"/>
+   <wangtile tileid="84" wangid="2,2,2,2,2,1,2,2"/>
+   <wangtile tileid="97" wangid="2,1,1,1,2,2,2,2"/>
+   <wangtile tileid="98" wangid="1,1,2,2,2,1,1,1"/>
+   <wangtile tileid="99" wangid="1,1,1,1,2,2,2,1"/>
+   <wangtile tileid="100" wangid="2,2,2,2,2,1,1,1"/>
+   <wangtile tileid="113" wangid="2,1,1,1,2,2,2,2"/>
+   <wangtile tileid="114" wangid="2,2,2,1,1,1,1,1"/>
+   <wangtile tileid="115" wangid="2,1,1,1,1,1,2,2"/>
+   <wangtile tileid="116" wangid="2,2,2,2,2,1,1,1"/>
+   <wangtile tileid="129" wangid="2,1,2,2,2,2,2,2"/>
+   <wangtile tileid="130" wangid="1,1,2,2,2,2,2,1"/>
+   <wangtile tileid="131" wangid="1,1,2,2,2,2,2,1"/>
+   <wangtile tileid="132" wangid="2,2,2,2,2,2,2,1"/>
+  </wangset>
  </wangsets>
 </tileset>
