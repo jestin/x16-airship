@@ -1,4 +1,4 @@
 ./terrain_fixes.tmx
-./buildings.tmx
 ./terrain_collision_generation.tmx
 ./things_collision_generation.tmx
+./buildings.tmx
