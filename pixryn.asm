@@ -33,61 +33,19 @@ load_pixryn:
 	sta veral0config
 	sta veral1config
 
-	; read tile file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_pixryn_tile_file-pixryn_tile_file)
-	ldx #<pixryn_tile_file
-	ldy #>pixryn_tile_file
-	jsr SETNAM
-	lda #(^vram_tile_data + 2)
-	ldx #<vram_tile_data
-	ldy #>vram_tile_data
-	jsr LOAD
+	LoadW u0, pixryn_tile_file
+	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
 
-	; read tile map file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_pixryn_l0_map_file-pixryn_l0_map_file)
-	ldx #<pixryn_l0_map_file
-	ldy #>pixryn_l0_map_file
-	jsr SETNAM
-	lda #(^vram_l0_map_data + 2)
-	ldx #<vram_l0_map_data
-	ldy #>vram_l0_map_data
-	jsr LOAD
+	LoadW u2, pixryn_l0_map_file
+	LoadW u3, end_pixryn_l0_map_file-pixryn_l0_map_file
 
-	; read tile map file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_pixryn_l1_map_file-pixryn_l1_map_file)
-	ldx #<pixryn_l1_map_file
-	ldy #>pixryn_l1_map_file
-	jsr SETNAM
-	lda #(^vram_l1_map_data + 2)
-	ldx #<vram_l1_map_data
-	ldy #>vram_l1_map_data
-	jsr LOAD
+	LoadW u4, pixryn_l1_map_file
+	LoadW u5, end_pixryn_l1_map_file-pixryn_l1_map_file
 
-	; read collision tile map into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_pixryn_collision_map_file-pixryn_collision_map_file)
-	ldx #<pixryn_collision_map_file
-	ldy #>pixryn_collision_map_file
-	jsr SETNAM
-	lda #0
-	ldx #<collision_map_data
-	ldy #>collision_map_data
-	jsr LOAD
+	LoadW u6, pixryn_collision_map_file
+	LoadW u7, end_pixryn_collision_map_file-pixryn_collision_map_file
+
+	jsr load_map
 
 	rts
 
@@ -122,47 +80,19 @@ load_pixryn_tavern:
 	sta veral0config
 	sta veral1config
 
-	; read tile file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_interior_tile_file-interior_tile_file)
-	ldx #<interior_tile_file
-	ldy #>interior_tile_file
-	jsr SETNAM
-	lda #(^vram_tile_data + 2)
-	ldx #<vram_tile_data
-	ldy #>vram_tile_data
-	jsr LOAD
+	LoadW u0, interior_tile_file
+	LoadW u1, end_interior_tile_file-interior_tile_file
 
-	; read tile map file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_tavern_l0_map_file-tavern_l0_map_file)
-	ldx #<tavern_l0_map_file
-	ldy #>tavern_l0_map_file
-	jsr SETNAM
-	lda #(^vram_l0_map_data + 2)
-	ldx #<vram_l0_map_data
-	ldy #>vram_l0_map_data
-	jsr LOAD
+	LoadW u2, tavern_l0_map_file
+	LoadW u3, end_tavern_l0_map_file-tavern_l0_map_file
 
-	; read tile map file into memory
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_tavern_l1_map_file-tavern_l1_map_file)
-	ldx #<tavern_l1_map_file
-	ldy #>tavern_l1_map_file
-	jsr SETNAM
-	lda #(^vram_l1_map_data + 2)
-	ldx #<vram_l1_map_data
-	ldy #>vram_l1_map_data
-	jsr LOAD
+	LoadW u4, tavern_l1_map_file
+	LoadW u5, end_tavern_l1_map_file-tavern_l1_map_file
+
+	LoadW u6, tavern_collision_map_file
+	LoadW u7, end_tavern_collision_map_file-tavern_collision_map_file
+
+	jsr load_map
 
 	rts
 

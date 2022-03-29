@@ -15,6 +15,7 @@
 .include "movement.asm"
 .include "animation.asm"
 .include "collision.asm"
+.include "map.asm"
 .include "pixryn.asm"
 
 ; replace this with separate memory include file
