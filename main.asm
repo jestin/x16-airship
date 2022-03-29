@@ -25,12 +25,12 @@ main:
 	LoadW map_height, 1024
 
 	; initialize player location on screen
-	LoadW xplayer, $008a
-	LoadW yplayer, $0088
+	LoadW xplayer, $00bc
+	LoadW yplayer, $007a
 
 	; initialize scroll variables
-	LoadW xoff, $008f
-	LoadW yoff, $00af
+	LoadW xoff, $0144
+	LoadW yoff, $00bf
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
@@ -111,9 +111,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_lunafile-lunafile)
-	ldx #<lunafile
-	ldy #>lunafile
+	lda #(end_aurorafile-aurorafile)
+	ldx #<aurorafile
+	ldy #>aurorafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
