@@ -28,4 +28,16 @@ end_pixryn_l1_map_file:
 pixryn_collision_map_file: .literal "PICLSNMAP.BIN"
 end_pixryn_collision_map_file:
 
+interior_tile_file: .literal "INTERIOR.BIN"
+end_interior_tile_file:
+
+tavern_l0_map_file: .literal "TAVL0.BIN"
+end_tavern_l0_map_file:
+
+tavern_l1_map_file: .literal "TAVL1.BIN"
+end_tavern_l1_map_file:
+
+tavern_collision_map_file: .literal "TAVCLSN.BIN"
+end_tavern_collision_map_file:
+
 .endif ; RESOURCES_INC

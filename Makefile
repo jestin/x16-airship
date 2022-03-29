@@ -14,7 +14,10 @@ SOURCES := $(wildcard *.asm) $(wildcard *.inc)
 RESOURCES = PITILES.BIN \
 			PIL0MAP.BIN \
 			PIL1MAP.BIN \
-			PICLSNMAP.BIN
+			PICLSNMAP.BIN \
+			TAVL0.BIN \
+			TAVL1.BIN \
+			TAVCLSN.BIN \
 
 all: $(PROG)
 
@@ -34,6 +37,15 @@ PIL1MAP.BIN: pixryn_isles/Pixryn_Isles.tmx
 
 PICLSNMAP.BIN: pixryn_isles/Pixryn_Isles.tmx
 	tmx2vera -c pixryn_isles/Pixryn_Isles.tmx PICLSNMAP.BIN -l collision
+
+TAVL0.BIN: pixryn_isles/tavern.tmx
+	tmx2vera pixryn_isles/tavern.tmx TAVL0.BIN -l terrain
+
+TAVL1.BIN: pixryn_isles/tavern.tmx
+	tmx2vera pixryn_isles/tavern.tmx TAVL1.BIN -l things
+
+TAVCLSN.BIN: pixryn_isles/tavern.tmx
+	tmx2vera -c pixryn_isles/tavern.tmx TAVCLSN.BIN -l collision
 
 #L0MAP.BIN: airship_game_map.tmx
 #	tmx2vera airship_game_map.tmx L0MAP.BIN -l terrain
