@@ -46,9 +46,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_aurorafile-aurorafile)
-	ldx #<aurorafile
-	ldy #>aurorafile
+	lda #(end_lunafile-lunafile)
+	ldx #<lunafile
+	ldy #>lunafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
