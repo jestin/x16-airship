@@ -20,6 +20,9 @@ active_tile			= $36	; 2 bytes
 tickcount			= $38
 joystick_data		= $39 ; 3 bytes
 
+; tick function
+tick_fn				= $56 ; 2 bytes
+
 ; vsync trigger for running the game loop
 zp_vsync_trig		= $58
 

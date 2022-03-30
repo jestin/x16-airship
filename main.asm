@@ -16,6 +16,7 @@
 .include "animation.asm"
 .include "collision.asm"
 .include "map.asm"
+.include "tick_handlers.asm"
 .include "pixryn.asm"
 
 ; replace this with separate memory include file
@@ -163,31 +164,26 @@ handle_irq:
 ;==================================================
 check_vsync:
 	lda zp_vsync_trig
-	beq @return
+	beq return_check_vsync
 
 	; VSYNC has occurred, handle
 
-	jsr tick
-
-@return:
-	stz zp_vsync_trig
-	rts
-
-;==================================================
-; tick
-;==================================================
-tick:
 	inc tickcount
 
-	; get joystick data
-	lda #1
-	jsr joystick_get
-	sta joystick_data
-	stx joystick_data+1
-	sty joystick_data+2
+	; Manually push the address of the jmp to the stack to simulate jsr
+	; instruction.
+	; NOTE:  Due to an ancient 6502 bug, we need to make sure that tick_fn
+	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
+	; sooner or later.  When it does, just fix by putting in a nop somewhere to
+	; bump the address foward.
+	lda #>(jmp_tick_fn)
+	pha
+	lda #<(jmp_tick_fn)
+	pha
+jmp_tick_fn:
+	jmp (tick_fn)				; jump to whatever the current screen defines
+								; as the tick handler
 
-	jsr animate_player
-	jsr move
-@return:
+return_check_vsync:
+	stz zp_vsync_trig
 	rts
-

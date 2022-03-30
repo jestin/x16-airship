@@ -1,6 +1,5 @@
 .ifndef PIXRYN_ASM
 PIXRYN_ASM = 1
-
 ;==================================================
 ; load_pixryn
 ;
@@ -46,6 +45,8 @@ load_pixryn:
 	LoadW u7, end_pixryn_collision_map_file-pixryn_collision_map_file
 
 	jsr load_map
+
+	LoadW tick_fn, character_overworld_tick
 
 	rts
 
