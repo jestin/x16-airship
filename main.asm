@@ -180,7 +180,7 @@ tick:
 	inc tickcount
 
 	; get joystick data
-	lda #0
+	lda #1
 	jsr joystick_get
 	sta joystick_data
 	stx joystick_data+1
