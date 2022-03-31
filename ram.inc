@@ -23,6 +23,9 @@ player_tile			= $38	; 2 bytes
 tickcount			= $40
 joystick_data		= $41 ; 3 bytes
 
+; interaction function
+interaction_fn		= $54 ; 2 bytes
+
 ; tick function
 tick_fn				= $56 ; 2 bytes
 

@@ -15,6 +15,7 @@
 .include "movement.asm"
 .include "animation.asm"
 .include "collision.asm"
+.include "interaction.asm"
 .include "map.asm"
 .include "tick_handlers.asm"
 .include "pixryn.asm"
@@ -165,7 +166,7 @@ handle_irq:
 ;==================================================
 check_vsync:
 	lda zp_vsync_trig
-	beq return_check_vsync
+	beq @return
 
 	; VSYNC has occurred, handle
 
@@ -177,14 +178,15 @@ check_vsync:
 	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
 	; sooner or later.  When it does, just fix by putting in a nop somewhere to
 	; bump the address foward.
-	lda #>(jmp_tick_fn)
+	lda #>(@jmp_tick_return)
 	pha
-	lda #<(jmp_tick_fn)
+	lda #<(@jmp_tick_return)
 	pha
-jmp_tick_fn:
 	jmp (tick_fn)				; jump to whatever the current screen defines
 								; as the tick handler
+@jmp_tick_return:
+	nop
 
-return_check_vsync:
+@return:
 	stz zp_vsync_trig
 	rts

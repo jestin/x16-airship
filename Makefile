@@ -18,7 +18,8 @@ RESOURCES = PITILES.BIN \
 			TAVL0.BIN \
 			TAVL1.BIN \
 			TAVCLSN.BIN \
-			PIINT.BIN
+			PIINT.BIN \
+			PITAVINT.BIN
 
 all: $(PROG)
 
@@ -50,6 +51,9 @@ TAVL1.BIN: pixryn_isles/tavern.tmx
 
 TAVCLSN.BIN: pixryn_isles/tavern.tmx
 	tmx2vera -c pixryn_isles/tavern.tmx TAVCLSN.BIN -l collision
+
+PITAVINT.BIN: pixryn_isles/tavern.tmx
+	tmx2vera -c pixryn_isles/tavern.tmx PITAVINT.BIN -l interaction
 
 #L0MAP.BIN: airship_game_map.tmx
 #	tmx2vera airship_game_map.tmx L0MAP.BIN -l terrain

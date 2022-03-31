@@ -50,7 +50,26 @@ load_pixryn:
 	jsr load_map
 
 	LoadW tick_fn, character_overworld_tick
+	LoadW interaction_fn, pixryn_overworld_interaction_handler
 
+	rts
+
+;==================================================
+; pixryn_overworld_interaction_handler
+;
+; void pixryn_overworld_interaction_handler()
+;==================================================
+pixryn_overworld_interaction_handler:
+
+	lda u0L
+	cmp #0
+	beq @return
+
+	cmp #1
+	bne @return
+	jsr load_pixryn_tavern
+
+@return:
 	rts
 
 ;==================================================
@@ -96,8 +115,31 @@ load_pixryn_tavern:
 	LoadW u6, tavern_collision_map_file
 	LoadW u7, end_tavern_collision_map_file-tavern_collision_map_file
 
+	LoadW u8, pixryn_tavern_interaction_map_file
+	LoadW u9, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
+
 	jsr load_map
+
+	LoadW tick_fn, character_overworld_tick
+	LoadW interaction_fn, pixryn_tavern_interaction_handler
 
 	rts
 
+;==================================================
+; pixryn_tavern_interaction_handler
+;
+; void pixryn_tavern_interaction_handler()
+;==================================================
+pixryn_tavern_interaction_handler:
+
+	lda u0L
+	cmp #0
+	beq @return
+
+	cmp #1
+	bne @return
+	jsr load_pixryn
+
+@return:
+	rts
 .endif ; PIXRYN_ASM

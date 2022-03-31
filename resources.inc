@@ -43,4 +43,7 @@ end_tavern_l1_map_file:
 tavern_collision_map_file: .literal "TAVCLSN.BIN"
 end_tavern_collision_map_file:
 
+pixryn_tavern_interaction_map_file: .literal "PITAVINT.BIN"
+end_pixryn_tavern_interaction_map_file:
+
 .endif ; RESOURCES_INC
