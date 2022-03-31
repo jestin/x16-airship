@@ -83,12 +83,12 @@ load_pixryn_tavern:
 	LoadW map_height, 512
 
 	; initialize player location on screen
-	LoadW xplayer, $00bc
-	LoadW yplayer, $007a
+	LoadW xplayer, $00b0
+	LoadW yplayer, $0080
 
 	; initialize scroll variables
-	LoadW xoff, $0000
-	LoadW yoff, $0000
+	LoadW xoff, $0070
+	LoadW yoff, $0070
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
