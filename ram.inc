@@ -27,14 +27,9 @@ tick_fn				= $56 ; 2 bytes
 zp_vsync_trig		= $58
 
 
-
-
 ; Other addresses
 
 ; the program is loaded at $800
-
-; for a 128x64 tile map this takes $2000 bytes
-collision_map_data	= $2000
 
 ; for 32 16x16 1bpp tiles this takes $800 bytes
 collision_tile_data	= $4000
@@ -46,6 +41,13 @@ construct_tile		= $4800
 ; player collision tile
 player_collision_tile = $4880
 
-default_irq			= $8000
+default_irq			= $9efe
+
+
+; Banked RAM addresses
+
+; for a 128x64 tile map this takes $2000 bytes
+collision_map_data_bank = 0
+collision_map_data	= $a000
 
 .endif ; RAM_INC

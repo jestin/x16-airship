@@ -90,6 +90,10 @@ construct_collision_tile:
 	adc yoff+1
 	sta u1H
 
+	; switch to the collsion map bank of RAM
+	lda #collision_map_data_bank
+	sta $00
+
 	; First, load the 4 relevant tiles into our collision tile memory
 	ldx #0
 @populate_pad_loop:

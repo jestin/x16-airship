@@ -58,6 +58,10 @@ load_map:
 	ldy #>vram_l1_map_data
 	jsr LOAD
 
+	; switch to the collision map bank
+	lda #collision_map_data_bank
+	sta $00
+
 	; read collision tile map into memory
 	lda #1
 	ldx #8

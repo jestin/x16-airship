@@ -101,6 +101,7 @@ main:
 	sta veradat
 
 	; read collision tile file into memory
+
 	lda #1
 	ldx #8
 	ldy #0
