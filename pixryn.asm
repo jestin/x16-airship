@@ -44,6 +44,9 @@ load_pixryn:
 	LoadW u6, pixryn_collision_map_file
 	LoadW u7, end_pixryn_collision_map_file-pixryn_collision_map_file
 
+	LoadW u8, pixryn_interaction_map_file
+	LoadW u9, end_pixryn_interaction_map_file-pixryn_interaction_map_file
+
 	jsr load_map
 
 	LoadW tick_fn, character_overworld_tick

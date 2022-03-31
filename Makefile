@@ -18,6 +18,7 @@ RESOURCES = PITILES.BIN \
 			TAVL0.BIN \
 			TAVL1.BIN \
 			TAVCLSN.BIN \
+			PIINT.BIN
 
 all: $(PROG)
 
@@ -37,6 +38,9 @@ PIL1MAP.BIN: pixryn_isles/Pixryn_Isles.tmx
 
 PICLSNMAP.BIN: pixryn_isles/Pixryn_Isles.tmx
 	tmx2vera -c pixryn_isles/Pixryn_Isles.tmx PICLSNMAP.BIN -l collision
+
+PIINT.BIN: pixryn_isles/Pixryn_Isles.tmx
+	tmx2vera -c pixryn_isles/Pixryn_Isles.tmx PIINT.BIN -l interaction
 
 TAVL0.BIN: pixryn_isles/tavern.tmx
 	tmx2vera pixryn_isles/tavern.tmx TAVL0.BIN -l terrain

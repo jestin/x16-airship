@@ -53,4 +53,8 @@ default_irq			= $9efe
 collision_map_data_bank = 0
 collision_map_data	= $a000
 
+; for a 128x64 tile map this takes $2000 bytes
+interaction_map_data_bank = 1
+interaction_map_data	= $a000
+
 .endif ; RAM_INC

@@ -6,14 +6,16 @@ MAP_ASM = 1
 ;
 ; Loads map data
 ;
-; void load_map(tile_file_name: u0,
-;				tile_file_size: u1,
-;				l0_map_file_name: u2,
-;				l0_map_file_size: u3,
-;				l1_map_file_name: u4,
-;				l1_map_file_size: u5,
-;				collision_map_file_name: u6,
-;				collision_map_file_size: u7)
+; void load_map(word tile_file_name: u0,
+;				byte tile_file_size: u1,
+;				word l0_map_file_name: u2,
+;				byte l0_map_file_size: u3,
+;				word l1_map_file_name: u4,
+;				byte l1_map_file_size: u5,
+;				word collision_map_file_name: u6,
+;				byte collision_map_file_size: u7,
+;				word interaction_map_file_name: u8,
+;				byte interaction_map_file_size: u9)
 ;==================================================
 load_map:
 	; read tile file into memory
@@ -74,6 +76,24 @@ load_map:
 	lda #0
 	ldx #<collision_map_data
 	ldy #>collision_map_data
+	jsr LOAD
+
+	; switch to the interaction map bank
+	lda #interaction_map_data_bank
+	sta $00
+
+	; read interaction tile map into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda u9
+	ldx u8L
+	ldy u8H
+	jsr SETNAM
+	lda #0
+	ldx #<interaction_map_data
+	ldy #>interaction_map_data
 	jsr LOAD
 
 rts
