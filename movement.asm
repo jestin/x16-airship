@@ -11,69 +11,98 @@ MOVEMENT_ASM = 1
 ; void set_active_tile()
 ;==================================================
 set_active_tile:
-	; the active tile x is the (xplayer + xoff) / 16
-	clc
 	lda xplayer
-	adc xoff
 	sta u0L
 	lda xplayer+1
-	adc xoff+1
 	sta u0H
-	LsrW u0						; divide by 2, 4 times (divide by 16)
-	LsrW u0
-	LsrW u0
-	LsrW u0
+
+	lda yplayer
+	sta u1L
+	lda yplayer+1
+	sta u1H
+
+	jsr calculate_tile_index
+
+	lda u0L
+	sta active_tile
+	lda u0H
+	sta active_tile+1
+
+	rts
+;==================================================
+; calculate_tile_index
+;
+; Based on an object's location on the screen,
+; calculate the corresponding tile index.
+;
+; void calculate_tile_index(word xobject: u0,
+; 							word yobject: u1
+; 							out word tile_index: u0)
+;==================================================
+calculate_tile_index:
+	; the active tile x is the (xplayer + xoff) / 16
+	clc
+	lda u0L
+	adc xoff
+	sta u2L
+	lda u0H
+	adc xoff+1
+	sta u2H
+	LsrW u2						; divide by 2, 4 times (divide by 16)
+	LsrW u2
+	LsrW u2
+	LsrW u2
 
 	; the active tile y is the (yplayer + yoff) / 16
 	clc
-	lda yplayer
+	lda u1L
 	adc yoff
-	sta u1L
-	lda yplayer+1
+	sta u3L
+	lda u1H
 	adc yoff+1
-	sta u1H
-	LsrW u1						; divide by 2, 4 times (divide by 16)
-	LsrW u1
-	LsrW u1
-	LsrW u1
+	sta u3H
+	LsrW u3						; divide by 2, 4 times (divide by 16)
+	LsrW u3
+	LsrW u3
+	LsrW u3
 
 	; calculate map width in tiles by shifting map_width left 4 times
-	MoveW map_width, u2
-	LsrW u2
-	LsrW u2
-	LsrW u2
-	LsrW u2
+	MoveW map_width, u4
+	LsrW u4
+	LsrW u4
+	LsrW u4
+	LsrW u4
 
-	; active tile should now be (u1 * u2) + u0
-	; NOTE: u0, u1, nor u2 should ever need their high bytes.  We simply aren't
+	; active tile should now be (u3 * u4) + u2
+	; NOTE: u2, u3, nor u4 should ever need their high bytes.  We simply aren't
 	; allowed tilemaps that large.  However, the result of this calculation
 	; almost certainly will require 16 bits.
-	lda u1						; load u1 into X, because it is almost
-	tax							; certainly lower than u2
-	LoadW u1, 0					; zero out u1 to re-use
+	lda u3						; load u3 into X, because it is almost
+	tax							; certainly lower than u4
+	LoadW u3, 0					; zero out u3 to re-use
 	clc
 @multiply_loop:
 	cpx #0
 	beq @add_x_tile
 	clc
-	lda u1L
-	adc u2L
-	sta u1L
-	lda u1H
-	adc u2H
-	sta u1H
+	lda u3L
+	adc u4L
+	sta u3L
+	lda u3H
+	adc u4H
+	sta u3H
 	dex
 	bra @multiply_loop
 
 @add_x_tile:
-	; at this point u1 contains the result of the multiplication
+	; at this point u3 contains the result of the multiplication
 	clc
-	lda u1L
-	adc u0L
-	sta active_tile
-	lda u1H
-	adc u0H
-	sta active_tile+1
+	lda u3L
+	adc u2L
+	sta u0L
+	lda u3H
+	adc u2H
+	sta u0H
 
 	rts
 

@@ -13,12 +13,15 @@ yoff				= $28	; 2 bytes
 xplayer				= $30	; 2 bytes
 yplayer				= $32	; 2 bytes
 
-; index of active tile (0 through w*h-1)
+; index (0 through w*h-1) of active tile (where player upper left is)
 active_tile			= $36	; 2 bytes
 
+; index (0 through w*h-1) of active tile (where player center is)
+player_tile			= $38	; 2 bytes
+
 ; 256 repeating ticks
-tickcount			= $38
-joystick_data		= $39 ; 3 bytes
+tickcount			= $40
+joystick_data		= $41 ; 3 bytes
 
 ; tick function
 tick_fn				= $56 ; 2 bytes
