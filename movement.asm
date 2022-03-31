@@ -29,6 +29,42 @@ set_active_tile:
 	sta active_tile+1
 
 	rts
+
+;==================================================
+; set_player_tile
+;
+; Based on the player's location on the map,
+; set the player tile (tile containing the player
+; sprite's center)
+;
+; void set_player_tile()
+;==================================================
+set_player_tile:
+	clc
+	lda xplayer
+	adc #8
+	sta u0L
+	lda xplayer+1
+	adc #0
+	sta u0H
+
+	clc
+	lda yplayer
+	adc #8
+	sta u1L
+	lda yplayer+1
+	adc #0
+	sta u1H
+
+	jsr calculate_tile_index
+
+	lda u0L
+	sta player_tile
+	lda u0H
+	sta player_tile+1
+
+	rts
+
 ;==================================================
 ; calculate_tile_index
 ;

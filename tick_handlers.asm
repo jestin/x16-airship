@@ -20,6 +20,7 @@ character_overworld_tick:
 
 	jsr animate_player
 	jsr move
+	jsr set_player_tile
 
 @return: 
 	rts
