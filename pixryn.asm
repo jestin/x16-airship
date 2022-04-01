@@ -11,14 +11,6 @@ load_pixryn:
 	LoadW map_width, 2048
 	LoadW map_height, 1024
 
-	; initialize player location on screen
-	LoadW xplayer, $00bc
-	LoadW yplayer, $007a
-
-	; initialize scroll variables
-	LoadW xoff, $0144
-	LoadW yoff, $00bf
-
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
 	sta veradcvideo
@@ -51,6 +43,40 @@ load_pixryn:
 
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
+
+	rts
+
+;==================================================
+; player_to_pixryn_tavern
+;
+; void player_to_pixryn_tavern()
+;==================================================
+player_to_pixryn_tavern:
+
+	; initialize player location on screen
+	LoadW xplayer, $00ac
+	LoadW yplayer, $0048
+
+	; initialize scroll variables
+	LoadW xoff, $0144
+	LoadW yoff, $0000
+
+	rts
+
+;==================================================
+; player_to_pixryn_home
+;
+; void player_to_pixryn_home()
+;==================================================
+player_to_pixryn_home:
+
+	; initialize player location on screen
+	LoadW xplayer, $00bc
+	LoadW yplayer, $007a
+
+	; initialize scroll variables
+	LoadW xoff, $0144
+	LoadW yoff, $00bf
 
 	rts
 
@@ -138,6 +164,7 @@ pixryn_tavern_interaction_handler:
 
 	cmp #1
 	bne @return
+	jsr player_to_pixryn_tavern
 	jsr load_pixryn
 
 @return:

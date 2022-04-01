@@ -116,6 +116,7 @@ main:
 	ldy #>collision_tile_data
 	jsr LOAD
 
+	jsr player_to_pixryn_home
 	jsr load_pixryn
 
 	jsr init_irq
