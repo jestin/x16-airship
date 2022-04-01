@@ -96,11 +96,10 @@ pixryn_overworld_interaction_handler:
 
 	; on the tavern door, now check if they pressed B
 	lda joystick_data
-	bit #%10000000				; checks if the button is currently down
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
-	lda last_joystick_data
-	bit #%10000000				; checks if the was down last time
-	beq @return
 	jsr load_pixryn_tavern
 
 @return:
@@ -172,13 +171,14 @@ pixryn_tavern_interaction_handler:
 
 	cmp #1
 	bne @return
-	; on the tavern door, now check if they pressed B
+
+	; on the tavern exit door, now check if they pressed B
 	lda joystick_data
-	bit #%10000000				; checks if the button is currently down
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
-	lda last_joystick_data
-	bit #%10000000				; checks if the was down last time
-	beq @return
+
 	jsr player_to_pixryn_tavern
 	jsr load_pixryn
 

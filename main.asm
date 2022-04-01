@@ -16,6 +16,7 @@
 .include "animation.asm"
 .include "collision.asm"
 .include "interaction.asm"
+.include "joystick.asm"
 .include "map.asm"
 .include "tick_handlers.asm"
 .include "pixryn.asm"

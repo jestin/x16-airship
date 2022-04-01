@@ -4,28 +4,14 @@ TICK_HANDLERS_ASM = 1
 ;==================================================
 ; character_overworld_tick
 ;
-; Custom tick handler for the character Pixryn
-; overworld map.
+; Custom tick handler for the character overworld
+; map.
 ;
 ; void character_overworld_tick()
 ;==================================================
 character_overworld_tick:
 
-	; move old joystick data to last_joystick_data
-	lda joystick_data
-	sta last_joystick_data
-	lda joystick_data+1
-	sta last_joystick_data+1
-	lda joystick_data+2
-	sta last_joystick_data+2
-
-	; get joystick data
-	lda #1
-	jsr joystick_get
-	sta joystick_data
-	stx joystick_data+1
-	sty joystick_data+2
-
+	jsr update_joystick_data
 	jsr animate_player
 	jsr move
 	jsr set_player_tile

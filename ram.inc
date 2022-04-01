@@ -20,9 +20,9 @@ active_tile			= $36	; 2 bytes
 player_tile			= $38	; 2 bytes
 
 ; 256 repeating ticks
-tickcount			= $40
-joystick_data		= $41 ; 3 bytes
-last_joystick_data	= $44 ; 3 bytes
+tickcount				= $40
+joystick_data			= $41 ; 3 bytes
+joystick_changed_data	= $44 ; 3 bytes
 
 ; interaction function
 interaction_fn		= $54 ; 2 bytes
