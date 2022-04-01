@@ -55,7 +55,7 @@ player_to_pixryn_tavern:
 
 	; initialize player location on screen
 	LoadW xplayer, $00ac
-	LoadW yplayer, $0048
+	LoadW yplayer, $0040
 
 	; initialize scroll variables
 	LoadW xoff, $0144
@@ -93,6 +93,14 @@ pixryn_overworld_interaction_handler:
 
 	cmp #1
 	bne @return
+
+	; on the tavern door, now check if they pressed B
+	lda joystick_data
+	bit #%10000000				; checks if the button is currently down
+	bne @return
+	lda last_joystick_data
+	bit #%10000000				; checks if the was down last time
+	beq @return
 	jsr load_pixryn_tavern
 
 @return:
@@ -164,6 +172,13 @@ pixryn_tavern_interaction_handler:
 
 	cmp #1
 	bne @return
+	; on the tavern door, now check if they pressed B
+	lda joystick_data
+	bit #%10000000				; checks if the button is currently down
+	bne @return
+	lda last_joystick_data
+	bit #%10000000				; checks if the was down last time
+	beq @return
 	jsr player_to_pixryn_tavern
 	jsr load_pixryn
 

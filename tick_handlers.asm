@@ -11,6 +11,14 @@ TICK_HANDLERS_ASM = 1
 ;==================================================
 character_overworld_tick:
 
+	; move old joystick data to last_joystick_data
+	lda joystick_data
+	sta last_joystick_data
+	lda joystick_data+1
+	sta last_joystick_data+1
+	lda joystick_data+2
+	sta last_joystick_data+2
+
 	; get joystick data
 	lda #1
 	jsr joystick_get
