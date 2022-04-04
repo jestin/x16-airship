@@ -34,7 +34,7 @@ animate_player:
 
 @calculate_frame:
 	; returns the correct animation frame in A
-	jsr animation_calculate_frame
+	jsr animation_calculate_player_frame
 
 @set_sprite:
 	; Player
@@ -45,14 +45,14 @@ animate_player:
 	rts
 
 ;==================================================
-; animation_calculate_frame
+; animation_calculate_player_frame
 ; Based on the current tick count, calculates which
 ; frame animations should use.
 ;
-; void animation_calculate_frame(
+; void animation_calculate_player_frame(
 ; 					out byte animation_frame: a)
 ;==================================================
-animation_calculate_frame:
+animation_calculate_player_frame:
 	; calculate frame and sprite - 0-0, 1-1, 2-0, 3-2
 	lda tickcount
 	lsr			; shift down a bit
@@ -218,7 +218,13 @@ animate_map:
 	; (zp),y addressing
 	LoadW u1, anim_tiles
 
-	jsr animation_calculate_frame
+	; base the animation frame on tickcount
+
+	lda tickcount
+	lsr
+	lsr
+	lsr
+	and #%00000011
 
 	ldy #0
 @tile_loop:

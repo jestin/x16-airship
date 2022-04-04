@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/PITILES.BIN" tilewidth="16" tileheight="16" tilecount="256" columns="16">
  <image source="PITILES.BIN.bmp" trans="000000" width="256" height="256"/>
+ <tile id="1">
+  <animation>
+   <frame tileid="1" duration="133"/>
+   <frame tileid="2" duration="133"/>
+   <frame tileid="3" duration="133"/>
+   <frame tileid="4" duration="133"/>
+  </animation>
+ </tile>
  <tile id="2" probability="0.05"/>
  <tile id="3" probability="0.05"/>
  <tile id="4" probability="0.05"/>
@@ -15,9 +23,6 @@
    <wangcolor name="Water" color="#00ff00" tile="-1" probability="1"/>
    <wangcolor name="Dirt" color="#0000ff" tile="-1" probability="1"/>
    <wangtile tileid="1" wangid="2,2,2,2,2,2,2,2"/>
-   <wangtile tileid="2" wangid="2,2,2,2,2,2,2,2"/>
-   <wangtile tileid="3" wangid="2,2,2,2,2,2,2,2"/>
-   <wangtile tileid="4" wangid="2,2,2,2,2,2,2,2"/>
    <wangtile tileid="5" wangid="1,1,1,1,1,1,1,1"/>
    <wangtile tileid="6" wangid="1,1,1,1,1,1,1,1"/>
    <wangtile tileid="7" wangid="1,1,1,1,1,1,1,1"/>
