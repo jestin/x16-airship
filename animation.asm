@@ -186,11 +186,18 @@ add_animated_tile:
 	lda #animation_tile_restore_data_bank
 	sta $00
 
-	LoadW u0, animation_tile_restore
+	; load the animation restore, and add the current anim_tiles_count to the
+	; high byte, which will be the correct restore address
+	LoadW u1, animation_tile_restore
+	clc
+	lda anim_tiles_count
+	adc u1H
+	sta u1H
+
 	ldy #0
 @copy_restore_tile_loop:
 	lda veradat
-	sta (u0),y
+	sta (u1),y
 	iny
 	bne @copy_restore_tile_loop
 
@@ -203,6 +210,9 @@ add_animated_tile:
 ; animate_map
 ;==================================================
 animate_map:
+	lda anim_tiles_count
+	cmp #0
+	beq @return
 
 	; put the address of the animated tiles on the zero page so we can use
 	; (zp),y addressing
@@ -218,9 +228,10 @@ animate_map:
 	pla							; pull the frame num
 	jsr set_tile_frame
 	iny
-	cpy #anim_tiles_count
-	beq @tile_loop
+	cpy anim_tiles_count
+	bne @tile_loop
 
+@return:
 	rts
 ;==================================================
 ; set_tile_frame
@@ -237,6 +248,7 @@ animate_map:
 ;==================================================
 set_tile_frame:
 	pha			; push to preseve the frame
+	phy			; push to preseve the loop counter
 
 	; first check if a is zero.  If so, we need to restore the original tile
 	; from ram
@@ -323,6 +335,7 @@ set_tile_frame:
 	bne @restore_loop
 
 @return:
+	ply			; pull to restore the loop counter
 	pla			; pull to restore the frame
 	rts
 

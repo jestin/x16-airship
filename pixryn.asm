@@ -44,7 +44,13 @@ load_pixryn:
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
 
+	; always clear anim_tiles_count
+	stz anim_tiles_count
+
 	; manually setup the animated tiles for the map
+	lda #1
+	sta u0L
+	jsr add_animated_tile
 	lda #74
 	sta u0L
 	jsr add_animated_tile
@@ -160,6 +166,9 @@ load_pixryn_tavern:
 
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_tavern_interaction_handler
+
+	; always clear anim_tiles_count
+	stz anim_tiles_count
 
 	rts
 
