@@ -12,6 +12,7 @@ TICK_HANDLERS_ASM = 1
 character_overworld_tick:
 
 	jsr update_joystick_data
+	jsr animate_map
 	jsr animate_player
 	jsr move
 	jsr set_player_tile

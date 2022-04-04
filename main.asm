@@ -141,10 +141,14 @@ init_irq:
 	sta default_irq
 	lda IRQVec+1
 	sta default_irq+1
+	sei
 	lda #<handle_irq
 	sta IRQVec
 	lda #>handle_irq
 	sta IRQVec+1
+	lda #$01				; set vera to only interrupt on vsync
+	sta veraien
+	cli
 	rts
 
 ;==================================================

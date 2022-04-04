@@ -44,6 +44,11 @@ load_pixryn:
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
 
+	; manually setup the animated tiles for the map
+	lda #74
+	sta u0L
+	jsr add_animated_tile
+
 	rts
 
 ;==================================================
