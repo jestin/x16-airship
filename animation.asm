@@ -38,7 +38,7 @@ animate_player:
 
 @set_sprite:
 	; Player
-	ldx #0
+	ldx #player_sprite
 	jsr set_sprite_frame
 
 @return:

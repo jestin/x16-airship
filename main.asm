@@ -5,15 +5,19 @@
 .segment "CODE"
 
 	jmp main
+	
+test_string: .literal "This is a test",$00
 
 .include "x16.inc"
 .include "vera.inc"
 .include "macros.inc"
 .include "ram.inc"
 .include "vram.inc"
+.include "sprites.inc"
 .include "resources.inc"
 .include "movement.asm"
 .include "animation.asm"
+.include "text.asm"
 .include "collision.asm"
 .include "interaction.asm"
 .include "joystick.asm"
@@ -48,9 +52,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_lunafile-lunafile)
-	ldx #<lunafile
-	ldy #>lunafile
+	lda #(end_aurorafile-aurorafile)
+	ldx #<aurorafile
+	ldy #>aurorafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites
@@ -85,22 +89,23 @@ main:
 	sta veralo
 
 	; create player sprite
+	ldx #player_sprite
 	lda #<(vram_player_sprites >> 5)
-	sta veradat
-	lda #>(vram_player_sprites >> 5) | 1 << 7 ; mode=0
-	sta veradat
-	lda xplayer		; XL
-	sta veradat
-	lda xplayer+1	; XH
-	sta veradat
-	lda yplayer		; YL
-	sta veradat
-	lda yplayer+1	; YH
-	sta veradat
+	sprstore 0
+	lda #>(vram_player_sprites >> 5) | %10000000 ; mode=1
+	sprstore 1
+	lda xplayer
+	sprstore 2
+	lda xplayer+1
+	sprstore 3
+	lda yplayer
+	sprstore 4
+	lda yplayer+1
+	sprstore 5
 	lda #%00001000	; Collision/Z-depth/vflip/hflip
-	sta veradat
+	sprstore 6
 	lda #%01010000	; Height/Width/Paloffset
-	sta veradat
+	sprstore 7
 
 	; read collision tile file into memory
 
@@ -116,6 +121,27 @@ main:
 	ldx #<collision_tile_data
 	ldy #>collision_tile_data
 	jsr LOAD
+
+	; character initialization
+	stz next_char_sprite
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_charsetfile-charsetfile)
+	ldx #<charsetfile
+	ldy #>charsetfile
+	jsr SETNAM
+	lda #(^vram_charset_sprites + 2)
+	ldx #<vram_charset_sprites
+	ldy #>vram_charset_sprites
+	jsr LOAD
+
+	LoadW u0, test_string
+	LoadW u1, 100
+	LoadW u2, 100
+	jsr draw_string
 
 	jsr player_to_pixryn_home
 	jsr load_pixryn

@@ -25,6 +25,7 @@ joystick_data			= $41 ; 3 bytes
 joystick_changed_data	= $44 ; 3 bytes
 
 anim_tiles_count		= $47
+next_char_sprite		= $48
 
 ; interaction function
 interaction_fn		= $54 ; 2 bytes

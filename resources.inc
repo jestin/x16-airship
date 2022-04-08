@@ -16,6 +16,9 @@ end_connorfile:
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 
+charsetfile: .literal "CHARSET.BIN"
+end_charsetfile:
+
 pixryn_tile_file: .literal "PITILES.BIN"
 end_pixryn_tile_file:
 

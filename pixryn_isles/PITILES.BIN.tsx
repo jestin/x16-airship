@@ -17,6 +17,14 @@
  <tile id="8" probability="0.05"/>
  <tile id="9" probability="0.05"/>
  <tile id="10" probability="0.05"/>
+ <tile id="74">
+  <animation>
+   <frame tileid="74" duration="133"/>
+   <frame tileid="75" duration="133"/>
+   <frame tileid="76" duration="133"/>
+   <frame tileid="77" duration="133"/>
+  </animation>
+ </tile>
  <wangsets>
   <wangset name="Grass/Water/Dirt" type="mixed" tile="-1">
    <wangcolor name="Grass" color="#ff0000" tile="-1" probability="1"/>
