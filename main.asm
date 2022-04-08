@@ -138,11 +138,6 @@ main:
 	ldy #>vram_charset_sprites
 	jsr LOAD
 
-	LoadW u0, test_string
-	LoadW u1, 100
-	LoadW u2, 100
-	jsr draw_string
-
 	jsr player_to_pixryn_home
 	jsr load_pixryn
 

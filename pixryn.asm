@@ -102,8 +102,8 @@ pixryn_overworld_interaction_handler:
 	cmp #0
 	beq @return
 
-	cmp #1
-	bne @return
+	cmp #$1
+	bne @campfire_sign
 
 	; on the tavern door, now check if they pressed B
 	lda joystick_data
@@ -112,6 +112,20 @@ pixryn_overworld_interaction_handler:
 	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
 	jsr load_pixryn_tavern
+
+@campfire_sign:
+	cmp #$10
+	bne @return
+
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	bne @return
+	LoadW u0, test_string
+	LoadW u1, 100
+	LoadW u2, 100
+	jsr draw_string
 
 @return:
 	rts
