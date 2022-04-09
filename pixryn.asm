@@ -54,6 +54,9 @@ load_pixryn:
 	lda #74
 	sta u0L
 	jsr add_animated_tile
+	lda #213
+	sta u0L
+	jsr add_animated_tile
 
 	rts
 

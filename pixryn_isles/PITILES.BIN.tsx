@@ -25,6 +25,14 @@
    <frame tileid="77" duration="133"/>
   </animation>
  </tile>
+ <tile id="213">
+  <animation>
+   <frame tileid="213" duration="100"/>
+   <frame tileid="214" duration="100"/>
+   <frame tileid="215" duration="100"/>
+   <frame tileid="216" duration="100"/>
+  </animation>
+ </tile>
  <wangsets>
   <wangset name="Grass/Water/Dirt" type="mixed" tile="-1">
    <wangcolor name="Grass" color="#ff0000" tile="-1" probability="1"/>
