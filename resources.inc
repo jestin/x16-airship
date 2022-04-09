@@ -37,13 +37,13 @@ end_pixryn_interaction_map_file:
 interior_tile_file: .literal "INTERIOR.BIN"
 end_interior_tile_file:
 
-tavern_l0_map_file: .literal "TAVL0.BIN"
+tavern_l0_map_file: .literal "PITAVL0.BIN"
 end_tavern_l0_map_file:
 
-tavern_l1_map_file: .literal "TAVL1.BIN"
+tavern_l1_map_file: .literal "PITAVL1.BIN"
 end_tavern_l1_map_file:
 
-tavern_collision_map_file: .literal "TAVCLSN.BIN"
+tavern_collision_map_file: .literal "PITAVCLSN.BIN"
 end_tavern_collision_map_file:
 
 pixryn_tavern_interaction_map_file: .literal "PITAVINT.BIN"
