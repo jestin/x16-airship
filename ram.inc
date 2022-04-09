@@ -27,6 +27,17 @@ joystick_changed_data	= $44 ; 3 bytes
 anim_tiles_count		= $47
 next_char_sprite		= $48
 
+; a bitmask of player statuses:
+; 0 - unable to move
+; 1 - reading text
+; 2 -
+; 3 -
+; 4 -
+; 5 -
+; 6 -
+; 7 -
+player_status			= $49
+
 ; interaction function
 interaction_fn		= $54 ; 2 bytes
 
@@ -51,8 +62,13 @@ construct_tile		= $4800
 ; player collision tile
 player_collision_tile = $4880
 
-; Store an array of indexes of the (base) animated tiles.  The max allowed is TBD
-anim_tiles			= $4900
+; Store an array of indexes of the (base) animated tiles.  The max allowed is
+; 32 animated tiles, since the that is the most we can hold in the animation
+; tile restore bank (32 tiles x 256 bytes per tile = 8K)
+anim_tiles			= $4900 ; 64 bytes (32 2-byte tile indexes)
+
+; Store an array of sprites used for message text
+message_sprites		= $4940 ; 64 bytes
 
 default_irq			= $9efe
 

@@ -28,15 +28,16 @@ inc_next_char_sprite:
 ;
 ; void draw_string(word string_address: u0,
 ;					word screen_x: u1,
-;					word screen_y: u2)
+;					word screen_y: u2,
+; 					word sprite_array: u3)
 ;==================================================
 draw_string:
 
 @loop:
 	lda (u0)
-	; check for null termination, and return if found
+	; check for null termination, and end the loop if found
 	cmp #0
-	beq @return
+	beq @end_loop
 
 	jsr char_to_sprite_address
 
@@ -44,6 +45,12 @@ draw_string:
 
 	ldx next_char_sprite
 	jsr set_character_sprite
+
+	; store the array index for the character into an array so we can
+	; manipulate it later
+	lda next_char_sprite
+	sta (u3)
+	IncW u3
 
 	; increment the next character sprite index
 	jsr inc_next_char_sprite
@@ -61,6 +68,12 @@ draw_string:
 	sta u1H
 
 	bra @loop
+@end_loop:
+
+	; write a $80 to the end of the sprite array, since there shouldn't be any
+	; sprites with that index
+	lda #$80
+	sta (u3)
 
 @return:
 	rts
@@ -71,14 +84,14 @@ draw_string:
 ; Sets a sprite that is to be used for characters
 ;
 ; void set_character_sprite(byte sprite_index: x,
-;							word data_address: u3,
+;							word data_address: u4,
 ;							word screen_x: u1,
 ;							word screen_y: u2)
 ;==================================================
 set_character_sprite:
-	lda u3L
+	lda u4L
 	sprstore 0
-	lda u3H
+	lda u4H
 	ora #%10000000
 	sprstore 1
 	lda u1L
@@ -104,33 +117,33 @@ set_character_sprite:
 ;
 ; void char_to_sprite_address(
 ;					byte char: A,
-;					out word sprite_address: u3)
+;					out word sprite_address: u4)
 ;==================================================
 char_to_sprite_address:
 
 	; subtract $20 from the petscii code to determine the correct character to draw
 	sec
 	sbc #$20
-	sta u3L							; store in u3, as a word
-	stz u3H
+	sta u4L							; store in u4, as a word
+	stz u4H
 
 	; based on the correct chracter, calculate the vram offset
 
-	AslW u3							; multiply the value by 64
-	AslW u3
-	AslW u3
-	AslW u3
-	AslW u3
-	AslW u3
+	AslW u4							; multiply the value by 64
+	AslW u4
+	AslW u4
+	AslW u4
+	AslW u4
+	AslW u4
 
 	; add vram_charset_sprites
 	clc
-	lda u3L
+	lda u4L
 	adc #<vram_charset_sprites
-	sta u3L
-	lda u3H
+	sta u4L
+	lda u4H
 	adc #>vram_charset_sprites
-	sta u3H
+	sta u4H
 	lda #0
 
 	; because vram_charset_sprites is 3 bytes, we need to decide to set the carry
@@ -143,16 +156,16 @@ char_to_sprite_address:
 
 @shift_right:
 	; shift right 5 times, accounting for the inital carry bit
-	ror u3H
-	ror u3L
-	ror u3H
-	ror u3L
-	ror u3H
-	ror u3L
-	ror u3H
-	ror u3L
-	ror u3H
-	ror u3L
+	ror u4H
+	ror u4L
+	ror u4H
+	ror u4L
+	ror u4H
+	ror u4L
+	ror u4H
+	ror u4L
+	ror u4H
+	ror u4L
 
 @return:
 	rts

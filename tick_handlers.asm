@@ -13,10 +13,20 @@ character_overworld_tick:
 
 	jsr update_joystick_data
 	jsr animate_map
+
+	; check if player can move
+	lda player_status
+	and #%00000001
+	cmp #%00000001
+	beq @control
+
 	jsr animate_player
 	jsr move
 	jsr set_player_tile
 	jsr check_interactions
+
+@control:
+	jsr character_overworld_control
 
 	; Manually push the address of the jmp to the stack to simulate jsr
 	; instruction.

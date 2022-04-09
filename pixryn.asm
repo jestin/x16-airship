@@ -128,7 +128,11 @@ pixryn_overworld_interaction_handler:
 	LoadW u0, test_string
 	LoadW u1, 100
 	LoadW u2, 100
-	jsr draw_string
+	LoadW u3, message_sprites
+	jsr draw_string					; draw message text
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
 
 @return:
 	rts

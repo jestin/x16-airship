@@ -15,6 +15,7 @@ test_string: .literal "This is a test",$00
 .include "vram.inc"
 .include "sprites.inc"
 .include "resources.inc"
+.include "control.asm"
 .include "movement.asm"
 .include "animation.asm"
 .include "text.asm"
