@@ -1,4 +1,5 @@
 ./terrain_fixes.tmx
 ./terrain_collision_generation.tmx
 ./things_collision_generation.tmx
+../collision_override.tmx
 ./buildings.tmx
