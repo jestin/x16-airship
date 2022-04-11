@@ -16,9 +16,8 @@ character_overworld_tick:
 
 	; check if player can move
 	lda player_status
-	and #%00000001
-	cmp #%00000001
-	beq @control
+	bit #%00000001
+	bne @control
 
 	jsr animate_player
 	jsr move
