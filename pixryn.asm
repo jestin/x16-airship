@@ -1,4 +1,7 @@
 .ifndef PIXRYN_ASM
+
+.include "pixryn_overworld_interactions.asm"
+
 PIXRYN_ASM = 1
 ;==================================================
 ; load_pixryn
@@ -98,85 +101,6 @@ player_to_pixryn_home:
 	rts
 
 ;==================================================
-; pixryn_overworld_interaction_handler
-;
-; void pixryn_overworld_interaction_handler()
-;==================================================
-pixryn_overworld_interaction_handler:
-
-	lda u0L
-	cmp #0
-	beq @return
-
-	cmp #$1
-	bne @campfire_sign
-
-	; on the tavern door, now check if they pressed B
-	lda joystick_data
-	eor #$ff						; NOT the accumulator
-	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @campfire_sign
-	jsr load_pixryn_tavern
-
-@campfire_sign:
-	lda u0L
-	cmp #$10
-	bne @home_sign
-
-	lda joystick_data
-	eor #$ff						; NOT the accumulator
-	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @home_sign
-
-	lda #0
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
-
-@home_sign:
-	lda u0L
-	cmp #$11
-	bne @tavern_sign
-
-	lda joystick_data
-	eor #$ff						; NOT the accumulator
-	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @tavern_sign
-
-	lda #1
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
-
-@tavern_sign:
-	lda u0L
-	cmp #$12
-	bne @return
-
-	lda joystick_data
-	eor #$ff						; NOT the accumulator
-	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @return
-
-	lda #2
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
-
-@return:
-	rts
-
-;==================================================
 ; load_pixryn_tavern
 ;
 ; void load_pixryn_tavern()
@@ -221,6 +145,10 @@ load_pixryn_tavern:
 
 	LoadW u8, pixryn_tavern_interaction_map_file
 	LoadW u9, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
+
+	; no messages yet
+	LoadW u10, 0
+	LoadW u11, 0
 
 	jsr load_map
 

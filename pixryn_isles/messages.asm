@@ -6,7 +6,9 @@
 .word campfire_sign
 .word home_sign
 .word tavern_sign
+.word fell_down_cave
 
 home_sign:			.literal "Welcome home!", $00
 campfire_sign:		.literal "Come sit with us", $00
 tavern_sign:		.literal "The Bloated Sturge", $00
+fell_down_cave:		.literal "You fell down a hole into a cave!", $00

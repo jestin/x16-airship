@@ -200,8 +200,8 @@ show_message:
 	sta u0H
 
 	; load the other draw_string parameters
-	LoadW u1, 100
-	LoadW u2, 100
+	LoadW u1, 20
+	LoadW u2, 220
 	LoadW u3, message_sprites
 	jsr draw_string					; draw message text
 
