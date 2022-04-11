@@ -1,6 +1,9 @@
 NAME = PIXRYN
 PREFIX = PI
 
+ASSEMBLER6502 = cl65
+ASFLAGS =
+
 RESOURCES = $(PREFIX)L0MAP.BIN \
 			$(PREFIX)L1MAP.BIN \
 			$(PREFIX)CLSNMAP.BIN \
@@ -10,7 +13,9 @@ RESOURCES = $(PREFIX)L0MAP.BIN \
 			$(PREFIX)INT.BIN \
 			$(PREFIX)TAVINT.BIN
 
-all: resources
+MESSAGES = $(PREFIX)MSG.BIN
+
+all: resources messages
 
 $(PREFIX)L0MAP.BIN: Pixryn_Isles.tmx
 	tmx2vera Pixryn_Isles.tmx $(PREFIX)L0MAP.BIN -l terrain
@@ -36,11 +41,19 @@ $(PREFIX)TAVCLSN.BIN: tavern.tmx
 $(PREFIX)TAVINT.BIN: tavern.tmx
 	tmx2vera -c tavern.tmx $(PREFIX)TAVINT.BIN -l interaction
 
+$(PREFIX)MSG.BIN: messages.asm
+	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin messages.asm -l $(PREFIX)MSG.list
+	# cheap hack because I can't figure out how to remove a header from cl65 output
+	tail -c +13 temp.bin > $(PREFIX)MSG.BIN
+	rm temp.bin
+
 
 resources: $(RESOURCES)
 
+messages: $(MESSAGES)
+
 clean:
-	rm -f $(RESOURCES)
+	rm -f $(RESOURCES) $(MESSAGES)
 
 list:
-	echo $(RESOURCES)
+	echo $(RESOURCES) $(MESSAGES)

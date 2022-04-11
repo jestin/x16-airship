@@ -6,8 +6,6 @@
 
 	jmp main
 	
-test_string: .literal "This is a test",$00
-
 .include "x16.inc"
 .include "vera.inc"
 .include "macros.inc"

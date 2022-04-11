@@ -39,6 +39,9 @@ load_pixryn:
 	LoadW u8, pixryn_interaction_map_file
 	LoadW u9, end_pixryn_interaction_map_file-pixryn_interaction_map_file
 
+	LoadW u10, pixryn_message_file
+	LoadW u11, end_pixryn_message_file-pixryn_message_file
+
 	jsr load_map
 
 	LoadW tick_fn, character_overworld_tick
@@ -113,11 +116,48 @@ pixryn_overworld_interaction_handler:
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
 	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @return
+	bne @campfire_sign
 	jsr load_pixryn_tavern
 
 @campfire_sign:
+	lda u0L
 	cmp #$10
+	bne @home_sign
+
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	bne @home_sign
+
+	lda #0
+	jsr show_message
+
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
+@home_sign:
+	lda u0L
+	cmp #$11
+	bne @tavern_sign
+
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	bne @tavern_sign
+
+	lda #1
+	jsr show_message
+
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
+@tavern_sign:
+	lda u0L
+	cmp #$12
 	bne @return
 
 	lda joystick_data
@@ -125,11 +165,10 @@ pixryn_overworld_interaction_handler:
 	and joystick_changed_data
 	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
-	LoadW u0, test_string
-	LoadW u1, 100
-	LoadW u2, 100
-	LoadW u3, message_sprites
-	jsr draw_string					; draw message text
+
+	lda #2
+	jsr show_message
+
 	lda player_status				; set the player status to restrained and reading
 	ora #%00000011
 	sta player_status

@@ -34,6 +34,9 @@ end_pixryn_collision_map_file:
 pixryn_interaction_map_file: .literal "PIINT.BIN"
 end_pixryn_interaction_map_file:
 
+pixryn_message_file: .literal "PIMSG.BIN"
+end_pixryn_message_file:
+
 interior_tile_file: .literal "INTERIOR.BIN"
 end_interior_tile_file:
 

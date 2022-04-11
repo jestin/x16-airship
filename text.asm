@@ -170,4 +170,41 @@ char_to_sprite_address:
 @return:
 	rts
 
+;==================================================
+; show_message
+;
+; Shows a message address to the user
+;
+; void show_message(byte message_index: A)
+;==================================================
+show_message:
+	; double the message index and add it to the message lookup address
+	asl
+	clc
+	adc #<map_message_lookup
+	sta u1L
+	lda #0
+	adc #>map_message_lookup
+	sta u1H
+
+	; switch to the map message bank
+	lda #map_message_data_bank
+	sta $00
+
+	; u1 now points to the address of the string.  u0 needs the be the address
+	; of the string in order to call draw_string
+	lda (u1)
+	sta u0L
+	ldx #1
+	lda u1,x
+	sta u0H
+
+	; load the other draw_string parameters
+	LoadW u1, 100
+	LoadW u2, 100
+	LoadW u3, message_sprites
+	jsr draw_string					; draw message text
+
+	rts
+
 .endif ; TEXT_INC

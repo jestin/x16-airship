@@ -15,7 +15,9 @@ MAP_ASM = 1
 ;				word collision_map_file_name: u6,
 ;				byte collision_map_file_size: u7,
 ;				word interaction_map_file_name: u8,
-;				byte interaction_map_file_size: u9)
+;				byte interaction_map_file_size: u9,
+;				word interaction_map_file_name: u10,
+;				byte interaction_map_file_size: u11)
 ;==================================================
 load_map:
 	; read tile file into memory
@@ -94,6 +96,24 @@ load_map:
 	lda #0
 	ldx #<interaction_map_data
 	ldy #>interaction_map_data
+	jsr LOAD
+
+	; switch to the map message bank
+	lda #map_message_data_bank
+	sta $00
+
+	; read messages file
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda u11
+	ldx u10L
+	ldy u10H
+	jsr SETNAM
+	lda #0
+	ldx #<map_message_lookup
+	ldy #>map_message_lookup
 	jsr LOAD
 
 rts

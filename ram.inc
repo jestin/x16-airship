@@ -87,5 +87,9 @@ interaction_map_data	= $a000
 animation_tile_restore_data_bank = 3
 animation_tile_restore = $a000
 
+; map messages
+map_message_data_bank = 4
+map_message_lookup = $a000
+
 
 .endif ; RAM_INC
