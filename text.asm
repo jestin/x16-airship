@@ -92,7 +92,7 @@ set_character_sprite:
 	lda u4L
 	sprstore 0
 	lda u4H
-	ora #%10000000
+	ora #%10000000						; using 8bpp, even for characters
 	sprstore 1
 	lda u1L
 	sprstore 2
