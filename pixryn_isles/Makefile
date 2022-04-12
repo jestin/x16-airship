@@ -4,7 +4,8 @@ PREFIX = PI
 ASSEMBLER6502 = cl65
 ASFLAGS =
 
-RESOURCES = $(PREFIX)L0MAP.BIN \
+RESOURCES = $(PREFIX)TILES.BIN \
+			$(PREFIX)L0MAP.BIN \
 			$(PREFIX)L1MAP.BIN \
 			$(PREFIX)CLSNMAP.BIN \
 			$(PREFIX)TAVL0.BIN \
@@ -16,6 +17,9 @@ RESOURCES = $(PREFIX)L0MAP.BIN \
 MESSAGES = $(PREFIX)MSG.BIN
 
 all: resources messages
+
+$(PREFIX)TILES.BIN: Pixryn_Tiles.xcf
+	gimp -i -b '(export-vera "Pixryn_Tiles.xcf" "$(PREFIX)TILES.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 $(PREFIX)L0MAP.BIN: Pixryn_Isles.tmx
 	tmx2vera Pixryn_Isles.tmx $(PREFIX)L0MAP.BIN -l terrain
