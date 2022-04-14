@@ -5,32 +5,19 @@ ANIMATION_ASM = 1
 ; animate_player
 ;==================================================
 animate_player:
-	; put direction offset byte in y
+	; check if the dpad was pressed
 	lda joystick_data
 	bit#$8
-	beq @up
+	beq @calculate_frame
 	bit#$4
-	beq @down
+	beq @calculate_frame
 	bit#$2
-	beq @left
+	beq @calculate_frame
 	bit #$1
-	beq @right
+	beq @calculate_frame
 
-	ldy #0
 	lda #0
 	bra @set_sprite
-
-@down:
-	ldy #0
-	bra @calculate_frame
-@right:
-	ldy #3
-	bra @calculate_frame
-@left:
-	ldy #6
-	bra @calculate_frame
-@up:
-	ldy #9
 
 @calculate_frame:
 	; returns the correct animation frame in A
@@ -91,8 +78,7 @@ animation_calculate_player_frame:
 ;					9 - rear facing
 ;
 ; void set_sprite_frame(byte animation_frame: a
-; 						byte sprite_index: x
-; 						byte sprite_direction: y)
+; 						byte sprite_index: x)
 ;==================================================
 set_sprite_frame:
 	pha			; push to preseve the frame
@@ -115,9 +101,10 @@ set_sprite_frame:
 	; push result to stack for later
 	pha
 
-	; Because tiles are 256 bytes apiece, Y is essentially the H byte of the
-	; address offset, so we store it in memory as such for further calculations
-	tya
+	; Because tiles are 256 bytes apiece, playerdir is essentially the H byte
+	; of the address offset, so we store it in memory as such for further
+	; calculations
+	lda playerdir
 	sta u15H
 	stz u15L
 

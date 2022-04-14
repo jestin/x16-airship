@@ -356,15 +356,23 @@ move:
 	bra @update
 
 @up:
+	lda #9
+	sta playerdir
 	DecW yplayer
 	bra @update
 @down:
+	lda #0
+	sta playerdir
 	IncW yplayer
 	bra @update
 @left:
+	lda #6
+	sta playerdir
 	DecW xplayer
 	bra @update
 @right:
+	lda #3
+	sta playerdir
 	IncW xplayer
 	bra @update
 	

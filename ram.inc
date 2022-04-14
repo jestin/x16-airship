@@ -13,6 +13,8 @@ yoff				= $28	; 2 bytes
 xplayer				= $30	; 2 bytes
 yplayer				= $32	; 2 bytes
 
+playerdir			= $34
+
 ; index (0 through w*h-1) of active tile (where player upper left is)
 active_tile			= $36	; 2 bytes
 
