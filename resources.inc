@@ -19,6 +19,9 @@ end_georgefile:
 elliotfile: .literal "ELLIOT.BIN"
 end_elliotfile:
 
+olliefile: .literal "OLLIE.BIN"
+end_olliefile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 

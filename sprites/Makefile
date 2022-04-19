@@ -7,7 +7,8 @@ RESOURCES = AURORA.BIN \
 			LUNA.BIN \
 			CONNOR.BIN \
 			GEORGE.BIN \
-			ELLIOT.BIN
+			ELLIOT.BIN \
+			OLLIE.BIN
 
 MESSAGES = $(PREFIX)MSG.BIN
 
@@ -27,6 +28,9 @@ GEORGE.BIN: George_Sprites.xcf
 
 ELLIOT.BIN: Elliot_Sprites.xcf
 	gimp -i -d -f -b '(export-vera "Elliot_Sprites.xcf" "ELLIOT.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
+
+OLLIE.BIN: Ollie_Sprites.xcf
+	gimp -i -d -f -b '(export-vera "Ollie_Sprites.xcf" "OLLIE.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 resources: $(RESOURCES)
 
