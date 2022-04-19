@@ -51,9 +51,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_lunafile-lunafile)
-	ldx #<lunafile
-	ldy #>lunafile
+	lda #(end_elliotfile-elliotfile)
+	ldx #<elliotfile
+	ldy #>elliotfile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites

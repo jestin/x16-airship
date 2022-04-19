@@ -13,6 +13,12 @@ end_lunafile:
 connorfile: .literal "CONNOR.BIN"
 end_connorfile:
 
+georgefile: .literal "GEORGE.BIN"
+end_georgefile:
+
+elliotfile: .literal "ELLIOT.BIN"
+end_elliotfile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 
