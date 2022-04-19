@@ -75,7 +75,7 @@ player_to_pixryn_tavern:
 
 	; initialize player location on screen
 	LoadW xplayer, $00ac
-	LoadW yplayer, $0040
+	LoadW yplayer, $0048
 
 	; initialize scroll variables
 	LoadW xoff, $0144
