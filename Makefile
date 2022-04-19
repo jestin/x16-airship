@@ -16,7 +16,8 @@ all: bin/$(PROG)
 bin/$(PROG): $(SOURCES) bin
 	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN)
 
-SUBDIRS = pixryn_isles
+SUBDIRS = pixryn_isles \
+		  sprites
 
 subresources:
 	-for i in $(SUBDIRS); do \
