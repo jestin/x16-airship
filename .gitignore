@@ -5,6 +5,7 @@
 *.BIN
 *.BIN.PAL
 *.list
+*.img
 
 # symbolic link to emulator
 x16emu
