@@ -28,6 +28,11 @@
 
 
 main:
+
+	; set video mode
+	lda #%00000001		; turn off screen while loading
+	sta veradcvideo
+	
 	lda #64
 	sta veradchscale
 	sta veradcvscale
@@ -51,9 +56,9 @@ main:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_olliefile-olliefile)
-	ldx #<olliefile
-	ldy #>olliefile
+	lda #(end_aurorafile-aurorafile)
+	ldx #<aurorafile
+	ldy #>aurorafile
 	jsr SETNAM
 	lda #(^vram_player_sprites + 2)
 	ldx #<vram_player_sprites

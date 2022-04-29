@@ -15,7 +15,7 @@ load_pixryn:
 	LoadW map_height, 1024
 
 	; set video mode
-	lda #%01110001		; sprites, l0, and l1 enabled
+	lda #%00000001		; turn off screen while loading
 	sta veradcvideo
 
 	; set the l0 tile mode	
@@ -64,6 +64,11 @@ load_pixryn:
 	sta u0L
 	jsr add_animated_tile
 
+	; set video mode
+	lda #%01110001		; sprites, l0, and l1 enabled
+	sta veradcvideo
+
+
 	rts
 
 ;==================================================
@@ -110,6 +115,10 @@ load_pixryn_tavern:
 	LoadW map_width, 512
 	LoadW map_height, 512
 
+	; set video mode
+	lda #%00000001		; turn off screen while loading
+	sta veradcvideo
+
 	; initialize player location on screen
 	LoadW xplayer, $00b0
 	LoadW yplayer, $0080
@@ -117,10 +126,6 @@ load_pixryn_tavern:
 	; initialize scroll variables
 	LoadW xoff, $0070
 	LoadW yoff, $0070
-
-	; set video mode
-	lda #%01110001		; sprites, l0, and l1 enabled
-	sta veradcvideo
 
 	; set the l0 tile mode	
 	lda #%00000011 	; height (2-bits) - 1 (64 tiles)
@@ -157,6 +162,10 @@ load_pixryn_tavern:
 
 	; always clear anim_tiles_count
 	stz anim_tiles_count
+
+	; set video mode
+	lda #%01110001		; sprites, l0, and l1 enabled
+	sta veradcvideo
 
 	rts
 

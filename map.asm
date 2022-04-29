@@ -98,6 +98,11 @@ load_map:
 	ldy #>interaction_map_data
 	jsr LOAD
 
+	; check if there are messages to load
+	lda u10L
+	ora u10H
+	beq @return							; both bytes of u10 are 0, which would not be a valid place to store a filename
+
 	; switch to the map message bank
 	lda #map_message_data_bank
 	sta $00
@@ -116,6 +121,8 @@ load_map:
 	ldy #>map_message_lookup
 	jsr LOAD
 
-rts
+@return:
+
+	rts
 
 .endif ; MAP_ASM
