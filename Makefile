@@ -9,7 +9,9 @@ SOURCES := $(wildcard *.asm) $(wildcard *.inc)
 
 RESOURCES = CHARSET.BIN \
 			CLSN.BIN \
-			INTERIOR.BIN
+			INTERIOR.BIN \
+			TITLE.BIN \
+			TIPAL.BIN
 
 all: bin/$(PROG)
 
@@ -39,6 +41,12 @@ CLSN.BIN: airship_collision_tiles.xcf
 
 INTERIOR.BIN: interior_tiles.xcf
 	gimp -i -d -f -b '(export-vera "interior_tiles.xcf" "INTERIOR.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
+
+TITLE.BIN: title.xcf
+	gimp -i -d -f -b '(export-vera "title.xcf" "TITLE.BIN" 1 8 16 16 0 0 1)' -b '(gimp-quit 0)'
+
+TIPAL.BIN: TITLE.BIN
+	cp TITLE.BIN.PAL TIPAL.BIN
 
 run: all resources
 	(cd bin; x16emu -prg $(PROG) -run -scale 2 -debug -joy1)

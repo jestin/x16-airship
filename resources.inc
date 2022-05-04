@@ -1,6 +1,12 @@
 .ifndef RESOURCES_INC
 RESOURCES_INC = 1
 
+titlefile: .literal "TITLE.BIN"
+end_titlefile:
+
+titlepalfile: .literal "TIPAL.BIN"
+end_titlepalfile:
+
 spritefile: .literal "SPRITES.BIN"	
 end_spritefile:
 
@@ -30,6 +36,9 @@ end_charsetfile:
 
 pixryn_tile_file: .literal "PITILES.BIN"
 end_pixryn_tile_file:
+
+pixryn_pal_file: .literal "PIPAL.BIN"
+end_pixryn_pal_file:
 
 pixryn_l0_map_file: .literal "PIL0MAP.BIN"
 end_pixryn_l0_map_file:

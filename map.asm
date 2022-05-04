@@ -16,10 +16,24 @@ MAP_ASM = 1
 ;				byte collision_map_file_size: u7,
 ;				word interaction_map_file_name: u8,
 ;				byte interaction_map_file_size: u9,
-;				word interaction_map_file_name: u10,
-;				byte interaction_map_file_size: u11)
+;				word message_file_name: u10,
+;				byte message_file_size: u11,
+;				word pal_file_name: u12,
+;				byte pal_file_size: u13)
 ;==================================================
 load_map:
+
+	; diable player sprite
+	ldx #player_sprite
+	lda #0
+	sprstore 6
+
+	; set video mode
+	lda #%01000001		; sprites and l0 enabled
+	sta veradcvideo
+
+@load_tiles:
+
 	; read tile file into memory
 	lda #1
 	ldx #8
@@ -101,7 +115,7 @@ load_map:
 	; check if there are messages to load
 	lda u10L
 	ora u10H
-	beq @return							; both bytes of u10 are 0, which would not be a valid place to store a filename
+	beq @set_layers					; both bytes of u10 are 0, which would not be a valid place to store a filename
 
 	; switch to the map message bank
 	lda #map_message_data_bank
@@ -119,6 +133,36 @@ load_map:
 	lda #0
 	ldx #<map_message_lookup
 	ldy #>map_message_lookup
+	jsr LOAD
+
+@set_layers:
+ 	; set the tile base address
+	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
+								;  height    |  width
+	sta veral0tilebase
+	sta veral1tilebase
+
+	; set the l0 tile map base address
+	lda #<(vram_l0_map_data >> 9)
+	sta veral0mapbase
+
+	; set the l1 tile map base address
+	lda #<(vram_l1_map_data >> 9)
+	sta veral1mapbase
+
+@set_palette:
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda u13
+	ldx u12L
+	ldy u12H
+	jsr SETNAM
+	lda #(^vram_palette + 2)
+	ldx #<vram_palette
+	ldy #>vram_palette
 	jsr LOAD
 
 @return:

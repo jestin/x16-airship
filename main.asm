@@ -22,6 +22,7 @@
 .include "joystick.asm"
 .include "map.asm"
 .include "tick_handlers.asm"
+.include "title.asm"
 .include "pixryn.asm"
 
 ; replace this with separate memory include file
@@ -37,21 +38,13 @@ main:
 	sta veradchscale
 	sta veradcvscale
 
- 	; set the tile base address
-	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
-								;  height    |  width
-	sta veral0tilebase
-	sta veral1tilebase
+	jsr show_title
 
-	; set the l0 tile map base address
-	lda #<(vram_l0_map_data >> 9)
-	sta veral0mapbase
+	; set video mode
+	lda #%01010001		; sprites and l0 enabled
+	sta veradcvideo
 
-	; set the l1 tile map base address
-	lda #<(vram_l1_map_data >> 9)
-	sta veral1mapbase
-
-	; read Aurora player sprites into vram as the player
+	; read player sprites into vram as the player
 	lda #1
 	ldx #8
 	ldy #0
@@ -106,7 +99,7 @@ main:
 	sprstore 4
 	lda yplayer+1
 	sprstore 5
-	lda #%00001000	; Collision/Z-depth/vflip/hflip
+	lda #%00000000	; Collision/Z-depth/vflip/hflip
 	sprstore 6
 	lda #%01010000	; Height/Width/Paloffset
 	sprstore 7
@@ -141,9 +134,6 @@ main:
 	ldx #<vram_charset_sprites
 	ldy #>vram_charset_sprites
 	jsr LOAD
-
-	jsr player_to_pixryn_home
-	jsr load_pixryn
 
 	jsr init_irq
 

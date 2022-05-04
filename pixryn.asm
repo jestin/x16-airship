@@ -3,6 +3,7 @@
 .include "pixryn_overworld_interactions.asm"
 
 PIXRYN_ASM = 1
+
 ;==================================================
 ; load_pixryn
 ;
@@ -13,19 +14,6 @@ load_pixryn:
 	; initialize map width and height
 	LoadW map_width, 2048
 	LoadW map_height, 1024
-
-	; set video mode
-	lda #%00000001		; turn off screen while loading
-	sta veradcvideo
-
-	; set the l0 tile mode	
-	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
-					; width (2-bits) - 2 (128 tiles
-					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 3 (8bpp)
-	sta veral0config
-	sta veral1config
 
 	LoadW u0, pixryn_tile_file
 	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
@@ -45,7 +33,19 @@ load_pixryn:
 	LoadW u10, pixryn_message_file
 	LoadW u11, end_pixryn_message_file-pixryn_message_file
 
+	LoadW u12, pixryn_pal_file
+	LoadW u13, end_pixryn_pal_file-pixryn_pal_file
+
 	jsr load_map
+
+	; set the l0 tile mode	
+	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
+					; width (2-bits) - 2 (128 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
+	sta veral1config
 
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
@@ -63,6 +63,11 @@ load_pixryn:
 	lda #213
 	sta u0L
 	jsr add_animated_tile
+
+	; set player sprite
+	ldx #player_sprite
+	lda #%00001000
+	sprstore 6
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
@@ -115,26 +120,9 @@ load_pixryn_tavern:
 	LoadW map_width, 512
 	LoadW map_height, 512
 
-	; set video mode
-	lda #%00000001		; turn off screen while loading
-	sta veradcvideo
-
 	; initialize player location on screen
 	LoadW xplayer, $00b0
 	LoadW yplayer, $0080
-
-	; initialize scroll variables
-	LoadW xoff, $0070
-	LoadW yoff, $0070
-
-	; set the l0 tile mode	
-	lda #%00000011 	; height (2-bits) - 1 (64 tiles)
-					; width (2-bits) - 2 (128 tiles
-					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 3 (8bpp)
-	sta veral0config
-	sta veral1config
 
 	LoadW u0, interior_tile_file
 	LoadW u1, end_interior_tile_file-interior_tile_file
@@ -151,17 +139,38 @@ load_pixryn_tavern:
 	LoadW u8, pixryn_tavern_interaction_map_file
 	LoadW u9, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
 
+	LoadW u12, pixryn_pal_file
+	LoadW u13, end_pixryn_pal_file-pixryn_pal_file
+
 	; no messages yet
 	LoadW u10, 0
 	LoadW u11, 0
 
 	jsr load_map
 
+	; initialize scroll variables
+	LoadW xoff, $0070
+	LoadW yoff, $0070
+
+	; set the l0 tile mode	
+	lda #%00000011 	; height (2-bits) - 1 (64 tiles)
+					; width (2-bits) - 2 (128 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
+	sta veral1config
+
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_tavern_interaction_handler
 
 	; always clear anim_tiles_count
 	stz anim_tiles_count
+
+	; set player sprite
+	ldx #player_sprite
+	lda #%00001000
+	sprstore 6
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
