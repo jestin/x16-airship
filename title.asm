@@ -9,7 +9,14 @@ TITLE_ASM = 1
 ; void show_title()
 ;==================================================
 show_title:
-	; show the title screen
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
+
 	; set the l0 tile mode	
 	lda #%00000111 	; height (2-bits) - 0 (32 tiles)
 					; width (2-bits) - 0 (32 tiles
@@ -47,6 +54,9 @@ show_title:
 	ldx #<vram_palette
 	ldy #>vram_palette
 	jsr LOAD
+
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
 
 	LoadW tick_fn, title_tick
 

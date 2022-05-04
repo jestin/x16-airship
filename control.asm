@@ -45,16 +45,7 @@ reading_message_control:
 
 	; disable message sprites
 	LoadW u0, message_sprites
-@disable_sprite_loop:
-	lda (u0)
-	cmp #$80
-	bcs @end_disable_sprite_loop
-	tax
-	lda #0
-	sprstore 6
-	IncW u0
-	bra @disable_sprite_loop
-@end_disable_sprite_loop:
+	jsr clear_text_sprites
 
 @return:
 	rts

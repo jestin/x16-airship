@@ -27,16 +27,34 @@
 
 ; replace this with separate memory include file
 
+loading_text:			.literal "Loading...", $00
+
 
 main:
 
 	; set video mode
-	lda #%00000001		; turn off screen while loading
+	lda #%01000001		; turn off layers while loading (leave sprites)
 	sta veradcvideo
 	
 	lda #64
 	sta veradchscale
 	sta veradcvscale
+
+	; character initialization
+	stz next_char_sprite
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_charsetfile-charsetfile)
+	ldx #<charsetfile
+	ldy #>charsetfile
+	jsr SETNAM
+	lda #(^vram_charset_sprites + 2)
+	ldx #<vram_charset_sprites
+	ldy #>vram_charset_sprites
+	jsr LOAD
 
 	jsr show_title
 
@@ -117,22 +135,6 @@ main:
 	lda #0
 	ldx #<collision_tile_data
 	ldy #>collision_tile_data
-	jsr LOAD
-
-	; character initialization
-	stz next_char_sprite
-
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_charsetfile-charsetfile)
-	ldx #<charsetfile
-	ldy #>charsetfile
-	jsr SETNAM
-	lda #(^vram_charset_sprites + 2)
-	ldx #<vram_charset_sprites
-	ldy #>vram_charset_sprites
 	jsr LOAD
 
 	jsr init_irq

@@ -207,4 +207,27 @@ show_message:
 
 	rts
 
+;==================================================
+; clear_text_sprites
+;
+; Shows a message address to the user
+;
+; void clear_text_sprites(word sprite_array: u0)
+;==================================================
+clear_text_sprites:
+
+	; disable message sprites
+@disable_sprite_loop:
+	lda (u0)
+	cmp #$80
+	bcs @end_disable_sprite_loop
+	tax
+	lda #0
+	sprstore 6
+	IncW u0
+	bra @disable_sprite_loop
+@end_disable_sprite_loop:
+
+	rts
+
 .endif ; TEXT_INC

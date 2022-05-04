@@ -32,6 +32,74 @@ load_map:
 	lda #%01000001		; sprites and l0 enabled
 	sta veradcvideo
 
+	; load the palette first so that the text sprites look okay
+@set_palette:
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda u13
+	ldx u12L
+	ldy u12H
+	jsr SETNAM
+	lda #(^vram_palette + 2)
+	ldx #<vram_palette
+	ldy #>vram_palette
+	jsr LOAD
+
+
+	; push u0 - u4 to the stack
+	lda u0L
+	pha
+	lda u0H
+	pha
+	lda u1L
+	pha
+	lda u1H
+	pha
+	lda u2L
+	pha
+	lda u2H
+	pha
+	lda u3L
+	pha
+	lda u3H
+	pha
+	lda u4L
+	pha
+	lda u4H
+	pha
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
+
+	; pull u0 - u4 from the stack
+	pla
+	sta u4H
+	pla
+	sta u4L
+	pla
+	sta u3H
+	pla
+	sta u3L
+	pla
+	sta u2H
+	pla
+	sta u2L
+	pla
+	sta u1H
+	pla
+	sta u1L
+	pla
+	sta u0H
+	pla
+	sta u0L
+
 @load_tiles:
 
 	; read tile file into memory
@@ -150,22 +218,10 @@ load_map:
 	lda #<(vram_l1_map_data >> 9)
 	sta veral1mapbase
 
-@set_palette:
-
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda u13
-	ldx u12L
-	ldy u12H
-	jsr SETNAM
-	lda #(^vram_palette + 2)
-	ldx #<vram_palette
-	ldy #>vram_palette
-	jsr LOAD
-
 @return:
+
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
 
 	rts
 

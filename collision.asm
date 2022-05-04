@@ -47,8 +47,8 @@ check_collisions:
 ; check_row
 ; sets Z if no collision
 ;
-; void concheck_row(word player_tile_row: u0,
-;					word collision_tile_row: u1)
+; void check_row(word player_tile_row: u0,
+;				word collision_tile_row: u1)
 ;==================================================
 check_row:
 	; left
