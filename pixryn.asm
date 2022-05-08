@@ -11,32 +11,54 @@ PIXRYN_ASM = 1
 ;==================================================
 load_pixryn:
 
+	; diable player sprite
+	ldx #player_sprite
+	lda #0
+	sprstore 6
+
+	; set video mode
+	lda #%01000001		; sprites and l0 enabled
+	sta veradcvideo
+
+	; load palette first so that the loading message is correct
+	LoadW u0, pixryn_pal_file
+	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
+	jsr load_palette
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
+
 	; initialize map width and height
 	LoadW map_width, 2048
 	LoadW map_height, 1024
 
 	LoadW u0, pixryn_tile_file
 	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
+	jsr load_tiles
 
-	LoadW u2, pixryn_l0_map_file
-	LoadW u3, end_pixryn_l0_map_file-pixryn_l0_map_file
+	LoadW u0, pixryn_l0_map_file
+	LoadW u1, end_pixryn_l0_map_file-pixryn_l0_map_file
+	jsr load_l0_map
 
-	LoadW u4, pixryn_l1_map_file
-	LoadW u5, end_pixryn_l1_map_file-pixryn_l1_map_file
+	LoadW u0, pixryn_l1_map_file
+	LoadW u1, end_pixryn_l1_map_file-pixryn_l1_map_file
+	jsr load_l1_map
 
-	LoadW u6, pixryn_collision_map_file
-	LoadW u7, end_pixryn_collision_map_file-pixryn_collision_map_file
+	LoadW u0, pixryn_collision_map_file
+	LoadW u1, end_pixryn_collision_map_file-pixryn_collision_map_file
+	jsr load_collision_map
 
-	LoadW u8, pixryn_interaction_map_file
-	LoadW u9, end_pixryn_interaction_map_file-pixryn_interaction_map_file
+	LoadW u0, pixryn_interaction_map_file
+	LoadW u1, end_pixryn_interaction_map_file-pixryn_interaction_map_file
+	jsr load_interaction_map
 
-	LoadW u10, pixryn_message_file
-	LoadW u11, end_pixryn_message_file-pixryn_message_file
-
-	LoadW u12, pixryn_pal_file
-	LoadW u13, end_pixryn_pal_file-pixryn_pal_file
-
-	jsr load_map
+	LoadW u0, pixryn_message_file
+	LoadW u1, end_pixryn_message_file-pixryn_message_file
+	jsr load_messages
 
 	; set the l0 tile mode	
 	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
@@ -63,6 +85,24 @@ load_pixryn:
 	lda #213
 	sta u0L
 	jsr add_animated_tile
+
+ 	; set the tile base address
+	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
+								;  height    |  width
+	sta veral0tilebase
+	sta veral1tilebase
+
+	; set the l0 tile map base address
+	lda #<(vram_l0_map_data >> 9)
+	sta veral0mapbase
+
+	; set the l1 tile map base address
+	lda #<(vram_l1_map_data >> 9)
+	sta veral1mapbase
+
+	; clear loading message
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
 
 	; set player sprite
 	ldx #player_sprite
@@ -116,6 +156,27 @@ player_to_pixryn_home:
 ; void load_pixryn_tavern()
 ;==================================================
 load_pixryn_tavern:
+
+	; diable player sprite
+	ldx #player_sprite
+	lda #0
+	sprstore 6
+
+	; set video mode
+	lda #%01000001		; sprites and l0 enabled
+	sta veradcvideo
+
+	; load palette first so that the loading message is correct
+	LoadW u0, pixryn_pal_file
+	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
+	jsr load_palette
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
 	; initialize map width and height
 	LoadW map_width, 512
 	LoadW map_height, 512
@@ -126,27 +187,23 @@ load_pixryn_tavern:
 
 	LoadW u0, interior_tile_file
 	LoadW u1, end_interior_tile_file-interior_tile_file
+	jsr load_tiles
 
-	LoadW u2, tavern_l0_map_file
-	LoadW u3, end_tavern_l0_map_file-tavern_l0_map_file
+	LoadW u0, tavern_l0_map_file
+	LoadW u1, end_tavern_l0_map_file-tavern_l0_map_file
+	jsr load_l0_map
 
-	LoadW u4, tavern_l1_map_file
-	LoadW u5, end_tavern_l1_map_file-tavern_l1_map_file
+	LoadW u0, tavern_l1_map_file
+	LoadW u1, end_tavern_l1_map_file-tavern_l1_map_file
+	jsr load_l1_map
 
-	LoadW u6, tavern_collision_map_file
-	LoadW u7, end_tavern_collision_map_file-tavern_collision_map_file
+	LoadW u0, tavern_collision_map_file
+	LoadW u1, end_tavern_collision_map_file-tavern_collision_map_file
+	jsr load_collision_map
 
-	LoadW u8, pixryn_tavern_interaction_map_file
-	LoadW u9, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
-
-	LoadW u12, pixryn_pal_file
-	LoadW u13, end_pixryn_pal_file-pixryn_pal_file
-
-	; no messages yet
-	LoadW u10, 0
-	LoadW u11, 0
-
-	jsr load_map
+	LoadW u0, pixryn_tavern_interaction_map_file
+	LoadW u1, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
+	jsr load_interaction_map
 
 	; initialize scroll variables
 	LoadW xoff, $0070
@@ -166,6 +223,25 @@ load_pixryn_tavern:
 
 	; always clear anim_tiles_count
 	stz anim_tiles_count
+
+ 	; set the tile base address
+	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
+								;  height    |  width
+	sta veral0tilebase
+	sta veral1tilebase
+
+	; set the l0 tile map base address
+	lda #<(vram_l0_map_data >> 9)
+	sta veral0mapbase
+
+	; set the l1 tile map base address
+	lda #<(vram_l1_map_data >> 9)
+	sta veral1mapbase
+
+	; clear loading message
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
+
 
 	; set player sprite
 	ldx #player_sprite
