@@ -89,26 +89,19 @@ set_sprite_frame:
 	; Because each sprite tile is 256 bytes, and the tiles are sequential, we
 	; need to add (animation_frame * $0100) to the address.
 
-	; multiply using asl so it can be used as the high byte, effectively adding
-	; (index * 256) to the address
-	asl
-	asl
-	; add to high byte of vram_player_sprites
-	clc
-	adc #>vram_player_sprites
-	asl
-
-	; push result to stack for later
-	pha
-
 	; Because tiles are 256 bytes apiece, playerdir is essentially the H byte
 	; of the address offset, so we store it in memory as such for further
 	; calculations
-	lda playerdir
+	clc
+	adc playerdir
 	sta u15H
 	stz u15L
 
-	; Shift the address right 5, since the VERA doesn't store the lower 5 bits
+	; We've now added the player to direction and the animation frame, which
+	; when used as the high byte make up the offset from the player sprite base
+	; address
+
+	; Shift the offset right 5, since the VERA doesn't store the lower 5 bits
 	; of the tile address for sprites
 	LsrW u15
 	LsrW u15
@@ -119,22 +112,13 @@ set_sprite_frame:
 	; add to the pre-shifted address of the start of the sprite tiles
 	AddW u15, (vram_player_sprites >> 5)
 
-	; u15 now has the VERA sprite-shifted address of the first frame of an animation set
-	
-	; pull high byte back from stack to apply the offset for the animation frame
-	pla
+	; u15 now contains the address of the correct frame of the correct sprite set
 
-	; Add to offset
-	clc
-	adc u15L
-	
-	; A now contains the address of the correct frame of the correct sprite set
-
-	; NOTE: We are not bothering with the highest 4 bits of a sprite that can
-	; be specifed with byte 1 of a sprite.  It's simply not needed or worth it
-	; yet.
-
+	lda u15L
 	sprstore 0
+	lda u15H
+	ora #%10000000				; make sure to keep this sprite set to 8bpp
+	sprstore 1
 	pla			; pull to restore the frame
 
 	rts
