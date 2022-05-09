@@ -4,6 +4,8 @@
 
 PIXRYN_ASM = 1
 
+PIXRYN_MAP_ID = 1
+
 ;==================================================
 ; load_pixryn
 ;
@@ -16,15 +18,6 @@ load_pixryn:
 	lda #0
 	sprstore 6
 
-	; set video mode
-	lda #%01000001		; sprites and l0 enabled
-	sta veradcvideo
-
-	; load palette first so that the loading message is correct
-	LoadW u0, pixryn_pal_file
-	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
-	jsr load_palette
-
 	; set the loading message
 	LoadW u0, loading_text
 	LoadW u1, 5
@@ -32,13 +25,20 @@ load_pixryn:
 	LoadW u3, message_sprites
 	jsr draw_string
 
+	; set video mode
+	lda #%01000001		; sprites
+	sta veradcvideo
+
+	jsr load_title
+	jsr show_title
+
+	; set video mode
+	lda #%01010001		; sprites and l0
+	sta veradcvideo
+
 	; initialize map width and height
 	LoadW map_width, 2048
 	LoadW map_height, 1024
-
-	LoadW u0, pixryn_tile_file
-	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
-	jsr load_tiles
 
 	LoadW u0, pixryn_l0_map_file
 	LoadW u1, end_pixryn_l0_map_file-pixryn_l0_map_file
@@ -59,6 +59,21 @@ load_pixryn:
 	LoadW u0, pixryn_message_file
 	LoadW u1, end_pixryn_message_file-pixryn_message_file
 	jsr load_messages
+
+	; set video mode
+	lda #%01000001		; sprites
+	sta veradcvideo
+
+	; load palette first so that the loading message is correct
+	LoadW u0, pixryn_pal_file
+	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
+	jsr load_palette
+
+	LoadW u0, pixryn_tile_file
+	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
+	jsr load_tiles
+
+@set_layer:
 
 	; set the l0 tile mode	
 	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
@@ -113,6 +128,8 @@ load_pixryn:
 	lda #%01110001		; sprites, l0, and l1 enabled
 	sta veradcvideo
 
+	lda #PIXRYN_MAP_ID
+	sta map_id
 
 	rts
 

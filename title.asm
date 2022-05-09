@@ -2,32 +2,13 @@
 TITLE_ASM = 1
 
 ;==================================================
-; show_title
+; load_title
 ;
-; Shows the title screen
+; Loads the title screen into vram
 ;
-; void show_title()
+; void load_title()
 ;==================================================
-show_title:
-
-	; set the loading message
-	LoadW u0, loading_text
-	LoadW u1, 5
-	LoadW u2, 230
-	LoadW u3, message_sprites
-	jsr draw_string
-
-	; set the l0 tile mode	
-	lda #%00000111 	; height (2-bits) - 0 (32 tiles)
-					; width (2-bits) - 0 (32 tiles
-					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 3 (8bpp)
-	sta veral0config
-
-	lda #(<(vram_bitmap >> 9) | (0 << 1) | 0)
-								;  height    |  width
-	sta veral0tilebase
+load_title:
 
 	lda #1
 	ldx #8
@@ -55,23 +36,29 @@ show_title:
 	ldy #>vram_palette
 	jsr LOAD
 
-	LoadW u0, message_sprites
-	jsr clear_text_sprites
-
-	LoadW tick_fn, title_tick
-
 	rts
 
-title_tick:
+;==================================================
+; show_title
+;
+; Shows the title screen
+;
+; void show_title()
+;==================================================
+show_title:
 
-	lda tickcount
-	cmp #$ff
-	bne @return
+	; set the l0 tile mode	
+	lda #%00000111 	; height (2-bits) - 0 (32 tiles)
+					; width (2-bits) - 0 (32 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
 
-	jsr player_to_pixryn_home
-	jsr load_pixryn
+	lda #(<(vram_bitmap >> 9) | (0 << 1) | 0)
+								;  height    |  width
+	sta veral0tilebase
 
-@return:
 	rts
 
 .endif ; TITLE_ASM

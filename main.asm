@@ -56,12 +56,6 @@ main:
 	ldy #>vram_charset_sprites
 	jsr LOAD
 
-	jsr show_title
-
-	; set video mode
-	lda #%01010001		; sprites and l0 enabled
-	sta veradcvideo
-
 	; read player sprites into vram as the player
 	lda #1
 	ldx #8
@@ -136,6 +130,10 @@ main:
 	ldx #<collision_tile_data
 	ldy #>collision_tile_data
 	jsr LOAD
+
+	; load Pixryn Isles
+	jsr player_to_pixryn_home
+	jsr load_pixryn
 
 	jsr init_irq
 

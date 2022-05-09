@@ -40,6 +40,8 @@ next_char_sprite		= $48
 ; 7 -
 player_status			= $49
 
+map_id					= $50
+
 ; interaction function
 interaction_fn		= $54 ; 2 bytes
 
