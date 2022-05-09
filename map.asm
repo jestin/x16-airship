@@ -79,7 +79,7 @@ load_l1_map:
 ;==================================================
 ; load_collision_map
 ;
-; Loads l1 map data
+; Loads collision map
 ;
 ; void load_collision_map(word collision_map_file_name: u0,
 ;							byte collision_map_file_size: u1)
@@ -109,7 +109,7 @@ load_collision_map:
 ;==================================================
 ; load_interaction_map
 ;
-; Loads l1 map data
+; Loads interaction map
 ;
 ; void load_interaction_map(word interaction_map_file_name: u0,
 ;							byte interaction_map_file_size: u1)
@@ -139,7 +139,7 @@ load_interaction_map:
 ;==================================================
 ; load_messages
 ;
-; Loads l1 map data
+; Loads messages
 ;
 ; void load_messages(word message_file_name: u0,
 ;						byte message_file_size: u1)
@@ -169,7 +169,7 @@ load_messages:
 ;==================================================
 ; load_palette
 ;
-; Loads l1 map data
+; Loads palette
 ;
 ; void load_palette(word palette_file_name: u0,
 ;					byte palette_file_size: u1)
@@ -187,6 +187,29 @@ load_palette:
 	lda #(^vram_palette + 2)
 	ldx #<vram_palette
 	ldy #>vram_palette
+	jsr LOAD
+
+;==================================================
+; load_player_sprites
+;
+; Loads player sprites
+;
+; void load_player_sprites(word palette_file_name: u0,
+;					byte palette_file_size: u1)
+;==================================================
+load_player_sprites:
+
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda u1
+	ldx u0L
+	ldy u0H
+	jsr SETNAM
+	lda #(^vram_player_sprites + 2)
+	ldx #<vram_player_sprites
+	ldy #>vram_player_sprites
 	jsr LOAD
 
 	rts

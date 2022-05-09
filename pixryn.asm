@@ -29,6 +29,10 @@ load_pixryn:
 	lda #%01000001		; sprites
 	sta veradcvideo
 
+	lda map_id
+	cmp #PIXRYN_MAP_ID
+	beq @start_load
+
 	jsr load_title
 	jsr show_title
 
@@ -36,17 +40,11 @@ load_pixryn:
 	lda #%01010001		; sprites and l0
 	sta veradcvideo
 
+@start_load:
+
 	; initialize map width and height
 	LoadW map_width, 2048
 	LoadW map_height, 1024
-
-	LoadW u0, pixryn_l0_map_file
-	LoadW u1, end_pixryn_l0_map_file-pixryn_l0_map_file
-	jsr load_l0_map
-
-	LoadW u0, pixryn_l1_map_file
-	LoadW u1, end_pixryn_l1_map_file-pixryn_l1_map_file
-	jsr load_l1_map
 
 	LoadW u0, pixryn_collision_map_file
 	LoadW u1, end_pixryn_collision_map_file-pixryn_collision_map_file
@@ -60,6 +58,16 @@ load_pixryn:
 	LoadW u1, end_pixryn_message_file-pixryn_message_file
 	jsr load_messages
 
+	lda map_id
+	cmp #PIXRYN_MAP_ID
+	beq @set_just_sprites
+
+	LoadW u0, pixryn_tile_file
+	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
+	jsr load_tiles
+
+@set_just_sprites:
+
 	; set video mode
 	lda #%01000001		; sprites
 	sta veradcvideo
@@ -69,9 +77,24 @@ load_pixryn:
 	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
 	jsr load_palette
 
-	LoadW u0, pixryn_tile_file
-	LoadW u1, end_pixryn_tile_file-pixryn_tile_file
-	jsr load_tiles
+	; load the player into the sprites
+	lda player_file
+	sta u0L
+	lda player_file+1
+	sta u0H
+	lda player_file_size
+	sta u1L
+	lda player_file_size+1
+	sta u1H
+	jsr load_player_sprites
+
+	LoadW u0, pixryn_l0_map_file
+	LoadW u1, end_pixryn_l0_map_file-pixryn_l0_map_file
+	jsr load_l0_map
+
+	LoadW u0, pixryn_l1_map_file
+	LoadW u1, end_pixryn_l1_map_file-pixryn_l1_map_file
+	jsr load_l1_map
 
 @set_layer:
 
@@ -180,13 +203,8 @@ load_pixryn_tavern:
 	sprstore 6
 
 	; set video mode
-	lda #%01000001		; sprites and l0 enabled
+	lda #%01000001		; sprites
 	sta veradcvideo
-
-	; load palette first so that the loading message is correct
-	LoadW u0, pixryn_pal_file
-	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
-	jsr load_palette
 
 	; set the loading message
 	LoadW u0, loading_text
@@ -194,6 +212,7 @@ load_pixryn_tavern:
 	LoadW u2, 230
 	LoadW u3, message_sprites
 	jsr draw_string
+
 	; initialize map width and height
 	LoadW map_width, 512
 	LoadW map_height, 512
@@ -202,9 +221,9 @@ load_pixryn_tavern:
 	LoadW xplayer, $00b0
 	LoadW yplayer, $0080
 
-	LoadW u0, interior_tile_file
-	LoadW u1, end_interior_tile_file-interior_tile_file
-	jsr load_tiles
+	; initialize scroll variables
+	LoadW xoff, $0070
+	LoadW yoff, $0070
 
 	LoadW u0, tavern_l0_map_file
 	LoadW u1, end_tavern_l0_map_file-tavern_l0_map_file
@@ -221,10 +240,6 @@ load_pixryn_tavern:
 	LoadW u0, pixryn_tavern_interaction_map_file
 	LoadW u1, end_pixryn_tavern_interaction_map_file-pixryn_tavern_interaction_map_file
 	jsr load_interaction_map
-
-	; initialize scroll variables
-	LoadW xoff, $0070
-	LoadW yoff, $0070
 
 	; set the l0 tile mode	
 	lda #%00000011 	; height (2-bits) - 1 (64 tiles)
@@ -259,15 +274,14 @@ load_pixryn_tavern:
 	LoadW u0, message_sprites
 	jsr clear_text_sprites
 
+	; set video mode
+	lda #%01110001		; sprites, l0, and l1 enabled
+	sta veradcvideo
 
 	; set player sprite
 	ldx #player_sprite
 	lda #%00001000
 	sprstore 6
-
-	; set video mode
-	lda #%01110001		; sprites, l0, and l1 enabled
-	sta veradcvideo
 
 	rts
 

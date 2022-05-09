@@ -9,7 +9,6 @@ SOURCES := $(wildcard *.asm) $(wildcard *.inc)
 
 RESOURCES = CHARSET.BIN \
 			CLSN.BIN \
-			INTERIOR.BIN \
 			TITLE.BIN \
 			TIPAL.BIN
 
@@ -39,11 +38,8 @@ CHARSET.BIN: Charset.xcf
 CLSN.BIN: airship_collision_tiles.xcf
 	gimp -i -d -f -b '(export-vera "airship_collision_tiles.xcf" "CLSN.BIN" 0 1 16 16 0 1 0)' -b '(gimp-quit 0)'
 
-INTERIOR.BIN: interior_tiles.xcf
-	gimp -i -d -f -b '(export-vera "interior_tiles.xcf" "INTERIOR.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
-
 TITLE.BIN: title.xcf
-	gimp -i -d -f -b '(export-vera "title.xcf" "TITLE.BIN" 1 8 16 16 0 0 1)' -b '(gimp-quit 0)'
+	gimp -i -d -f -b '(export-vera "title.xcf" "TITLE.BIN" 1 4 16 16 0 0 1)' -b '(gimp-quit 0)'
 
 TIPAL.BIN: TITLE.BIN
 	cp TITLE.BIN.PAL TIPAL.BIN

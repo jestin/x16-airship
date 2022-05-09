@@ -56,19 +56,9 @@ main:
 	ldy #>vram_charset_sprites
 	jsr LOAD
 
-	; read player sprites into vram as the player
-	lda #1
-	ldx #8
-	ldy #0
-	jsr SETLFS
-	lda #(end_aurorafile-aurorafile)
-	ldx #<aurorafile
-	ldy #>aurorafile
-	jsr SETNAM
-	lda #(^vram_player_sprites + 2)
-	ldx #<vram_player_sprites
-	ldy #>vram_player_sprites
-	jsr LOAD
+	; TODO: Move this to a player selection screen
+	LoadW player_file, aurorafile
+	LoadW player_file_size, end_aurorafile - aurorafile
 
 	LoadWBE player_collision_tile+00, %0000000000000000
 	LoadWBE player_collision_tile+02, %0000000000000000

@@ -55,9 +55,6 @@ end_pixryn_interaction_map_file:
 pixryn_message_file: .literal "PIMSG.BIN"
 end_pixryn_message_file:
 
-interior_tile_file: .literal "INTERIOR.BIN"
-end_interior_tile_file:
-
 tavern_l0_map_file: .literal "PITAVL0.BIN"
 end_tavern_l0_map_file:
 

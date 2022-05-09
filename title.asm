@@ -48,11 +48,11 @@ load_title:
 show_title:
 
 	; set the l0 tile mode	
-	lda #%00000111 	; height (2-bits) - 0 (32 tiles)
+	lda #%00000110 	; height (2-bits) - 0 (32 tiles)
 					; width (2-bits) - 0 (32 tiles
 					; T256C - 0
 					; bitmap mode - 0
-					; color depth (2-bits) - 3 (8bpp)
+					; color depth (2-bits) - 2 (4bpp)
 	sta veral0config
 
 	lda #(<(vram_bitmap >> 9) | (0 << 1) | 0)

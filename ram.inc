@@ -74,6 +74,9 @@ anim_tiles			= $4900 ; 64 bytes (32 2-byte tile indexes)
 ; Store an array of sprites used for message text
 message_sprites		= $4940 ; 64 bytes
 
+player_file			= $5000 ; 2 bytes
+player_file_size	= $5002 ; 2 bytes
+
 default_irq			= $9efe
 
 
