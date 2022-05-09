@@ -67,7 +67,7 @@ card.img: all resources clean_card
 card: card.img
 
 run_card:
-	x16emu -sdcard card.img -scale 2 -joy1 -debug
+	x16emu -sdcard card.img -prg bin/AIRSHIP.PRG -run -scale 2 -joy1 -debug
 
 clean:
 	rm  -f bin/$(PROG) $(LIST)
