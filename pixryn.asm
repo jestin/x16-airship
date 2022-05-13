@@ -36,8 +36,8 @@ load_pixryn:
 	jsr load_title
 	jsr show_title
 
-	; set video mode
-	lda #%01010001		; sprites and l0
+	; turn off loading sprites
+	lda #%00010001		; l0
 	sta veradcvideo
 
 @start_load:
