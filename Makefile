@@ -38,8 +38,9 @@ CHARSET.BIN: Charset.xcf
 CLSN.BIN: airship_collision_tiles.xcf
 	gimp -i -d -f -b '(export-vera "airship_collision_tiles.xcf" "CLSN.BIN" 0 1 16 16 0 1 0)' -b '(gimp-quit 0)'
 
-TITLE.BIN: title.xcf
-	gimp -i -d -f -b '(export-vera "title.xcf" "TITLE.BIN" 1 4 16 16 0 0 1)' -b '(gimp-quit 0)'
+TITLE.BIN: title_screen.xcf
+	gimp -i -d -f -b '(make-vera-bitmap "title_screen.xcf" "TITLE.BIN" 1920 1080 4 1 1)' -b '(gimp-quit 0)'
+
 
 TIPAL.BIN: TITLE.BIN
 	cp TITLE.BIN.PAL TIPAL.BIN
