@@ -67,4 +67,16 @@ end_tavern_collision_map_file:
 pixryn_tavern_interaction_map_file: .literal "PITAVINT.BIN"
 end_pixryn_tavern_interaction_map_file:
 
+home_l0_map_file: .literal "PIHOMEL0.BIN"
+end_home_l0_map_file:
+
+home_l1_map_file: .literal "PIHOMEL1.BIN"
+end_home_l1_map_file:
+
+home_collision_map_file: .literal "PIHOMECLSN.BIN"
+end_home_collision_map_file:
+
+pixryn_home_interaction_map_file: .literal "PIHOMEINT.BIN"
+end_pixryn_home_interaction_map_file:
+
 .endif ; RESOURCES_INC

@@ -39,6 +39,13 @@ pixryn_overworld_interaction_handler:
 
 :
 	lda u0L
+	cmp #$2
+	bne :+
+	jsr load_pixryn_home
+	bra @return
+
+:
+	lda u0L
 	cmp #$10
 	bne :+
 	jsr campfire_sign

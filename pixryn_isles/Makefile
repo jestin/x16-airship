@@ -8,11 +8,15 @@ RESOURCES = $(PREFIX)TILES.BIN \
 			$(PREFIX)L0MAP.BIN \
 			$(PREFIX)L1MAP.BIN \
 			$(PREFIX)CLSNMAP.BIN \
+			$(PREFIX)INT.BIN \
 			$(PREFIX)TAVL0.BIN \
 			$(PREFIX)TAVL1.BIN \
 			$(PREFIX)TAVCLSN.BIN \
-			$(PREFIX)INT.BIN \
 			$(PREFIX)TAVINT.BIN \
+			$(PREFIX)HOMEL0.BIN \
+			$(PREFIX)HOMEL1.BIN \
+			$(PREFIX)HOMECLSN.BIN \
+			$(PREFIX)HOMEINT.BIN \
 			$(PREFIX)PAL.BIN
 
 MESSAGES = $(PREFIX)MSG.BIN
@@ -48,6 +52,18 @@ $(PREFIX)TAVCLSN.BIN: tavern.tmx
 
 $(PREFIX)TAVINT.BIN: tavern.tmx
 	tmx2vera -c tavern.tmx $(PREFIX)TAVINT.BIN -l interaction
+
+$(PREFIX)HOMEL0.BIN: home.tmx
+	tmx2vera home.tmx $(PREFIX)HOMEL0.BIN -l terrain
+
+$(PREFIX)HOMEL1.BIN: home.tmx
+	tmx2vera home.tmx $(PREFIX)HOMEL1.BIN -l things
+
+$(PREFIX)HOMECLSN.BIN: home.tmx
+	tmx2vera -c home.tmx $(PREFIX)HOMECLSN.BIN -l collision
+
+$(PREFIX)HOMEINT.BIN: home.tmx
+	tmx2vera -c home.tmx $(PREFIX)HOMEINT.BIN -l interaction
 
 $(PREFIX)MSG.BIN: messages.asm
 	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin messages.asm -l $(PREFIX)MSG.list
