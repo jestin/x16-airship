@@ -1,8 +1,12 @@
 .ifndef VRAM_INC
 VRAM_INC = 1
 
+; tiles are assumed to be stored at $00000 for animations to work, so don't
+; change this
 vram_tile_data			= $00000 ; goes to $10000
+
 vram_bitmap				= $10000 ; goes to $19600
+
 vram_l0_map_data		= $10000
 vram_l1_map_data		= $14000
 

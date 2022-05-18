@@ -110,8 +110,8 @@ load_pixryn:
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
 
-	; always clear anim_tiles_count
-	stz anim_tiles_count
+	; always restore and clear previous animated tiles
+	jsr clear_animated_tiles
 
 	; manually setup the animated tiles for the map
 	lda #1
@@ -253,8 +253,8 @@ load_pixryn_tavern:
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_tavern_interaction_handler
 
-	; always clear anim_tiles_count
-	stz anim_tiles_count
+	; always restore and clear previous animated tiles
+	jsr clear_animated_tiles
 
 	; manually setup the animated tiles for the map
 	lda #74
@@ -380,8 +380,8 @@ load_pixryn_home:
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_home_interaction_handler
 
-	; always clear anim_tiles_count
-	stz anim_tiles_count
+	; always restore and clear previous animated tiles
+	jsr clear_animated_tiles
 
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)

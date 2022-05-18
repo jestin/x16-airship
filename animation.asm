@@ -178,6 +178,79 @@ add_animated_tile:
 	rts
 
 ;==================================================
+; clear_animated_tiles
+; 
+; Put the tile map in vram back such that frame 0 is in place for each animated
+; tile.
+;
+; void clear_animated_tiles()
+;==================================================
+clear_animated_tiles:
+	; restore each animation tile
+	ldy #0
+@anim_tile_loop:
+	cpy anim_tiles_count
+	beq @return
+	; put the address of the animated tiles on the zero page so we can use
+	; (zp),y addressing
+	LoadW u0, anim_tiles
+	lda (u0),y
+	tax
+	jsr restore_original_tile
+	iny
+	bra @anim_tile_loop
+
+@return:
+	stz anim_tiles_count
+
+	rts
+
+;==================================================
+; restore_original_tile
+; 
+; Put the tile map in vram back such that frame 0 is in place for each animated
+; tile.
+;
+; void restore_original_tile(byte tile_index: x
+; 							byte anim_tile_index: y)
+;==================================================
+restore_original_tile:
+	phy
+
+	; switch to animation_tile_restore_data_bank
+	lda #animation_tile_restore_data_bank
+	sta $00
+
+	; add the anim_tile_index in Y to the animation_tile_restore address's high
+	; byte to get the address of the copy from address
+	LoadW u0, animation_tile_restore
+	clc
+	tya
+	adc u0H
+	sta u0H
+
+	; u0 now contains the address of the correct tile to restore
+
+	lda #0						; use data port 0 to point to the to tile
+	sta veractl
+	stz veralo
+	txa							; the raw value in X is the index of the to tile
+	sta veramid
+	lda #$10					; storing $10 in verahi sets the hi to 0 and the inc to 1
+	sta verahi
+
+	ldy #0
+@restore_loop:
+	lda (u0),y
+	sta veradat
+	iny
+	bne @restore_loop
+
+	ply
+
+	rts
+
+;==================================================
 ; animate_map
 ;==================================================
 animate_map:
@@ -280,36 +353,7 @@ set_tile_frame:
 	bra @return					; skip over the restore loop
 
 @restore:
-	; no need to preserve A since if we are here, we know that it's 0
-
-	; switch to animation_tile_restore_data_bank
-	lda #animation_tile_restore_data_bank
-	sta $00
-
-	; add the anim_tile_index in Y to the animation_tile_restore address's high
-	; byte to get the address of the copy from address
-	LoadW u0, animation_tile_restore
-	clc
-	tya
-	adc u0H
-	sta u0H
-
-	; u0 now contains the address of the correct tile to restore
-
-	lda #0						; use data port 0 to point to the to tile
-	sta veractl
-	stz veralo
-	txa							; the raw value in X is the index of the to tile
-	sta veramid
-	lda #$10					; storing $10 in verahi sets the hi to 0 and the inc to 1
-	sta verahi
-
-	ldy #0
-@restore_loop:
-	lda (u0),y
-	sta veradat
-	iny
-	bne @restore_loop
+	jsr restore_original_tile
 
 @return:
 	ply			; pull to restore the loop counter
