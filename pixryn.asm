@@ -256,6 +256,11 @@ load_pixryn_tavern:
 	; always clear anim_tiles_count
 	stz anim_tiles_count
 
+	; manually setup the animated tiles for the map
+	lda #74
+	sta u0L
+	jsr add_animated_tile
+
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
 								;  height    |  width
