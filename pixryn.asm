@@ -120,6 +120,9 @@ load_pixryn:
 	lda #74
 	sta u0L
 	jsr add_animated_tile
+	lda #197
+	sta u0L
+	jsr add_animated_tile
 	lda #213
 	sta u0L
 	jsr add_animated_tile
@@ -382,6 +385,11 @@ load_pixryn_home:
 
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
+
+	; manually setup the animated tiles for the map
+	lda #74
+	sta u0L
+	jsr add_animated_tile
 
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
