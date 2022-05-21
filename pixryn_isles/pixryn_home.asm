@@ -108,6 +108,10 @@ load_pixryn_home:
 ;==================================================
 pixryn_home_interaction_handler:
 
+; putting everything (except the symbol of this routine) into a proc means we
+; don't have to worry about symbol collisions with other handlers
+.proc PIXRYN_HOME_INTERACTIONS
+
 	lda u0L
 	cmp #0
 	beq @return
@@ -127,5 +131,7 @@ pixryn_home_interaction_handler:
 
 @return:
 	rts
+
+.endproc		; PIXRYN_HOME_INTERACTIONS
 
 .endif ; PIXRYN_HOME_ASM

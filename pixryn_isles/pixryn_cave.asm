@@ -104,11 +104,17 @@ load_pixryn_cave:
 ;==================================================
 pixryn_cave_interaction_handler:
 
+; putting everything (except the symbol of this routine) into a proc means we
+; don't have to worry about symbol collisions with other handlers
+.proc PIXRYN_CAVE_INTERACTIONS
+
 	lda u0L
 	cmp #0
 	beq @return
 
 @return:
 	rts
+
+.endproc		; PIXRYN_CAVE_INTERACTIONS
 
 .endif ; PIXRYN_CAVE_ASM

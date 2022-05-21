@@ -108,6 +108,10 @@ load_pixryn_tavern:
 ;==================================================
 pixryn_tavern_interaction_handler:
 
+; putting everything (except the symbol of this routine) into a proc means we
+; don't have to worry about symbol collisions with other handlers
+.proc PIXRYN_TAVERN_INTERACTIONS
+
 	lda u0L
 	cmp #0
 	beq @return
@@ -127,5 +131,7 @@ pixryn_tavern_interaction_handler:
 
 @return:
 	rts
+
+.endproc		; PIXRYN_TAVERN_INTERACTIONS
 
 .endif ; PIXRYN_TAVERN_ASM
