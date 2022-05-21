@@ -23,7 +23,7 @@
 .include "map.asm"
 .include "tick_handlers.asm"
 .include "title.asm"
-.include "pixryn.asm"
+.include "pixryn_isles/pixryn.asm"
 
 ; replace this with separate memory include file
 
