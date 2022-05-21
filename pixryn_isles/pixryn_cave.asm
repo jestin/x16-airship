@@ -25,9 +25,8 @@ load_pixryn_cave:
 	jsr draw_string
 
 	; initialize map width and height
-	; load one pixel smaller to avoid maps bleeding on edges
-	LoadW map_width, 511
-	LoadW map_height, 1023
+	LoadW map_width, 512
+	LoadW map_height, 1024
 
 	; initialize player location on screen
 	LoadW xplayer, $0050

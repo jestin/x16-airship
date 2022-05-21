@@ -95,5 +95,26 @@
    <wangtile tileid="72" wangid="3,3,1,1,1,1,1,3"/>
    <wangtile tileid="73" wangid="1,1,1,1,1,1,1,3"/>
   </wangset>
+  <wangset name="Cave" type="mixed" tile="-1">
+   <wangcolor name="Rock" color="#ff0000" tile="-1" probability="1"/>
+   <wangcolor name="Void" color="#00ff00" tile="-1" probability="1"/>
+   <wangtile tileid="0" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="144" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="145" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="146" wangid="2,2,2,1,2,2,2,2"/>
+   <wangtile tileid="147" wangid="2,2,2,2,2,1,2,2"/>
+   <wangtile tileid="148" wangid="1,1,2,2,2,1,1,1"/>
+   <wangtile tileid="149" wangid="1,1,1,1,2,2,2,1"/>
+   <wangtile tileid="160" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="161" wangid="1,1,1,1,1,1,1,1"/>
+   <wangtile tileid="162" wangid="2,1,2,2,2,2,2,2"/>
+   <wangtile tileid="163" wangid="2,2,2,2,2,2,2,1"/>
+   <wangtile tileid="164" wangid="2,2,2,1,1,1,1,1"/>
+   <wangtile tileid="165" wangid="2,1,1,1,1,1,2,2"/>
+   <wangtile tileid="166" wangid="2,2,2,1,1,1,2,2"/>
+   <wangtile tileid="167" wangid="1,1,2,2,2,2,2,1"/>
+   <wangtile tileid="168" wangid="2,1,1,1,2,2,2,2"/>
+   <wangtile tileid="169" wangid="2,2,2,2,2,1,1,1"/>
+  </wangset>
  </wangsets>
 </tileset>
