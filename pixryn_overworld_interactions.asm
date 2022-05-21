@@ -133,7 +133,7 @@ tavern_sign:
 fall_down_cave:
 
 	; TODO: create a cave map and use it here
-	jsr load_pixryn_tavern
+	jsr load_pixryn_cave
 
 	; Call a tick directly so that the user doesn't see the map loaded, but the
 	; player unpositioned

@@ -17,6 +17,10 @@ RESOURCES = $(PREFIX)TILES.BIN \
 			$(PREFIX)HOMEL1.BIN \
 			$(PREFIX)HOMECLSN.BIN \
 			$(PREFIX)HOMEINT.BIN \
+			$(PREFIX)CAVEL0.BIN \
+			$(PREFIX)CAVEL1.BIN \
+			$(PREFIX)CAVECLSN.BIN \
+			$(PREFIX)CAVEINT.BIN \
 			$(PREFIX)PAL.BIN
 
 MESSAGES = $(PREFIX)MSG.BIN
@@ -64,6 +68,18 @@ $(PREFIX)HOMECLSN.BIN: home.tmx
 
 $(PREFIX)HOMEINT.BIN: home.tmx
 	tmx2vera -c home.tmx $(PREFIX)HOMEINT.BIN -l interaction
+
+$(PREFIX)CAVEL0.BIN: cave.tmx
+	tmx2vera cave.tmx $(PREFIX)CAVEL0.BIN -l terrain
+
+$(PREFIX)CAVEL1.BIN: cave.tmx
+	tmx2vera cave.tmx $(PREFIX)CAVEL1.BIN -l things
+
+$(PREFIX)CAVECLSN.BIN: cave.tmx
+	tmx2vera -c cave.tmx $(PREFIX)CAVECLSN.BIN -l collision
+
+$(PREFIX)CAVEINT.BIN: cave.tmx
+	tmx2vera -c cave.tmx $(PREFIX)CAVEINT.BIN -l interaction
 
 $(PREFIX)MSG.BIN: messages.asm
 	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin messages.asm -l $(PREFIX)MSG.list

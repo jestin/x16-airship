@@ -79,4 +79,16 @@ end_home_collision_map_file:
 pixryn_home_interaction_map_file: .literal "PIHOMEINT.BIN"
 end_pixryn_home_interaction_map_file:
 
+cave_l0_map_file: .literal "PICAVEL0.BIN"
+end_cave_l0_map_file:
+
+cave_l1_map_file: .literal "PICAVEL1.BIN"
+end_cave_l1_map_file:
+
+cave_collision_map_file: .literal "PICAVECLSN.BIN"
+end_cave_collision_map_file:
+
+pixryn_cave_interaction_map_file: .literal "PICAVEINT.BIN"
+end_pixryn_cave_interaction_map_file:
+
 .endif ; RESOURCES_INC
