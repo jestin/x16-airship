@@ -61,8 +61,14 @@ pixryn_overworld_interaction_handler:
 :
 	lda u0L
 	cmp #$12
-	bne @return
+	bne :+
 	jsr tavern_sign
+	bra :+
+:
+	lda u0L
+	cmp #$13
+	bne :+
+	jsr trapdoor_to_cave
 	bra :+
 
 :	; end the b_button_interactions section with an unnamed label
@@ -132,14 +138,34 @@ tavern_sign:
 ;==================================================
 fall_down_cave:
 
-	; TODO: create a cave map and use it here
 	jsr load_pixryn_cave
+	jsr player_to_cave_entrance
 
 	; Call a tick directly so that the user doesn't see the map loaded, but the
 	; player unpositioned
-	jsr character_overworld_tick
+	jsr pixryn_cave_tick_handler
 
 	lda #3
+	jsr show_message
+
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
+@return:
+	rts
+
+;==================================================
+; trapdoor_to_cave
+;==================================================
+trapdoor_to_cave:
+
+	lda #0
+	sta playerdir
+	jsr load_pixryn_cave
+	jsr player_to_field_ladder
+
+	lda #4
 	jsr show_message
 
 	lda player_status				; set the player status to restrained and reading

@@ -28,14 +28,6 @@ load_pixryn_cave:
 	LoadW map_width, 512
 	LoadW map_height, 1024
 
-	; initialize player location on screen
-	LoadW xplayer, $0050
-	LoadW yplayer, $00a8
-
-	; initialize scroll variables
-	LoadW xoff, $0000
-	LoadW yoff, $0300
-
 	LoadW u0, cave_l0_map_file
 	LoadW u1, end_cave_l0_map_file-cave_l0_map_file
 	jsr load_l0_map
@@ -171,6 +163,40 @@ position_mask_over_player:
 	rts
 
 ;==================================================
+; player_to_cave_entrance
+;
+; void player_to_cave_entrance()
+;==================================================
+player_to_cave_entrance:
+
+	; initialize player location on screen
+	LoadW xplayer, $0050
+	LoadW yplayer, $00a8
+
+	; initialize scroll variables
+	LoadW xoff, $0000
+	LoadW yoff, $0300
+
+	rts
+
+;==================================================
+; player_to_field_ladder
+;
+; void player_to_field_ladder()
+;==================================================
+player_to_field_ladder:
+
+	; initialize player location on screen
+	LoadW xplayer, $00a0
+	LoadW yplayer, $00a8
+
+	; initialize scroll variables
+	LoadW xoff, $0130
+	LoadW yoff, $0300
+
+	rts
+
+;==================================================
 ; pixryn_cave_interaction_handler
 ;
 ; void pixryn_cave_interaction_handler()
@@ -185,7 +211,67 @@ pixryn_cave_interaction_handler:
 	cmp #0
 	beq @return
 
+	cmp #1
+	bne :+
+	jsr find_trapdoor_to_cabin
+	bra @return
+
+:
+
+	cmp #2
+	bne :+
+	jsr find_trapdoor_to_field
+
+:
+
 @return:
+	rts
+
+;==================================================
+; find_trapdoor_to_field
+;
+; void find_trapdoor_to_field()
+;==================================================
+find_trapdoor_to_field:
+
+	lda #0
+	sta playerdir
+	jsr load_pixryn
+	jsr player_to_pixryn_field
+	; Call a tick directly so that the user doesn't see the map loaded, but the
+	; player unpositioned
+	jsr character_overworld_tick
+
+	lda #4
+	jsr show_message
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
+	rts
+
+;==================================================
+; find_trapdoor_to_cabin
+;
+; void find_trapdoor_to_cabin()
+;==================================================
+find_trapdoor_to_cabin:
+
+	lda #0
+	sta playerdir
+	; TODO: create map for cabin and go there instead
+	jsr load_pixryn
+	jsr player_to_pixryn_tavern
+	; Call a tick directly so that the user doesn't see the map loaded, but the
+	; player unpositioned
+	jsr character_overworld_tick
+
+	lda #4
+	jsr show_message
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
 	rts
 
 .endproc		; PIXRYN_CAVE_INTERACTIONS

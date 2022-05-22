@@ -4,7 +4,7 @@ INTERACTION_ASM = 1
 ;==================================================
 ; check_interactions
 ;
-; void check_interactions(byte interaction_id: u0L)
+; void check_interactions(out byte interaction_id: u0L)
 ;==================================================
 check_interactions:
 
