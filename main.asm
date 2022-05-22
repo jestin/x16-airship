@@ -124,7 +124,6 @@ main:
 	; load Pixryn Isles
 	jsr player_to_pixryn_home
 	jsr load_pixryn
-	jsr load_pixryn_cave
 
 	jsr init_irq
 

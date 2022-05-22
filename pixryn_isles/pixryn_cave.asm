@@ -120,6 +120,8 @@ pixryn_cave_tick_handler:
 
 	jsr animate_player
 	jsr move
+	lda #1
+	jsr apply_scroll_offsets
 	jsr position_mask_over_player
 	jsr set_player_tile
 	jsr check_interactions

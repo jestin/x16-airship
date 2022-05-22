@@ -453,12 +453,6 @@ move:
 	bne @updatescrollx
 	stz xoff+1
 @updatescrollx:
-	lda xoff
-	sta veral0hscrolllo
-	sta veral1hscrolllo
-	lda xoff+1
-	sta veral0hscrollhi
-	sta veral1hscrollhi
 
 	lda yoff+1
 	cmp #$04
@@ -466,12 +460,6 @@ move:
 	stz yoff+1
 
 @updatescrolly:
-	lda yoff
-	sta veral0vscrolllo
-	sta veral1vscrolllo
-	lda yoff+1
-	sta veral0vscrollhi
-	sta veral1vscrollhi
 
 @update_sprite:
 	ldx #player_sprite
@@ -485,6 +473,51 @@ move:
 	sprstore 5
 
 @return: 
+	rts
+
+;==================================================
+; apply_scroll_offsets
+; 
+; Apply the layers scroll offsets based on flags in A
+; %000000XX
+;        ||_layer 0
+;		 |__layer 1
+; 
+; void apply_scroll_offsets()
+;==================================================
+apply_scroll_offsets:
+	pha
+
+@set_layer_0:
+	and #1
+	cmp #1
+	bne @set_layer_1
+
+	lda xoff
+	sta veral0hscrolllo
+	lda xoff+1
+	sta veral0hscrollhi
+	lda yoff
+	sta veral0vscrolllo
+	lda yoff+1
+	sta veral0vscrollhi
+
+@set_layer_1:
+	pla
+	and #2
+	cmp #2
+	bne @return
+
+	lda xoff
+	sta veral1hscrolllo
+	lda xoff+1
+	sta veral1hscrollhi
+	lda yoff
+	sta veral1vscrolllo
+	lda yoff+1
+	sta veral1vscrollhi
+
+@return:
 	rts
 
 .endif ; MOVEMENT_ASM
