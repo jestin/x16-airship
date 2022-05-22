@@ -5,12 +5,13 @@ ASFLAGS = -t cx16 -l $(NAME).list
 PROG = $(NAME).PRG
 LIST = $(NAME).list
 MAIN = main.asm
-SOURCES := $(wildcard *.asm) $(wildcard *.inc)
+SOURCES := $(shell find -type f -name '*.asm') $(shell find -type f -name '*.inc')
 
 RESOURCES = CHARSET.BIN \
 			CLSN.BIN \
 			TITLE.BIN \
-			TIPAL.BIN
+			TIPAL.BIN \
+			VIMASK.BIN
 
 all: bin/$(PROG)
 
@@ -44,6 +45,9 @@ TITLE.BIN: title_screen.xcf
 
 TIPAL.BIN: TITLE.BIN
 	cp TITLE.BIN.PAL TIPAL.BIN
+
+VIMASK.BIN: visibility_mask.tmx
+	tmx2vera visibility_mask.tmx -l mask VIMASK.BIN
 
 run: all resources
 	(cd bin; x16emu -prg $(PROG) -run -scale 2 -debug -joy1)

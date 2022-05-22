@@ -40,8 +40,8 @@ load_pixryn_cave:
 	LoadW u1, end_cave_l0_map_file-cave_l0_map_file
 	jsr load_l0_map
 
-	LoadW u0, cave_l1_map_file
-	LoadW u1, end_cave_l1_map_file-cave_l1_map_file
+	LoadW u0, vimaskfile
+	LoadW u1, end_vimaskfile-vimaskfile
 	jsr load_l1_map
 
 	LoadW u0, cave_collision_map_file
@@ -59,9 +59,16 @@ load_pixryn_cave:
 					; bitmap mode - 0
 					; color depth (2-bits) - 3 (8bpp)
 	sta veral0config
+
+	; set the l1 tile mode	
+	lda #%00000011 	; height (2-bits) - 0 (32 tiles)
+					; width (2-bits) - 0 (32 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 3 (8bpp)
 	sta veral1config
 
-	LoadW tick_fn, character_overworld_tick
+	LoadW tick_fn, pixryn_cave_tick_handler
 	LoadW interaction_fn, pixryn_cave_interaction_handler
 
 	; always restore and clear previous animated tiles
@@ -93,6 +100,71 @@ load_pixryn_cave:
 	ldx #player_sprite
 	lda #%00001000
 	sprstore 6
+
+	rts
+
+;==================================================
+; pixryn_cave_tick_handler
+;
+; void pixryn_cave_tick_handler()
+;==================================================
+pixryn_cave_tick_handler:
+
+	jsr update_joystick_data
+	jsr animate_map
+
+	; check if player can move
+	lda player_status
+	bit #%00000001
+	bne @control
+
+	jsr animate_player
+	jsr move
+	jsr position_mask_over_player
+	jsr set_player_tile
+	jsr check_interactions
+
+@control:
+	jsr character_overworld_control
+
+	; Manually push the address of the jmp to the stack to simulate jsr
+	; instruction.
+	; NOTE:  Due to an ancient 6502 bug, we need to make sure that tick_fn
+	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
+	; sooner or later.  When it does, just fix by putting in a nop somewhere to
+	; bump the address foward.
+	lda #>(@jmp_interaction_return)
+	pha
+	lda #<(@jmp_interaction_return)
+	pha
+	jmp (interaction_fn)				; jump to whatever the current screen defines
+@jmp_interaction_return:
+	nop
+
+@return: 
+	rts
+
+;==================================================
+; position_mask_over_player
+;
+; void position_mask_over_player()
+;==================================================
+position_mask_over_player:
+	lda #$f7
+	sec
+	sbc xplayer
+	sta veral1hscrolllo
+	lda #$f7
+	sbc xplayer+1
+	sta veral1hscrollhi
+
+	lda #$00
+	sec
+	sbc yplayer
+	sta veral1vscrolllo
+	lda #$00
+	sbc yplayer+1
+	sta veral1vscrollhi
 
 	rts
 

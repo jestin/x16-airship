@@ -7,6 +7,9 @@ end_titlefile:
 titlepalfile: .literal "TIPAL.BIN"
 end_titlepalfile:
 
+vimaskfile: .literal "VIMASK.BIN"
+end_vimaskfile:
+
 spritefile: .literal "SPRITES.BIN"	
 end_spritefile:
 
