@@ -165,6 +165,10 @@ trapdoor_to_cave:
 	jsr load_pixryn_cave
 	jsr player_to_field_ladder
 
+	; Call a tick directly so that the user doesn't see the map loaded, but the
+	; player unpositioned
+	jsr pixryn_cave_tick_handler
+
 	lda #4
 	jsr show_message
 
