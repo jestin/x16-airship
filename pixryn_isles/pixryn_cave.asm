@@ -152,11 +152,11 @@ position_mask_over_player:
 	sbc xplayer+1
 	sta veral1hscrollhi
 
-	lda #$00
+	lda #$f7
 	sec
 	sbc yplayer
 	sta veral1vscrolllo
-	lda #$00
+	lda #$f7
 	sbc yplayer+1
 	sta veral1vscrollhi
 
