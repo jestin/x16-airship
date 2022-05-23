@@ -29,8 +29,8 @@ load_pixryn_cabin:
 	LoadW map_height, 512
 
 	; initialize player location on screen
-	LoadW xplayer, $0090
-	LoadW yplayer, $00a8
+	LoadW xplayer, $0070
+	LoadW yplayer, $0058
 
 	; initialize scroll variables
 	LoadW xoff, $0090
