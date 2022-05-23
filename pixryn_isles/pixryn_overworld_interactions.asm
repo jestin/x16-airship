@@ -20,7 +20,7 @@ pixryn_overworld_interaction_handler:
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	cmp #%10000000				; checks if the b button is currently down, and wasn't before
 	bne @auto_interactions
 
 	; NOTE: We are using unnamed labels here so that we don't care which
@@ -48,21 +48,24 @@ pixryn_overworld_interaction_handler:
 	lda u0L
 	cmp #$10
 	bne :+
-	jsr campfire_sign
+	lda #0					; campfire sign
+	jsr captured_message
 	bra @return
 
 :
 	lda u0L
 	cmp #$11
 	bne :+
-	jsr home_sign
+	lda #1					; home sign
+	jsr captured_message
 	bra @return
 
 :
 	lda u0L
 	cmp #$12
 	bne :+
-	jsr tavern_sign
+	lda #2					; tavern sign
+	jsr captured_message
 	bra :+
 :
 	lda u0L
@@ -85,50 +88,6 @@ pixryn_overworld_interaction_handler:
 	bra @return
 
 :	; end the auto_interactions section with an unnamed label
-
-@return:
-	rts
-
-;==================================================
-; campfire_sign
-;==================================================
-campfire_sign:
-
-	lda #0
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
-
-@return:
-	rts
-
-;==================================================
-; home_sign
-;==================================================
-home_sign:
-
-	lda #1
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
-
-@return:
-	rts
-;==================================================
-; home_sign
-;==================================================
-tavern_sign:
-
-	lda #2
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
 
 @return:
 	rts

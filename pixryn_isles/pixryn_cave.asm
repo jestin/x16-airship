@@ -211,14 +211,62 @@ pixryn_cave_interaction_handler:
 	cmp #0
 	beq @return
 
-	cmp #1
+	; check if the b button was pressed
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the b button is currently down, and wasn't before
+	bne @auto_interactions
+
+	; NOTE: We are using unnamed labels here so that we don't care which
+	; section is which.  When the condition doesn't hit, we just advance to the
+	; next label.  This allows us to reorder these handlers without recoding
+	; them.
+
+; these interactions only trigger when the user has pressed the b button on the tile
+@b_button_interactions:
+
+	lda u0L
+	cmp #$10
+	bne :+
+	lda #6		; cave entrance sign
+	jsr captured_message
+	bra @return
+:
+	lda u0L
+	cmp #$11
+	bne :+
+	lda #8		; nothing to see here
+	jsr captured_message
+	bra @return
+:
+	lda u0L
+	cmp #$12
+	bne :+
+	lda #7		; deliveries ahead sign
+	jsr captured_message
+	bra @return
+:
+	lda u0L
+	cmp #$13
+	bne :+
+	lda #5		; cabin ladder sign
+	jsr captured_message
+	bra @return
+
+@auto_interactions:
+:
+
+	lda u0L
+	cmp #$1
 	bne :+
 	jsr find_trapdoor_to_cabin
 	bra @return
 
 :
 
-	cmp #2
+	lda u0L
+	cmp #$2
 	bne :+
 	jsr find_trapdoor_to_field
 
@@ -243,10 +291,7 @@ find_trapdoor_to_field:
 	jsr character_overworld_tick
 
 	lda #4
-	jsr show_message
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
+	jsr captured_message
 
 	rts
 
@@ -265,10 +310,7 @@ find_trapdoor_to_cabin:
 	jsr character_overworld_tick
 
 	lda #4
-	jsr show_message
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
+	jsr captured_message
 
 	rts
 

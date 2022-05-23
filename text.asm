@@ -208,6 +208,23 @@ show_message:
 	rts
 
 ;==================================================
+; captured_message
+;
+; Shows a message that needs to be cleared by the
+; user
+;
+; void captured_message(byte message: A)
+;==================================================
+captured_message:
+	jsr show_message
+
+	lda player_status				; set the player status to restrained and reading
+	ora #%00000011
+	sta player_status
+
+	rts
+
+;==================================================
 ; clear_text_sprites
 ;
 ; Shows a message address to the user
