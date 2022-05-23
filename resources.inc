@@ -82,6 +82,18 @@ end_home_collision_map_file:
 pixryn_home_interaction_map_file: .literal "PIHOMEINT.BIN"
 end_pixryn_home_interaction_map_file:
 
+cabin_l0_map_file: .literal "PICABINL0.BIN"
+end_cabin_l0_map_file:
+
+cabin_l1_map_file: .literal "PICABINL1.BIN"
+end_cabin_l1_map_file:
+
+cabin_collision_map_file: .literal "PICABINCLSN.BIN"
+end_cabin_collision_map_file:
+
+pixryn_cabin_interaction_map_file: .literal "PICABININT.BIN"
+end_pixryn_cabin_interaction_map_file:
+
 cave_l0_map_file: .literal "PICAVEL0.BIN"
 end_cave_l0_map_file:
 

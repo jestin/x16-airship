@@ -17,6 +17,10 @@ RESOURCES = $(PREFIX)TILES.BIN \
 			$(PREFIX)HOMEL1.BIN \
 			$(PREFIX)HOMECLSN.BIN \
 			$(PREFIX)HOMEINT.BIN \
+			$(PREFIX)CABINL0.BIN \
+			$(PREFIX)CABINL1.BIN \
+			$(PREFIX)CABINCLSN.BIN \
+			$(PREFIX)CABININT.BIN \
 			$(PREFIX)CAVEL0.BIN \
 			$(PREFIX)CAVEL1.BIN \
 			$(PREFIX)CAVECLSN.BIN \
@@ -68,6 +72,18 @@ $(PREFIX)HOMECLSN.BIN: home.tmx
 
 $(PREFIX)HOMEINT.BIN: home.tmx
 	tmx2vera -c home.tmx $(PREFIX)HOMEINT.BIN -l interaction
+
+$(PREFIX)CABINL0.BIN: cabin.tmx
+	tmx2vera cabin.tmx $(PREFIX)CABINL0.BIN -l terrain
+
+$(PREFIX)CABINL1.BIN: cabin.tmx
+	tmx2vera cabin.tmx $(PREFIX)CABINL1.BIN -l things
+
+$(PREFIX)CABINCLSN.BIN: cabin.tmx
+	tmx2vera -c cabin.tmx $(PREFIX)CABINCLSN.BIN -l collision
+
+$(PREFIX)CABININT.BIN: cabin.tmx
+	tmx2vera -c cabin.tmx $(PREFIX)CABININT.BIN -l interaction
 
 $(PREFIX)CAVEL0.BIN: cave.tmx
 	tmx2vera cave.tmx $(PREFIX)CAVEL0.BIN -l terrain

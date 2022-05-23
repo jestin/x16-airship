@@ -259,9 +259,7 @@ find_trapdoor_to_cabin:
 
 	lda #0
 	sta playerdir
-	; TODO: create map for cabin and go there instead
-	jsr load_pixryn
-	jsr player_to_pixryn_tavern
+	jsr load_pixryn_cabin
 	; Call a tick directly so that the user doesn't see the map loaded, but the
 	; player unpositioned
 	jsr character_overworld_tick

@@ -1,6 +1,7 @@
 .ifndef PIXRYN_ASM
 
 .include "pixryn_overworld_interactions.asm"
+.include "pixryn_cabin.asm"
 .include "pixryn_home.asm"
 .include "pixryn_tavern.asm"
 .include "pixryn_cave.asm"
@@ -193,6 +194,23 @@ player_to_pixryn_home:
 	; initialize scroll variables
 	LoadW xoff, $0144
 	LoadW yoff, $00bf
+
+	rts
+
+;==================================================
+; player_to_pixryn_cabin
+;
+; void player_to_pixryn_cabin()
+;==================================================
+player_to_pixryn_cabin:
+
+	; initialize player location on screen
+	LoadW xplayer, $0050
+	LoadW yplayer, $006a
+
+	; initialize scroll variables
+	LoadW xoff, $0000
+	LoadW yoff, $0000
 
 	rts
 
