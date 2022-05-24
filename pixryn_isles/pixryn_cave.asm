@@ -187,12 +187,12 @@ player_to_cave_entrance:
 player_to_field_ladder:
 
 	; initialize player location on screen
-	LoadW xplayer, $00a0
-	LoadW yplayer, $00a8
+	LoadW xplayer, $010f
+	LoadW yplayer, $0098
 
 	; initialize scroll variables
-	LoadW xoff, $0130
-	LoadW yoff, $0300
+	LoadW xoff, $00C1
+	LoadW yoff, $0311
 
 	rts
 
