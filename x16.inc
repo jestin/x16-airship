@@ -212,53 +212,55 @@ r15H		= $21
 ; ------------------------------------------------------------ 
 ; user virtual registers (cannot be used with BASIC or floating point)
 ; ------------------------------------------------------------ 
-u0			=$60
-u0L			=$60
-u0H			=$61
-u1			=$62
-u1L			=$62
-u1H			=$63
-u2			=$64
-u2L			=$64
-u2H			=$65
-u3			=$66
-u3L			=$66
-u3H			=$67
-u4			=$68
-u4L			=$68
-u4H			=$69
-u5			=$6a
-u5L			=$6a
-u5H			=$6b
-u6			=$6c
-u6L			=$6c
-u6H			=$6d
-u7			=$6e
-u7L			=$6e
-u7H			=$6f
-u8			=$70
-u8L			=$70
-u8H			=$71
-u9			=$72
-u9L			=$72
-u9H			=$73
-u10			=$74
-u10L		=$74
-u10H		=$75
-u11			=$76
-u11L		=$76
-u11H		=$77
-u12			=$78
-u12L		=$78
-u12H		=$79
-u13			=$7a
-u13L		=$7a
-u13H		=$7b
-u14			=$7c
-u14L		=$7c
-u14H		=$7d
-u15			=$7e
-u15L		=$7e
-u15H		=$7f
+ .segment "ZEROPAGE"
+ 
+ u0:		.res 2
+ u0L		= u0
+ u0H		= u0+1
+ u1:		.res 2
+ u1L		= u1
+ u1H		= u1+1
+ u2:		.res 2
+ u2L		= u2
+ u2H		= u2+1
+ u3:		.res 2
+ u3L		= u3
+ u3H		= u3+1
+ u4:		.res 2
+ u4L		= u4
+ u4H		= u4+1
+ u5:		.res 2
+ u5L		= u5
+ u5H		= u5+1
+ u6:		.res 2
+ u6L		= u6
+ u6H		= u6+1
+ u7:		.res 2
+ u7L		= u7
+ u7H		= u7+1
+ u8:		.res 2
+ u8L		= u8
+ u8H		= u8+1
+ u9:		.res 2
+ u9L		= u9
+ u9H		= u9+1
+ u10:		.res 2
+ u10L		= u10
+ u10H		= u10+1
+ u11:		.res 2
+ u11L		= u11
+ u11H		= u11+1
+ u12:		.res 2
+ u12L		= u12
+ u12H		= u12+1
+ u13:		.res 2
+ u13L		= u13
+ u13H		= u13+1
+ u14:		.res 2
+ u14L		= u14
+ u14H		= u14+1
+ u15:		.res 2
+ u15L		= u15
+ u15H		= u15+1
 
 .endif

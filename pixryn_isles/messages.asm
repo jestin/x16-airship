@@ -2,6 +2,7 @@
 .segment "STARTUP"
 .segment "INIT"
 .segment "ONCE"
+.segment "RODATA"
 
 .word campfire_sign
 .word home_sign

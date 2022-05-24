@@ -1,33 +1,33 @@
 .ifndef RAM_INC
 RAM_INC = 1
 
-; Zero Page
+.segment "DATA"
 
-map_width			= $22	; 2 bytes
-map_height			= $24	; 2 bytes
+map_width:		.res 2
+map_height:		.res 2
 
 ; scroll offsets
-xoff				= $26	; 2 bytes
-yoff				= $28	; 2 bytes
+xoff:		.res 2
+yoff:		.res 2
 
-xplayer				= $30	; 2 bytes
-yplayer				= $32	; 2 bytes
+xplayer:		.res 2
+yplayer:		.res 2
 
-playerdir			= $34
+playerdir:		.res 1
 
 ; index (0 through w*h-1) of active tile (where player upper left is)
-active_tile			= $36	; 2 bytes
+active_tile:		.res 2
 
 ; index (0 through w*h-1) of active tile (where player center is)
-player_tile			= $38	; 2 bytes
+player_tile:		.res 2
 
 ; 256 repeating ticks
-tickcount				= $40
-joystick_data			= $41 ; 3 bytes
-joystick_changed_data	= $44 ; 3 bytes
+tickcount:		.res 1
+joystick_data:		.res 3
+joystick_changed_data:		.res 3
 
-anim_tiles_count		= $47
-next_char_sprite		= $48
+anim_tiles_count:		.res 1
+next_char_sprite:		.res 1
 
 ; a bitmask of player statuses:
 ; 0 - unable to move
@@ -38,18 +38,18 @@ next_char_sprite		= $48
 ; 5 -
 ; 6 -
 ; 7 -
-player_status			= $49
+player_status:		.res 1
 
-map_id					= $50
+map_id:		.res 1
 
 ; interaction function
-interaction_fn		= $54 ; 2 bytes
+interaction_fn:		.res 2
 
 ; tick function
-tick_fn				= $56 ; 2 bytes
+tick_fn:		.res 2
 
 ; vsync trigger for running the game loop
-zp_vsync_trig		= $58
+zp_vsync_trig:		.res 1
 
 
 ; Other addresses
@@ -57,27 +57,27 @@ zp_vsync_trig		= $58
 ; the program is loaded at $800
 
 ; for 32 16x16 1bpp tiles this takes $800 bytes
-collision_tile_data	= $4000
+collision_tile_data:		.res $800
 
 ; for the single constructed collision tile to be compared against the player
 ; this is stored in $20 bytes, but will take $80 to calculate
-construct_tile		= $4800
+construct_tile:		.res $80
 
 ; player collision tile
-player_collision_tile = $4880
+player_collision_tile:		.res 32
 
 ; Store an array of indexes of the (base) animated tiles.  The max allowed is
 ; 32 animated tiles, since the that is the most we can hold in the animation
 ; tile restore bank (32 tiles x 256 bytes per tile = 8K)
-anim_tiles			= $4900 ; 64 bytes (32 2-byte tile indexes)
+anim_tiles:			.res 64 ; 64 bytes (32 2-byte tile indexes)
 
 ; Store an array of sprites used for message text
-message_sprites		= $4940 ; 64 bytes
+message_sprites:		.res 64
 
-player_file			= $5000 ; 2 bytes
-player_file_size	= $5002 ; 2 bytes
+player_file:		.res 2
+player_file_size:		.res 2
 
-default_irq			= $9efe
+default_irq:		.res 2
 
 
 ; Banked RAM addresses
