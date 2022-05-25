@@ -46,6 +46,14 @@ pixryn_overworld_interaction_handler:
 
 :
 	lda u0L
+	cmp #$6
+	bne :+
+	lda #10
+	jsr captured_message
+	bra @return
+
+:
+	lda u0L
 	cmp #$10
 	bne :+
 	lda #0					; campfire sign
@@ -105,11 +113,7 @@ fall_down_cave:
 	jsr pixryn_cave_tick_handler
 
 	lda #3
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
+	jsr captured_message
 
 @return:
 	rts
@@ -129,11 +133,7 @@ trapdoor_to_cave:
 	jsr pixryn_cave_tick_handler
 
 	lda #4
-	jsr show_message
-
-	lda player_status				; set the player status to restrained and reading
-	ora #%00000011
-	sta player_status
+	jsr captured_message
 
 @return:
 	rts

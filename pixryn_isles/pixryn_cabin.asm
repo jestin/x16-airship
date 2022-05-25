@@ -116,9 +116,6 @@ pixryn_cabin_interaction_handler:
 	cmp #0
 	beq @return
 
-	cmp #1
-	bne @return
-
 	; on the cabin exit door, now check if they pressed B
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
@@ -126,10 +123,29 @@ pixryn_cabin_interaction_handler:
 	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
 
-	jsr player_to_pixryn_cabin
-	jsr load_pixryn
+	jsr exit_cabin
 
 @return:
+	rts
+
+;==================================================
+; exit_cabin
+;
+; void exit_cabin()
+;==================================================
+exit_cabin:
+
+	lda #0
+	sta playerdir
+	jsr load_pixryn
+	jsr player_to_pixryn_cabin
+	; Call a tick directly so that the user doesn't see the map loaded, but the
+	; player unpositioned
+	jsr character_overworld_tick
+
+	lda #9
+	jsr captured_message
+
 	rts
 
 .endproc		; PIXRYN_CABIN_INTERACTIONS
