@@ -213,5 +213,83 @@ load_player_sprites:
 	jsr LOAD
 
 	rts
+	
+;==================================================
+; cache_map_in_hi_mem
+;
+; Cache the overworld map data into hi ram banks
+;
+; Expects the VERA address to already be set
+;
+; void cache_map_in_hi_mem(byte bank1: x, byte bank2, y)
+;==================================================
+cache_map_in_hi_mem:
+
+	stx $00
+
+	LoadW u0, bank_window
+@bank_1_loop:
+	lda u0H
+	cmp #>(bank_window+$2000)
+	beq @bank_1_loaded
+	lda veradat
+	sta (u0)
+	IncW u0
+	bra @bank_1_loop
+
+@bank_1_loaded:
+	sty $00
+
+	LoadW u0, bank_window
+@bank_2_loop:
+	lda u0H
+	cmp #>(bank_window+$2000)
+	beq @return
+	lda veradat
+	sta (u0)
+	IncW u0
+	bra @bank_2_loop
+
+@return:
+	rts
+
+;==================================================
+; load_map_from_cache
+;
+; Load the overworld cache from hi ram
+;
+; Expects the VERA address to already be set
+;
+; void load_map_from_cache(byte bank1: x, byte bank2, y)
+;==================================================
+load_map_from_cache:
+
+	stx $00
+
+	LoadW u0, bank_window
+@bank_1_loop:
+	lda u0H
+	cmp #>(bank_window+$2000)
+	beq @bank_1_loaded
+	lda (u0)
+	sta veradat
+	IncW u0
+	bra @bank_1_loop
+
+@bank_1_loaded:
+	sty $00
+
+	LoadW u0, bank_window
+@bank_2_loop:
+	lda u0H
+	cmp #>(bank_window+$2000)
+	beq @return
+	lda (u0)
+	sta veradat
+	IncW u0
+	bra @bank_2_loop
+
+@return:
+	rts
 
 .endif ; MAP_ASM

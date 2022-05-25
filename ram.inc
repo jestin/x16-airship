@@ -81,6 +81,7 @@ default_irq:		.res 2
 
 
 ; Banked RAM addresses
+bank_window = $a000
 
 ; for a 128x64 tile map this takes $2000 bytes
 collision_map_data_bank = 1
@@ -98,5 +99,10 @@ animation_tile_restore = $a000
 map_message_data_bank = 4
 map_message_lookup = $a000
 
+; overworld map cache
+overworld_l0_map_bank_1 = 5
+overworld_l0_map_bank_2 = 6
+overworld_l1_map_bank_1 = 7
+overworld_l1_map_bank_2 = 8
 
 .endif ; RAM_INC

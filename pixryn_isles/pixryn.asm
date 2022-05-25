@@ -92,13 +92,43 @@ load_pixryn:
 	sta u1H
 	jsr load_player_sprites
 
+	lda map_id
+	cmp #PIXRYN_MAP_ID
+	beq @load_tile_maps_from_cache
+
+@load_tile_maps:
+
 	LoadW u0, pixryn_l0_map_file
 	LoadW u1, end_pixryn_l0_map_file-pixryn_l0_map_file
 	jsr load_l0_map
 
+	vset vram_l0_map_data
+	ldx #overworld_l0_map_bank_1
+	ldy #overworld_l0_map_bank_2
+	jsr cache_map_in_hi_mem
+
 	LoadW u0, pixryn_l1_map_file
 	LoadW u1, end_pixryn_l1_map_file-pixryn_l1_map_file
 	jsr load_l1_map
+
+	vset vram_l1_map_data
+	ldx #overworld_l1_map_bank_1
+	ldy #overworld_l1_map_bank_2
+	jsr cache_map_in_hi_mem
+
+	bra @set_layer
+
+@load_tile_maps_from_cache:
+
+	vset vram_l0_map_data
+	ldx #overworld_l0_map_bank_1
+	ldy #overworld_l0_map_bank_2
+	jsr load_map_from_cache
+
+	vset vram_l1_map_data
+	ldx #overworld_l1_map_bank_1
+	ldy #overworld_l1_map_bank_2
+	jsr load_map_from_cache
 
 @set_layer:
 
