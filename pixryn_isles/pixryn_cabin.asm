@@ -120,10 +120,20 @@ pixryn_cabin_interaction_handler:
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
-	bne @return
+	cmp #%10000000				; checks if the b button is currently down, and wasn't before
+	bne @auto_interactions
+
+; these interactions only trigger when the user has pressed the b button on the tile
+@b_button_interactions:
+
+	lda u0L
+	cmp #1
+	bne :+
 
 	jsr exit_cabin
+:
+
+@auto_interactions:
 
 @return:
 	rts
