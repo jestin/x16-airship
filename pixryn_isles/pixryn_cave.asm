@@ -96,6 +96,11 @@ load_pixryn_cave:
 	lda #%00001000
 	sprstore 6
 
+	lda #music_bank_1
+	ldx #<music_data
+	ldy #>music_data
+	jsr startmusic
+
 	rts
 
 ;==================================================
@@ -123,6 +128,9 @@ pixryn_cave_tick_handler:
 
 @control:
 	jsr character_overworld_control
+
+@music:
+	jsr playmusic
 
 	; Manually push the address of the jmp to the stack to simulate jsr
 	; instruction.

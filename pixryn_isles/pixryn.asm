@@ -209,9 +209,9 @@ load_pixryn:
 ;==================================================
 load_pixryn_music:
 
+	; overworld
 	lda #overworld_music_bank
 	sta 0
-
 	lda #1
 	ldx #8
 	ldy #2
@@ -219,6 +219,22 @@ load_pixryn_music:
 	lda #(end_pixryn_overworld_music_file-pixryn_overworld_music_file)
 	ldx #<pixryn_overworld_music_file
 	ldy #>pixryn_overworld_music_file
+	jsr SETNAM
+	lda #0
+	ldx #<music_data
+	ldy #>music_data
+	jsr LOAD
+
+	; cave
+	lda #music_bank_1
+	sta 0
+	lda #1
+	ldx #8
+	ldy #2
+	jsr SETLFS
+	lda #(end_pixryn_cave_music_file-pixryn_cave_music_file)
+	ldx #<pixryn_cave_music_file
+	ldy #>pixryn_cave_music_file
 	jsr SETNAM
 	lda #0
 	ldx #<music_data

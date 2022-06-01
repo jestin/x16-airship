@@ -109,4 +109,7 @@ end_pixryn_cave_interaction_map_file:
 pixryn_overworld_music_file: .literal "PIOVW.ZSM"
 end_pixryn_overworld_music_file:
 
+pixryn_cave_music_file: .literal "PICAVE.ZSM"
+end_pixryn_cave_music_file:
+
 .endif ; RESOURCES_INC
