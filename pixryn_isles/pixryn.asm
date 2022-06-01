@@ -44,6 +44,9 @@ load_pixryn:
 	lda #%00010001		; l0
 	sta veradcvideo
 
+	; stop music
+	jsr stopmusic
+
 @start_load:
 
 	; initialize map width and height
@@ -95,6 +98,9 @@ load_pixryn:
 	lda map_id
 	cmp #PIXRYN_MAP_ID
 	beq @load_tile_maps_from_cache
+
+	; load all pixryn music
+	jsr load_pixryn_music
 
 @load_tile_maps:
 
@@ -191,14 +197,17 @@ load_pixryn:
 	lda #PIXRYN_MAP_ID
 	sta map_id
 
-	jsr load_pixryn_overworld_music
+	lda #overworld_music_bank
+	ldx #<music_data
+	ldy #>music_data
+	jsr startmusic
 
 	rts
 
 ;==================================================
-; load_pixryn_overworld_music
+; load_pixryn_music
 ;==================================================
-load_pixryn_overworld_music:
+load_pixryn_music:
 
 	lda #overworld_music_bank
 	sta 0
@@ -215,11 +224,6 @@ load_pixryn_overworld_music:
 	ldx #<music_data
 	ldy #>music_data
 	jsr LOAD
-
-	lda #overworld_music_bank
-	ldx #<music_data
-	ldy #>music_data
-	jsr startmusic
 
 	rts
 

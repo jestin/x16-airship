@@ -24,6 +24,9 @@ load_pixryn_home:
 	LoadW u3, message_sprites
 	jsr draw_string
 
+	; stop music
+	jsr stopmusic
+
 	; initialize map width and height
 	LoadW map_width, 512
 	LoadW map_height, 512
