@@ -24,12 +24,17 @@
 .include "title.asm"
 .include "pixryn_isles/pixryn.asm"
 
+; 3rd party includes
+.include "zsmplayer.inc"
+
 ; replace this with separate memory include file
 
 loading_text:			.literal "Loading...", $00
 
 
 main:
+
+	jsr init_player
 
 	; set video mode
 	lda #%01000001		; turn off layers while loading (leave sprites)

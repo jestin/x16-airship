@@ -1,6 +1,10 @@
 NAME = AIRSHIP
 ASSEMBLER6502 = cl65
-ASFLAGS = -t cx16 -l $(NAME).list
+INCLUDEDIR = 3rdParty/include/
+LIBDIR = 3rdParty/lib/
+LIBS = zsound.lib
+
+ASFLAGS = -t cx16 -l $(NAME).list -L $(LIBDIR) --asm-include-dir $(INCLUDEDIR)
 
 PROG = $(NAME).PRG
 LIST = $(NAME).list
@@ -16,10 +20,11 @@ RESOURCES = CHARSET.BIN \
 all: clean bin/$(PROG)
 
 bin/$(PROG): $(SOURCES) bin
-	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN)
+	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN) $(LIBS)
 
 SUBDIRS = pixryn_isles \
-		  sprites
+		  sprites \
+		  music
 
 subresources:
 	-for i in $(SUBDIRS); do \
@@ -29,9 +34,10 @@ subresources:
 resources: subresources bin $(RESOURCES)
 	-for i in $(SUBDIRS); do \
 		echo "copying resources from $$i..."; \
-		cp $$i/*.BIN bin/; done
-	cp *.BIN bin
-	cp sprites/*.BIN bin
+		cp $$i/*.BIN bin/ 2> /dev/null || :; done
+	cp *.BIN bin 2> /dev/null
+	cp sprites/*.BIN bin 2> /dev/null
+	cp music/*.ZSM bin 2> /dev/null
 
 CHARSET.BIN: Charset.xcf
 	gimp -i -d -f -b '(export-vera "Charset.xcf" "CHARSET.BIN" 0 8 8 8 0 0 0)' -b '(gimp-quit 0)'

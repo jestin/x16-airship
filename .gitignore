@@ -4,6 +4,8 @@
 *.bin
 *.BIN
 *.BIN.PAL
+*.zsm
+*.ZSM
 *.list
 *.img
 

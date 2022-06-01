@@ -191,6 +191,36 @@ load_pixryn:
 	lda #PIXRYN_MAP_ID
 	sta map_id
 
+	jsr load_pixryn_overworld_music
+
+	rts
+
+;==================================================
+; load_pixryn_overworld_music
+;==================================================
+load_pixryn_overworld_music:
+
+	lda #overworld_music_bank
+	sta 0
+
+	lda #1
+	ldx #8
+	ldy #2
+	jsr SETLFS
+	lda #(end_pixryn_overworld_music_file-pixryn_overworld_music_file)
+	ldx #<pixryn_overworld_music_file
+	ldy #>pixryn_overworld_music_file
+	jsr SETNAM
+	lda #0
+	ldx #<music_data
+	ldy #>music_data
+	jsr LOAD
+
+	lda #overworld_music_bank
+	ldx #<music_data
+	ldy #>music_data
+	jsr startmusic
+
 	rts
 
 ;==================================================

@@ -106,4 +106,7 @@ end_cave_collision_map_file:
 pixryn_cave_interaction_map_file: .literal "PICAVEINT.BIN"
 end_pixryn_cave_interaction_map_file:
 
+pixryn_overworld_music_file: .literal "PIOVW.ZSM"
+end_pixryn_overworld_music_file:
+
 .endif ; RESOURCES_INC
