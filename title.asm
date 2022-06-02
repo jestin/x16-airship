@@ -39,6 +39,32 @@ load_title:
 	rts
 
 ;==================================================
+; load_title_music
+;
+; Loads the title screen into vram
+;
+; void load_title_music()
+;==================================================
+load_title_music:
+
+	lda #music_bank_2
+	sta 0
+	lda #1
+	ldx #8
+	ldy #2
+	jsr SETLFS
+	lda #(end_title_music_file-title_music_file)
+	ldx #<title_music_file
+	ldy #>title_music_file
+	jsr SETNAM
+	lda #0
+	ldx #<music_data
+	ldy #>music_data
+	jsr LOAD
+
+	rts
+
+;==================================================
 ; show_title
 ;
 ; Shows the title screen
@@ -46,6 +72,14 @@ load_title:
 ; void show_title()
 ;==================================================
 show_title:
+
+	LoadW tick_fn, title_screen_tick
+	
+	; title music
+	lda #music_bank_2
+	ldx #<music_data
+	ldy #>music_data
+	jsr startmusic
 
 	; set the l0 tile mode	
 	lda #%00000110 	; height (2-bits) - 0 (32 tiles)

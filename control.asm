@@ -21,6 +21,32 @@ character_overworld_control:
 	rts
 
 ;==================================================
+; title_screen_control
+;
+; Handles the UI interactions while on the title
+; screen
+;
+; void title_screen_control()
+;==================================================
+title_screen_control:
+
+	lda joystick_data
+	eor $ff
+	and joystick_changed_data
+	cmp #%00010000				; checks if the button is currently down, and wasn't before
+	bne @return
+
+	; disable message sprites
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
+
+	jsr player_to_pixryn_home
+	jsr load_pixryn
+
+@return:
+	rts
+
+;==================================================
 ; reading_message_control
 ;
 ; Handles the player's UI choices while reading

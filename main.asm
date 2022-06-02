@@ -125,11 +125,28 @@ main:
 	ldy #>collision_tile_data
 	jsr LOAD
 
-	; load Pixryn Isles
-	jsr player_to_pixryn_home
-	jsr load_pixryn
-
 	jsr init_irq
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
+
+	; set video mode
+	lda #%01000001		; sprites
+	sta veradcvideo
+
+	jsr load_title
+	jsr load_title_music
+
+	; turn off loading sprites
+	lda #%00010001		; l0
+	sta veradcvideo
+
+	jsr show_title
+
 
 ;==================================================
 ; mainloop

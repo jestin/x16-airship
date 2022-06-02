@@ -109,6 +109,7 @@ overworld_l1_map_bank_2 = 8
 overworld_music_bank = 9
 music_bank_0 = 9
 music_bank_1 = 10
+music_bank_2 = 11
 music_data = $a000
 
 .endif ; RAM_INC

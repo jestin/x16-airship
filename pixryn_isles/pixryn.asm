@@ -17,32 +17,17 @@ PIXRYN_MAP_ID = 1
 ;==================================================
 load_pixryn:
 
+	; stop music
+	jsr stopmusic
+
 	; diable player sprite
 	ldx #player_sprite
 	lda #0
 	sprstore 6
 
-	; set the loading message
-	LoadW u0, loading_text
-	LoadW u1, 5
-	LoadW u2, 230
-	LoadW u3, message_sprites
-	jsr draw_string
-
-	; set video mode
-	lda #%01000001		; sprites
-	sta veradcvideo
-
 	lda map_id
 	cmp #PIXRYN_MAP_ID
 	beq @start_load
-
-	jsr load_title
-	jsr show_title
-
-	; turn off loading sprites
-	lda #%00010001		; l0
-	sta veradcvideo
 
 	; stop music
 	jsr stopmusic
@@ -83,6 +68,17 @@ load_pixryn:
 	LoadW u0, pixryn_pal_file
 	LoadW u1, end_pixryn_pal_file-pixryn_pal_file
 	jsr load_palette
+
+	; set the loading message
+	LoadW u0, loading_text
+	LoadW u1, 5
+	LoadW u2, 230
+	LoadW u3, message_sprites
+	jsr draw_string
+
+	; set video mode
+	lda #%01000001		; sprites
+	sta veradcvideo
 
 	; load the player into the sprites
 	lda player_file

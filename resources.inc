@@ -7,6 +7,9 @@ end_titlefile:
 titlepalfile: .literal "TIPAL.BIN"
 end_titlepalfile:
 
+title_music_file: .literal "TITLE.ZSM"
+end_title_music_file:
+
 vimaskfile: .literal "VIMASK.BIN"
 end_vimaskfile:
 

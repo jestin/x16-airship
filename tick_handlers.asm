@@ -49,4 +49,20 @@ character_overworld_tick:
 @return: 
 	rts
 
+;==================================================
+; title_screen_tick
+;
+; Custom tick handler for the title screen
+;
+; void title_screen_tick()
+;==================================================
+title_screen_tick:
+@music:
+	jsr playmusic
+	jsr update_joystick_data
+	jsr title_screen_control
+
+@return: 
+	rts
+
 .endif ; TICK_HANDLERS_ASM
