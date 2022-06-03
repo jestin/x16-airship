@@ -81,11 +81,11 @@ show_title:
 	ldy #>music_data
 	jsr startmusic
 
-	; set the l0 tile mode	
+	; set the l0 layer mode	
 	lda #%00000110 	; height (2-bits) - 0 (32 tiles)
 					; width (2-bits) - 0 (32 tiles
 					; T256C - 0
-					; bitmap mode - 0
+					; bitmap mode - 1
 					; color depth (2-bits) - 2 (4bpp)
 	sta veral0config
 
