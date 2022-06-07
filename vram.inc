@@ -15,7 +15,7 @@ vram_player_sprites		= $18000
 
 ; the charset is positioned here to be out of the way of a full screen 4bb
 ; bitmap loaded at $10000
-vram_charset_sprites	= $19600
+vram_charset_sprites	= $19600 ; goes to $1a600
 
 vram_palette			= $1fa00
 
