@@ -92,7 +92,7 @@ set_character_sprite:
 	lda u4L
 	sprstore 0
 	lda u4H
-	ora #%10000000						; using 8bpp, even for characters
+	and #%01111111						; using 4bpp
 	sprstore 1
 	lda u1L
 	sprstore 2
@@ -129,8 +129,7 @@ char_to_sprite_address:
 
 	; based on the correct chracter, calculate the vram offset
 
-	AslW u4							; multiply the value by 64
-	AslW u4
+	AslW u4							; multiply the value by 32
 	AslW u4
 	AslW u4
 	AslW u4
