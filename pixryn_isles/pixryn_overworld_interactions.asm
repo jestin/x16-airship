@@ -12,10 +12,6 @@ pixryn_overworld_interaction_handler:
 ; don't have to worry about symbol collisions with other handlers
 .proc PIXRYN_OVERWORD_INTERACTIONS
 
-	lda u0L
-	cmp #0
-	beq @return
-
 	; check if the b button was pressed
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
@@ -42,6 +38,29 @@ pixryn_overworld_interaction_handler:
 	cmp #$2
 	bne :+
 	jsr load_pixryn_home
+	bra @return
+:
+	lda u0L
+	cmp #$3
+	bne :+
+	lda #10
+	jsr captured_message
+	bra @return
+
+:
+	lda u0L
+	cmp #$4
+	bne :+
+	lda #10
+	jsr captured_message
+	bra @return
+
+:
+	lda u0L
+	cmp #$5
+	bne :+
+	lda #10
+	jsr captured_message
 	bra @return
 
 :
