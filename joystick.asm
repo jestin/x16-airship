@@ -19,13 +19,34 @@ update_joystick_data:
 	lda joystick_data+2
 	sta u1L
 
-	; get joystick data
-	lda #1
+	; get joystick data from keyboard
+	lda #0
 	jsr joystick_get
 	sta joystick_data
 	stx joystick_data+1
 	sty joystick_data+2
 
+	; get joystick data
+	lda #1
+	jsr joystick_get
+	cpy #0
+	bne @calculate_changed_data
+
+	; AND the values with what was read from the keyboard before storing
+	; This is a little non-intuitive, but because 0 is used when the button is
+	; pressed, this is essentially an OR for button presses
+	and joystick_data
+	sta joystick_data
+	txa
+	and joystick_data+1
+	sta joystick_data+1
+
+	; for Y, just overwrite what the keyboard returned.  This now becomes an
+	; indicator for the joystick alone
+	sty joystick_data+2
+
+
+@calculate_changed_data:
 	; compare against previous values, save a bitmask of the state change (1 means changed)
 	lda joystick_data
 	eor u0L
@@ -33,9 +54,9 @@ update_joystick_data:
 	lda joystick_data+1
 	eor u0H
 	sta joystick_changed_data+1
-	lda joystick_data+2
-	eor u1L
-	sta joystick_changed_data+2
+
+	; there's no reason to invert byte 2 of the joystick data, since it only
+	; tells if the joystick is present
 
 	rts
 
