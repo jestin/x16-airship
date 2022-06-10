@@ -344,37 +344,38 @@ move:
 	lda yplayer+1
 	pha
 
+	; up
 	lda joystick_data
-	bit#$8
-	beq @up
-	bit#$4
-	beq @down
-	bit#$2
-	beq @left
-	bit #$1
-	beq @right
-	bra @update
-
-@up:
+	bit #$8
+	bne :+
 	lda #9
 	sta playerdir
 	DecW yplayer
-	bra @update
-@down:
+:
+	; down
+	lda joystick_data
+	bit #$4
+	bne :+
 	lda #0
 	sta playerdir
 	IncW yplayer
-	bra @update
-@left:
+:
+	; left
+	lda joystick_data
+	bit #$2
+	bne :+
 	lda #6
 	sta playerdir
 	DecW xplayer
-	bra @update
-@right:
+:
+	; right
+	lda joystick_data
+	bit #$1
+	bne :+
 	lda #3
 	sta playerdir
 	IncW xplayer
-	bra @update
+:
 	
 @update:
 	jsr set_active_tile
