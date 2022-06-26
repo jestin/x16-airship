@@ -5,6 +5,7 @@
 .include "pixryn_home.asm"
 .include "pixryn_tavern.asm"
 .include "pixryn_cave.asm"
+.include "pixryn_resources.inc"
 
 PIXRYN_ASM = 1
 
