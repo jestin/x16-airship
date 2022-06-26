@@ -109,11 +109,7 @@ load_pixryn_cabin:
 ;
 ; void pixryn_cabin_interaction_handler()
 ;==================================================
-pixryn_cabin_interaction_handler:
-
-; putting everything (except the symbol of this routine) into a proc means we
-; don't have to worry about symbol collisions with other handlers
-.proc PIXRYN_CABIN_INTERACTIONS
+.proc pixryn_cabin_interaction_handler
 
 	lda u0L
 	cmp #0
@@ -161,6 +157,6 @@ exit_cabin:
 
 	rts
 
-.endproc		; PIXRYN_CABIN_INTERACTIONS
+.endproc		; pixryn_cabin_interaction_handler
 
 .endif ; PIXRYN_CABIN_ASM

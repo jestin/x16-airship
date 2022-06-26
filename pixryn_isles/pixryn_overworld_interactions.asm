@@ -6,11 +6,7 @@ PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 ;
 ; void pixryn_overworld_interaction_handler()
 ;==================================================
-pixryn_overworld_interaction_handler:
-
-; putting everything (except the symbol of this routine) into a proc means we
-; don't have to worry about symbol collisions with other handlers
-.proc PIXRYN_OVERWORD_INTERACTIONS
+.proc pixryn_overworld_interaction_handler
 
 	; check if the b button was pressed
 	lda joystick_data
@@ -157,6 +153,6 @@ trapdoor_to_cave:
 @return:
 	rts
 
-.endproc		; PIXRYN_OVERWORD_INTERACTIONS
+.endproc		; pixryn_overworld_interaction_handler
 
 .endif ; PIXRYN_OVERWORLD_INTERACTIONS_ASM

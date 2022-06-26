@@ -180,8 +180,8 @@ add_animated_tile:
 ;==================================================
 ; clear_animated_tiles
 ; 
-; Put the tile map in vram back such that frame 0 is in place for each animated
-; tile.
+; Put the tile map in vram back such that frame 0
+; is in place for each animated tile.
 ;
 ; void clear_animated_tiles()
 ;==================================================

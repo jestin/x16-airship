@@ -212,11 +212,7 @@ player_to_field_ladder:
 ;
 ; void pixryn_cave_interaction_handler()
 ;==================================================
-pixryn_cave_interaction_handler:
-
-; putting everything (except the symbol of this routine) into a proc means we
-; don't have to worry about symbol collisions with other handlers
-.proc PIXRYN_CAVE_INTERACTIONS
+.proc pixryn_cave_interaction_handler
 
 	lda u0L
 	cmp #0
@@ -325,6 +321,6 @@ find_trapdoor_to_cabin:
 
 	rts
 
-.endproc		; PIXRYN_CAVE_INTERACTIONS
+.endproc		; pixryn_cave_interaction_handler
 
 .endif ; PIXRYN_CAVE_ASM
