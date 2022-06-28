@@ -1,5 +1,7 @@
 .ifndef PIXRYN_ASM
 
+.include "../map.asm"
+
 .include "pixryn_overworld_interactions.asm"
 .include "pixryn_cabin.asm"
 .include "pixryn_home.asm"

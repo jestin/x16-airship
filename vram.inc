@@ -13,9 +13,13 @@ vram_l1_map_data		= $14000
 ; This consists of 12 16x16 8bpp tiles, so $C00 bytes
 vram_player_sprites		= $18000
 
+; $A00 are available here (after bitmap is no longer needed)
+
 ; the charset is positioned here to be out of the way of a full screen 4bb
 ; bitmap loaded at $10000
 vram_charset_sprites	= $19600 ; goes to $1a600
+
+; $5400 are available here
 
 vram_palette			= $1fa00
 

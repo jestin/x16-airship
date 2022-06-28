@@ -1,6 +1,12 @@
 .ifndef TICK_HANDLERS_ASM
 TICK_HANDLERS_ASM = 1
 
+.include "control.asm"
+.include "interaction.asm"
+.include "movement.asm"
+.include "animation.asm"
+.include "joystick.asm"
+
 ;==================================================
 ; character_overworld_tick
 ;

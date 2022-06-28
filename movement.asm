@@ -1,6 +1,8 @@
 .ifndef MOVEMENT_ASM
 MOVEMENT_ASM = 1
 
+.include "collision.asm"
+
 ;==================================================
 ; set_active_tile
 ;

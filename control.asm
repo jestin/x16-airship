@@ -1,6 +1,8 @@
 .ifndef CONTROL_ASM
 CONTROL_ASM = 1
 
+.include "pixryn_isles/pixryn.asm"
+
 ;==================================================
 ; character_overworld_control
 ;

@@ -1,6 +1,8 @@
 .ifndef TITLE_ASM
 TITLE_ASM = 1
 
+.include "tick_handlers.asm"
+
 ;==================================================
 ; load_title
 ;

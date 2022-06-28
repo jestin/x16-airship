@@ -12,17 +12,8 @@
 .include "vram.inc"
 .include "sprites.inc"
 .include "resources.inc"
-.include "control.asm"
-.include "movement.asm"
-.include "animation.asm"
 .include "text.asm"
-.include "collision.asm"
-.include "interaction.asm"
-.include "joystick.asm"
-.include "map.asm"
-.include "tick_handlers.asm"
 .include "title.asm"
-.include "pixryn_isles/pixryn.asm"
 
 ; 3rd party includes
 .include "zsmplayer.inc"
