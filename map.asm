@@ -1,6 +1,14 @@
 .ifndef MAP_ASM
 MAP_ASM = 1
 
+.segment "DATA"
+
+map_id:		.res 1
+map_width:		.res 2
+map_height:		.res 2
+
+.segment "CODE"
+
 ;==================================================
 ; load_tiles
 ;
@@ -100,8 +108,8 @@ load_collision_map:
 	ldy u0H
 	jsr SETNAM
 	lda #0
-	ldx #<collision_map_data
-	ldy #>collision_map_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	rts
@@ -130,8 +138,8 @@ load_interaction_map:
 	ldy u0H
 	jsr SETNAM
 	lda #0
-	ldx #<interaction_map_data
-	ldy #>interaction_map_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	rts
@@ -160,8 +168,8 @@ load_messages:
 	ldy u0H
 	jsr SETNAM
 	lda #0
-	ldx #<map_message_lookup
-	ldy #>map_message_lookup
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	rts
@@ -227,10 +235,10 @@ cache_map_in_hi_mem:
 
 	stx $00
 
-	LoadW u0, bank_window
+	LoadW u0, hi_mem
 @bank_1_loop:
 	lda u0H
-	cmp #>(bank_window+$2000)
+	cmp #>(hi_mem+$2000)
 	beq @bank_1_loaded
 	lda veradat
 	sta (u0)
@@ -240,10 +248,10 @@ cache_map_in_hi_mem:
 @bank_1_loaded:
 	sty $00
 
-	LoadW u0, bank_window
+	LoadW u0, hi_mem
 @bank_2_loop:
 	lda u0H
-	cmp #>(bank_window+$2000)
+	cmp #>(hi_mem+$2000)
 	beq @return
 	lda veradat
 	sta (u0)
@@ -266,10 +274,10 @@ load_map_from_cache:
 
 	stx $00
 
-	LoadW u0, bank_window
+	LoadW u0, hi_mem
 @bank_1_loop:
 	lda u0H
-	cmp #>(bank_window+$2000)
+	cmp #>(hi_mem+$2000)
 	beq @bank_1_loaded
 	lda (u0)
 	sta veradat
@@ -279,10 +287,10 @@ load_map_from_cache:
 @bank_1_loaded:
 	sty $00
 
-	LoadW u0, bank_window
+	LoadW u0, hi_mem
 @bank_2_loop:
 	lda u0H
-	cmp #>(bank_window+$2000)
+	cmp #>(hi_mem+$2000)
 	beq @return
 	lda (u0)
 	sta veradat

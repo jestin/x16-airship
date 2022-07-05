@@ -1,6 +1,12 @@
 .ifndef JOYSTICK_ASM
 JOYSTICK_ASM = 1
 
+.segment "DATA"
+joystick_data:		.res 3
+joystick_changed_data:		.res 3
+
+.segment "CODE"
+
 ;==================================================
 ; update_joystick_data
 ;

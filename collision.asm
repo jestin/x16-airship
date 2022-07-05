@@ -1,6 +1,20 @@
 .ifndef COLLISION_ASM
 COLLISION_ASM = 1
 
+.segment "DATA"
+
+; for 32 16x16 1bpp tiles this takes $800 bytes
+collision_tile_data:		.res $800
+
+; for the single constructed collision tile to be compared against the player
+; this is stored in $20 bytes, but will take $80 to calculate
+construct_tile:		.res $80
+
+; player collision tile
+player_collision_tile:		.res 32
+
+.segment "CODE"
+
 ;==================================================
 ; check_collisions
 ;
@@ -98,10 +112,10 @@ construct_collision_tile:
 	ldx #0
 @populate_pad_loop:
 	clc
-	lda #<(collision_map_data)
+	lda #<(hi_mem)
 	adc active_tile
 	sta u2L
-	lda #>(collision_map_data)
+	lda #>(hi_mem)
 	adc active_tile+1
 	sta u2H
 

@@ -7,6 +7,16 @@ TICK_HANDLERS_ASM = 1
 .include "animation.asm"
 .include "joystick.asm"
 
+.segment "DATA"
+
+; interaction function
+interaction_fn:		.res 2
+
+; tick function
+tick_fn:		.res 2
+
+.segment "CODE"
+
 ;==================================================
 ; character_overworld_tick
 ;

@@ -97,8 +97,8 @@ load_pixryn_cave:
 	sprstore 6
 
 	lda #music_bank_1
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr startmusic
 
 	rts

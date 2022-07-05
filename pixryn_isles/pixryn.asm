@@ -1,6 +1,7 @@
 .ifndef PIXRYN_ASM
 
 .include "../map.asm"
+.include "../player.asm"
 
 .include "pixryn_overworld_interactions.asm"
 .include "pixryn_cabin.asm"
@@ -197,8 +198,8 @@ load_pixryn:
 	sta map_id
 
 	lda #overworld_music_bank
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr startmusic
 
 	rts
@@ -220,8 +221,8 @@ load_pixryn_music:
 	ldy #>pixryn_overworld_music_file
 	jsr SETNAM
 	lda #0
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	; cave
@@ -236,8 +237,8 @@ load_pixryn_music:
 	ldy #>pixryn_cave_music_file
 	jsr SETNAM
 	lda #0
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	rts

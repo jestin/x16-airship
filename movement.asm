@@ -3,6 +3,25 @@ MOVEMENT_ASM = 1
 
 .include "collision.asm"
 
+.segment "DATA"
+
+; scroll offsets
+xoff:		.res 2
+yoff:		.res 2
+
+xplayer:		.res 2
+yplayer:		.res 2
+
+playerdir:		.res 1
+
+; index (0 through w*h-1) of active tile (where player upper left is)
+active_tile:		.res 2
+
+; index (0 through w*h-1) of active tile (where player center is)
+player_tile:		.res 2
+
+.segment "CODE"
+
 ;==================================================
 ; set_active_tile
 ;

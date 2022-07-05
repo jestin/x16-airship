@@ -1,6 +1,15 @@
 .ifndef TEXT_INC
 TEXT_INC = 1
 
+.segment "DATA"
+
+; Store an array of sprites used for message text
+message_sprites:		.res 64
+
+next_char_sprite:		.res 1
+
+.segment "CODE"
+
 ;==================================================
 ; inc_next_char_sprite
 ; 
@@ -180,10 +189,10 @@ show_message:
 	; double the message index and add it to the message lookup address
 	asl
 	clc
-	adc #<map_message_lookup
+	adc #<hi_mem
 	sta u1L
 	lda #0
-	adc #>map_message_lookup
+	adc #>hi_mem
 	sta u1H
 
 	; switch to the map message bank

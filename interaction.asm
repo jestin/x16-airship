@@ -1,6 +1,8 @@
 .ifndef INTERACTION_ASM
 INTERACTION_ASM = 1
 
+.segment "CODE"
+
 ;==================================================
 ; check_interactions
 ;
@@ -13,10 +15,10 @@ check_interactions:
 	sta $00
 
 	clc
-	lda #<(interaction_map_data)
+	lda #<(hi_mem)
 	adc player_tile
 	sta u0L
-	lda #>(interaction_map_data)
+	lda #>(hi_mem)
 	adc player_tile+1
 	sta u0H
 

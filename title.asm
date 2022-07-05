@@ -3,6 +3,8 @@ TITLE_ASM = 1
 
 .include "tick_handlers.asm"
 
+.segment "CODE"
+
 ;==================================================
 ; load_title
 ;
@@ -60,8 +62,8 @@ load_title_music:
 	ldy #>title_music_file
 	jsr SETNAM
 	lda #0
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr LOAD
 
 	rts
@@ -79,8 +81,8 @@ show_title:
 	
 	; title music
 	lda #music_bank_2
-	ldx #<music_data
-	ldy #>music_data
+	ldx #<hi_mem
+	ldy #>hi_mem
 	jsr startmusic
 
 	; set the l0 layer mode	

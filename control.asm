@@ -3,6 +3,8 @@ CONTROL_ASM = 1
 
 .include "pixryn_isles/pixryn.asm"
 
+.segment "CODE"
+
 ;==================================================
 ; character_overworld_control
 ;

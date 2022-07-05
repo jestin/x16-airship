@@ -8,7 +8,7 @@
 .include "x16.inc"
 .include "vera.inc"
 .include "macros.inc"
-.include "ram.inc"
+.include "himem.inc"
 .include "vram.inc"
 .include "sprites.inc"
 .include "resources.inc"
@@ -20,8 +20,20 @@
 
 ; replace this with separate memory include file
 
+.segment "RODATA"
+
 loading_text:			.literal "Loading...", $00
 
+.segment "DATA"
+
+; vsync trigger for running the game loop
+vsync_trigger:		.res 1
+default_irq:		.res 2
+
+; 256 repeating ticks
+tickcount:		.res 1
+
+.segment "CODE"
 
 main:
 
@@ -52,8 +64,8 @@ main:
 	jsr LOAD
 
 	; TODO: Move this to a player selection screen
-	LoadW player_file, aurorafile
-	LoadW player_file_size, end_aurorafile - aurorafile
+	LoadW player_file, lunafile
+	LoadW player_file_size, end_lunafile - lunafile
 
 	LoadWBE player_collision_tile+00, %0000000000000000
 	LoadWBE player_collision_tile+02, %0000000000000000
@@ -177,7 +189,7 @@ handle_irq:
 	lda veraisr
 	and #$01
 	beq @return
-	sta zp_vsync_trig
+	sta vsync_trigger
 	; clear vera irq flag
 	sta veraisr
 
@@ -188,7 +200,7 @@ handle_irq:
 ; check_vsync
 ;==================================================
 check_vsync:
-	lda zp_vsync_trig
+	lda vsync_trigger
 	beq @return
 
 	; VSYNC has occurred, handle
@@ -211,5 +223,5 @@ check_vsync:
 	nop
 
 @return:
-	stz zp_vsync_trig
+	stz vsync_trigger
 	rts

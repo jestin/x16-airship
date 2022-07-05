@@ -1,6 +1,19 @@
 .ifndef ANIMATION_ASM
 ANIMATION_ASM = 1
 
+.segment "DATA"
+
+anim_tiles_count:		.res 1
+
+; Store an array of indexes of the (base) animated tiles.  The max allowed is
+; 32 animated tiles, since the that is the most we can hold in the animation
+; tile restore bank (32 tiles x 256 bytes per tile = 8K)
+anim_tiles:
+.align 64
+.word 32 ; 64 bytes (32 2-byte tile indexes)
+
+.segment "CODE"
+
 ;==================================================
 ; animate_player
 ;==================================================
@@ -159,7 +172,7 @@ add_animated_tile:
 
 	; load the animation restore, and add the current anim_tiles_count to the
 	; high byte, which will be the correct restore address
-	LoadW u1, animation_tile_restore
+	LoadW u1, hi_mem
 	clc
 	lda anim_tiles_count
 	adc u1H
@@ -223,7 +236,7 @@ restore_original_tile:
 
 	; add the anim_tile_index in Y to the animation_tile_restore address's high
 	; byte to get the address of the copy from address
-	LoadW u0, animation_tile_restore
+	LoadW u0, hi_mem
 	clc
 	tya
 	adc u0H
