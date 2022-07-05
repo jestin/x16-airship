@@ -4,7 +4,7 @@ INCLUDEDIR = 3rdParty/include/
 LIBDIR = 3rdParty/lib/
 LIBS = zsound.lib
 
-ASFLAGS = -t cx16 -l $(NAME).list -L $(LIBDIR) --asm-include-dir $(INCLUDEDIR)
+ASFLAGS = -t cx16 -l $(NAME).list -L $(LIBDIR) --asm-include-dir $(INCLUDEDIR) -C cx16-aligned.cfg
 
 PROG = $(NAME).PRG
 LIST = $(NAME).list
