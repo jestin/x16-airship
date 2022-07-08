@@ -38,10 +38,10 @@ $(PREFIX)PAL.BIN: $(PREFIX)TILES.BIN
 	mv $(PREFIX)TILES.BIN.PAL $(PREFIX)PAL.BIN
 
 $(PREFIX)L0MAP.BIN: Pixryn_Isles.tmx
-	tmx2vera Pixryn_Isles.tmx $(PREFIX)L0MAP.BIN -l terrain
+	tmx2vera Pixryn_Isles.tmx $(PREFIX)L0MAP.BIN -l terrain -d
 
 $(PREFIX)L1MAP.BIN: Pixryn_Isles.tmx
-	tmx2vera Pixryn_Isles.tmx $(PREFIX)L1MAP.BIN -l things
+	tmx2vera Pixryn_Isles.tmx $(PREFIX)L1MAP.BIN -l things -d
 
 $(PREFIX)CLSNMAP.BIN: Pixryn_Isles.tmx
 	tmx2vera -c Pixryn_Isles.tmx $(PREFIX)CLSNMAP.BIN -l collision
@@ -50,10 +50,10 @@ $(PREFIX)INT.BIN: Pixryn_Isles.tmx
 	tmx2vera -c Pixryn_Isles.tmx $(PREFIX)INT.BIN -l interaction
 
 $(PREFIX)TAVL0.BIN: tavern.tmx
-	tmx2vera tavern.tmx $(PREFIX)TAVL0.BIN -l terrain
+	tmx2vera tavern.tmx $(PREFIX)TAVL0.BIN -l terrain -d
 
 $(PREFIX)TAVL1.BIN: tavern.tmx
-	tmx2vera tavern.tmx $(PREFIX)TAVL1.BIN -l things
+	tmx2vera tavern.tmx $(PREFIX)TAVL1.BIN -l things -d
 
 $(PREFIX)TAVCLSN.BIN: tavern.tmx
 	tmx2vera -c tavern.tmx $(PREFIX)TAVCLSN.BIN -l collision
@@ -62,10 +62,10 @@ $(PREFIX)TAVINT.BIN: tavern.tmx
 	tmx2vera -c tavern.tmx $(PREFIX)TAVINT.BIN -l interaction
 
 $(PREFIX)HOMEL0.BIN: home.tmx
-	tmx2vera home.tmx $(PREFIX)HOMEL0.BIN -l terrain
+	tmx2vera home.tmx $(PREFIX)HOMEL0.BIN -l terrain -d
 
 $(PREFIX)HOMEL1.BIN: home.tmx
-	tmx2vera home.tmx $(PREFIX)HOMEL1.BIN -l things
+	tmx2vera home.tmx $(PREFIX)HOMEL1.BIN -l things -d
 
 $(PREFIX)HOMECLSN.BIN: home.tmx
 	tmx2vera -c home.tmx $(PREFIX)HOMECLSN.BIN -l collision
@@ -74,10 +74,10 @@ $(PREFIX)HOMEINT.BIN: home.tmx
 	tmx2vera -c home.tmx $(PREFIX)HOMEINT.BIN -l interaction
 
 $(PREFIX)CABINL0.BIN: cabin.tmx
-	tmx2vera cabin.tmx $(PREFIX)CABINL0.BIN -l terrain
+	tmx2vera cabin.tmx $(PREFIX)CABINL0.BIN -l terrain -d
 
 $(PREFIX)CABINL1.BIN: cabin.tmx
-	tmx2vera cabin.tmx $(PREFIX)CABINL1.BIN -l things
+	tmx2vera cabin.tmx $(PREFIX)CABINL1.BIN -l things -d
 
 $(PREFIX)CABINCLSN.BIN: cabin.tmx
 	tmx2vera -c cabin.tmx $(PREFIX)CABINCLSN.BIN -l collision
@@ -86,10 +86,10 @@ $(PREFIX)CABININT.BIN: cabin.tmx
 	tmx2vera -c cabin.tmx $(PREFIX)CABININT.BIN -l interaction
 
 $(PREFIX)CAVEL0.BIN: cave.tmx
-	tmx2vera cave.tmx $(PREFIX)CAVEL0.BIN -l terrain
+	tmx2vera cave.tmx $(PREFIX)CAVEL0.BIN -l terrain -d
 
 $(PREFIX)CAVEL1.BIN: cave.tmx
-	tmx2vera cave.tmx $(PREFIX)CAVEL1.BIN -l things
+	tmx2vera cave.tmx $(PREFIX)CAVEL1.BIN -l things -d
 
 $(PREFIX)CAVECLSN.BIN: cave.tmx
 	tmx2vera -c cave.tmx $(PREFIX)CAVECLSN.BIN -l collision
