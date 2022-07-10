@@ -29,13 +29,15 @@ RESOURCES = $(PREFIX)TILES.BIN \
 
 MESSAGES = $(PREFIX)MSG.BIN
 
+MISC_ARTIFACTS = $(PREFIX)TILES.BIN.PAL
+
 all: resources messages
 
 $(PREFIX)TILES.BIN: Pixryn_Tiles.xcf
 	gimp -i -d -f -b '(export-vera "Pixryn_Tiles.xcf" "$(PREFIX)TILES.BIN" 0 8 16 16 0 1 1)' -b '(gimp-quit 0)'
 
 $(PREFIX)PAL.BIN: $(PREFIX)TILES.BIN
-	mv $(PREFIX)TILES.BIN.PAL $(PREFIX)PAL.BIN
+	cp $(PREFIX)TILES.BIN.PAL $(PREFIX)PAL.BIN
 
 $(PREFIX)L0MAP.BIN: Pixryn_Isles.tmx
 	tmx2vera Pixryn_Isles.tmx $(PREFIX)L0MAP.BIN -l terrain -d
@@ -109,7 +111,7 @@ resources: $(RESOURCES)
 messages: $(MESSAGES)
 
 clean:
-	rm -f $(RESOURCES) $(MESSAGES)
+	rm -f $(RESOURCES) $(MESSAGES) $(MISC_ARTIFACTS)
 
 list:
 	echo $(RESOURCES) $(MESSAGES)
