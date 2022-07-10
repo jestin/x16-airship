@@ -2,6 +2,7 @@
 
 .include "../map.asm"
 .include "../player.asm"
+.include "../npc.asm"
 
 .include "pixryn_overworld_interactions.asm"
 .include "pixryn_cabin.asm"
@@ -94,6 +95,9 @@ load_pixryn:
 	lda player_file_size+1
 	sta u1H
 	jsr load_player_sprites
+	
+	; load NPCs
+	jsr initialize_npcs
 
 	lda map_id
 	cmp #PIXRYN_MAP_ID

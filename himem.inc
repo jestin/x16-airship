@@ -33,4 +33,7 @@ music_bank_0 = 10
 music_bank_1 = 11
 music_bank_2 = 12
 
+; NPCs
+npc_tile_bank = 13
+
 .endif ; HIMEM_INC

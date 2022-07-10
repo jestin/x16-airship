@@ -17,7 +17,7 @@ RESOURCES = CHARSET.BIN \
 			TIPAL.BIN \
 			VIMASK.BIN
 
-all: clean bin/$(PROG)
+all: bin/$(PROG)
 
 bin/$(PROG): $(SOURCES) bin
 	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN) $(LIBS)
