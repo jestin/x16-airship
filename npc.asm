@@ -160,37 +160,37 @@ set_npc_tiles:
 	; A now holds %0000hhww
 
 	cmp #0			; 8x8
-	jmp @store64
+	bra @store64
 	cmp #1			; 16x8
-	jmp @store128
+	bra @store128
 	cmp #2			; 32x8
-	jmp @store256
+	bra @store256
 	cmp #3			; 64*8
-	jmp @store512
+	bra @store512
 	cmp #4			; 8*16
-	jmp @store128
+	bra @store128
 	cmp #5			; 16*16
-	jmp @store256
+	bra @store256
 	cmp #6			; 32*16
-	jmp @store512
+	bra @store512
 	cmp #7			; 64*16
-	jmp @store1024
+	bra @store1024
 	cmp #8			; 8*32
-	jmp @store256
+	bra @store256
 	cmp #9			; 16*32
-	jmp @store512
+	bra @store512
 	cmp #10			; 32*32
-	jmp @store1024
+	bra @store1024
 	cmp #11			; 64*32
-	jmp @store2048
+	bra @store2048
 	cmp #12			; 8*64
-	jmp @store512
+	bra @store512
 	cmp #13			; 16*64
-	jmp @store1024
+	bra @store1024
 	cmp #14			; 32*64
-	jmp @store2048
+	bra @store2048
 	cmp #15			; 64*64
-	jmp @store4096
+	bra @store4096
 
 
 @store64:
@@ -198,43 +198,43 @@ set_npc_tiles:
 	sta u4L
 	lda #0
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store128:
 	lda #128
 	sta u4L
 	lda #0
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store256:
 	lda #0
 	sta u4L
 	lda #1
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store512:
 	lda #0
 	sta u4L
 	lda #2
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store1024:
 	lda #0
 	sta u4L
 	lda #4
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store2048:
 	lda #0
 	sta u4L
 	lda #8
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 @store4096:
 	lda #0
 	sta u4L
 	lda #16
 	sta u4H
-	jmp @end_byte_jump_table
+	bra @end_byte_jump_table
 
 @end_byte_jump_table:
 
@@ -267,7 +267,7 @@ set_npc_tiles:
 	lda u4H
 	adc next_npc_ram+1
 	sta next_npc_ram+1
-	jmp @multiply_loop
+	bra @multiply_loop
 @end_multiply_loop:
 
 	rts
@@ -302,7 +302,7 @@ calculate_npc_address:
 	adc u0H
 	sta u0H
 	dex
-	jmp @multiply_loop
+	bra @multiply_loop
 
 @return:
 	plx
