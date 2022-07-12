@@ -208,6 +208,23 @@ player_to_field_ladder:
 	rts
 
 ;==================================================
+; player_to_cabin_ladder
+;
+; void player_to_cabin_ladder()
+;==================================================
+player_to_cabin_ladder:
+
+	; initialize player location on screen
+	LoadW xplayer, $00b0
+	LoadW yplayer, $0030
+
+	; initialize scroll variables
+	LoadW xoff, $0000
+	LoadW yoff, $0000
+
+	rts
+
+;==================================================
 ; pixryn_cave_interaction_handler
 ;
 ; void pixryn_cave_interaction_handler()

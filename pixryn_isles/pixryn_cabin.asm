@@ -132,6 +132,21 @@ load_pixryn_cabin:
 	jsr exit_cabin
 :
 
+	lda u0L
+	cmp #$10
+	bne :+
+
+	jsr load_pixryn_cave
+	jsr player_to_cabin_ladder
+
+	; Call a tick directly so that the user doesn't see the map loaded, but the
+	; player unpositioned
+	jsr pixryn_cave_tick_handler
+
+	lda #4
+	jsr captured_message
+:
+
 @auto_interactions:
 
 @return:
