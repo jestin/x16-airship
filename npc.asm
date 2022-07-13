@@ -71,7 +71,7 @@ add_npc:
 	sta (u0),y
 
 	; increment the number of NPCs
-	IncW num_npcs
+	inc num_npcs
 
 @return:
 	rts
@@ -133,7 +133,7 @@ set_npc_tiles:
 	ldy Npc::ram_addr
 	lda next_npc_ram
 	sta (u0),y
-	iny
+	ldy Npc::ram_addr+1
 	lda next_npc_ram+1
 	sta (u0),y
 
@@ -141,7 +141,7 @@ set_npc_tiles:
 	ldy Npc::vram_addr
 	lda next_npc_vram
 	sta (u0),y
-	iny
+	ldy Npc::vram_addr+1
 	lda next_npc_vram+1
 	sta (u0),y
 
@@ -160,37 +160,37 @@ set_npc_tiles:
 	; A now holds %0000hhww
 
 	cmp #0			; 8x8
-	bra @store64
+	beq @store64
 	cmp #1			; 16x8
-	bra @store128
+	beq @store128
 	cmp #2			; 32x8
-	bra @store256
+	beq @store256
 	cmp #3			; 64*8
-	bra @store512
+	beq @store512
 	cmp #4			; 8*16
-	bra @store128
+	beq @store128
 	cmp #5			; 16*16
-	bra @store256
+	beq @store256
 	cmp #6			; 32*16
-	bra @store512
+	beq @store512
 	cmp #7			; 64*16
-	bra @store1024
+	beq @store1024
 	cmp #8			; 8*32
-	bra @store256
+	beq @store256
 	cmp #9			; 16*32
-	bra @store512
+	beq @store512
 	cmp #10			; 32*32
-	bra @store1024
+	beq @store1024
 	cmp #11			; 64*32
-	bra @store2048
+	beq @store2048
 	cmp #12			; 8*64
-	bra @store512
+	beq @store512
 	cmp #13			; 16*64
-	bra @store1024
+	beq @store1024
 	cmp #14			; 32*64
-	bra @store2048
+	beq @store2048
 	cmp #15			; 64*64
-	bra @store4096
+	beq @store4096
 
 
 @store64:
@@ -267,6 +267,7 @@ set_npc_tiles:
 	lda u4H
 	adc next_npc_ram+1
 	sta next_npc_ram+1
+	dex
 	bra @multiply_loop
 @end_multiply_loop:
 
@@ -287,10 +288,6 @@ calculate_npc_address:
 
 	; load the base address of the npc array
 	LoadW u0, npcs
-
-	; NOTE: The carry part of this addition is not actually needed so long as
-	; .sizeof(Npc) is less than 8 and we are restricting ourselves to 32 NPCs.
-	; If an optimization needs to happen, the carry addition can be removed.
 
 @multiply_loop:
 	cpx #0

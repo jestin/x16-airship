@@ -171,6 +171,9 @@ load_pixryn:
 	sta u0L
 	jsr add_animated_tile
 
+	; add the NPCs
+	jsr load_pixryn_npcs
+
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
 								;  height    |  width
@@ -205,6 +208,23 @@ load_pixryn:
 	ldx #<hi_mem
 	ldy #>hi_mem
 	jsr startmusic
+
+	rts
+
+
+;==================================================
+; load_pixryn_npcs
+;==================================================
+load_pixryn_npcs:
+
+	; test NPC
+	lda #100			; sprite index
+	jsr add_npc
+	LoadW u0, testnpc_file
+	LoadW u1, end_testnpc_file-testnpc_file
+	lda #%01010000		; 16x16
+	ldy #4				; number of frames
+	jsr set_npc_tiles
 
 	rts
 

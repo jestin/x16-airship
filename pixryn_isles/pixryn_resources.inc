@@ -76,4 +76,7 @@ end_pixryn_overworld_music_file:
 pixryn_cave_music_file: .literal "PICAVE.ZSM"
 end_pixryn_cave_music_file:
 
+testnpc_file: .literal "TESTNPC.BIN"
+end_testnpc_file:
+
 .endif ; PIXRYN_RESOURCES_INC
