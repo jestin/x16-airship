@@ -213,15 +213,12 @@ check_vsync:
 	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
 	; sooner or later.  When it does, just fix by putting in a nop somewhere to
 	; bump the address foward.
-	lda #>(@jmp_tick_return)
+	lda #>(@return)
 	pha
-	lda #<(@jmp_tick_return)
+	lda #<(@return)
 	pha
 	jmp (tick_fn)				; jump to whatever the current screen defines
 								; as the tick handler
-@jmp_tick_return:
-	nop
-
 @return:
 	stz vsync_trigger
 	rts
