@@ -6,19 +6,25 @@ MOVEMENT_ASM = 1
 .segment "DATA"
 
 ; scroll offsets
-xoff:		.res 2
-yoff:		.res 2
+xoff:			.res 2
+yoff:			.res 2
 
 xplayer:		.res 2
 yplayer:		.res 2
 
+prev_xoff:		.res 2
+prev_yoff:		.res 2
+
+prev_xplayer:	.res 2
+prev_yplayer:	.res 2
+
 playerdir:		.res 1
 
 ; index (0 through w*h-1) of active tile (where player upper left is)
-active_tile:		.res 2
+active_tile:	.res 2
 
 ; index (0 through w*h-1) of active tile (where player center is)
-player_tile:		.res 2
+player_tile:	.res 2
 
 .segment "CODE"
 
@@ -348,22 +354,10 @@ set_scroll_offset:
 ;==================================================
 move:
 	; push the existing location variables to the stack, low first
-	lda xoff
-	pha
-	lda xoff+1
-	pha
-	lda yoff
-	pha
-	lda yoff+1
-	pha
-	lda xplayer
-	pha
-	lda xplayer+1
-	pha
-	lda yplayer
-	pha
-	lda yplayer+1
-	pha
+	MoveW xoff, prev_xoff
+	MoveW yoff, prev_yoff
+	MoveW xplayer, prev_xplayer
+	MoveW yplayer, prev_yplayer
 
 	; up
 	lda joystick_data
@@ -402,36 +396,13 @@ move:
 	jsr set_active_tile
 	jsr check_collisions
 	cmp #0
-	bne @dump_loc_cache
+	bne @cap_player_x_lower
 
 @restore_loc_cache:
-	pla
-	sta yplayer+1
-	pla
-	sta yplayer
-	pla
-	sta xplayer+1
-	pla
-	sta xplayer
-	pla
-	sta yoff+1
-	pla
-	sta yoff
-	pla
-	sta xoff+1
-	pla
-	sta xoff
-	bra @update_scroll
-
-@dump_loc_cache:
-	pla
-	pla
-	pla
-	pla
-	pla
-	pla
-	pla
-	pla
+	MoveW prev_xoff, xoff
+	MoveW prev_yoff, yoff
+	MoveW prev_xplayer, xplayer
+	MoveW prev_yplayer, yplayer
 
 @cap_player_x_lower:
 	lda xplayer+1

@@ -20,8 +20,8 @@ player_collision_tile:		.res 32
 ;
 ; This should be called after movement is
 ; calculated, but before it is applied. It will
-; indicate whether the calculation should be
-; applied.
+; indicate whether the collision should be applied.
+;
 ; 0 - don't apply
 ; 1 - apply
 ;
