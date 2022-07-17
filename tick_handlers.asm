@@ -36,6 +36,7 @@ character_overworld_tick:
 	bne @control
 
 	jsr animate_player
+	jsr update_npcs
 	jsr move
 	lda #3
 	jsr apply_scroll_offsets

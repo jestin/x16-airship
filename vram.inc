@@ -19,7 +19,7 @@ vram_player_sprites		= $18000
 ; bitmap loaded at $10000
 vram_charset_sprites	= $19600 ; goes to $1a600
 
-; $5400 are available here
+; $5400 are available here (32 byte aligned)
 vram_npc				= $1a600
 
 vram_palette			= $1fa00
