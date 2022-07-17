@@ -77,13 +77,11 @@ MACROS = 1
 .endmacro
 
 .macro LsrW dest
-	clc
 	lsr dest+1
 	ror dest
 .endmacro
 
 .macro AslW dest
-	clc
 	asl dest
 	rol dest+1
 .endmacro
