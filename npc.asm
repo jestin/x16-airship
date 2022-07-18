@@ -423,6 +423,10 @@ initialize_npcs:
 	; set next_npc_ram to the beginning of the bank
 	LoadW next_npc_ram, hi_mem
 
+	; reset the frames loaded counter
+	lda #0
+	sta npc_frames_loaded
+
 	rts
 
 ;==================================================
@@ -467,10 +471,10 @@ update_npcs:
 ; void update_npc(word npc_addr: u0)
 ;==================================================
 update_npc:
-	; if frames aren't loaded, always load the frame
+	; if not all npcs have their frames loaded, always load the frame
 	lda npc_frames_loaded
-	cmp #0
-	beq @update_frame
+	cmp num_npcs
+	bcc @update_frame
 
 	; when it's not time to swap out the frames, don't
 	ldy #Npc::frame_mask
@@ -481,6 +485,7 @@ update_npc:
 
 @update_frame:
 	jsr update_npc_frame
+	inc npc_frames_loaded
 
 @update_sprite_attributes:
 	; put the sprite index in X

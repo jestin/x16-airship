@@ -216,9 +216,6 @@ load_pixryn:
 ; load_pixryn_npcs
 ;==================================================
 load_pixryn_npcs:
-	lda #0
-	sta npc_frames_loaded
-
 	; test NPC
 	lda #100			; sprite index
 	jsr add_npc
@@ -231,11 +228,6 @@ load_pixryn_npcs:
 	jsr set_npc_tiles
 	lda #%00001000
 	jsr set_npc_depth_flip
-
-	; call update once to make sure all frames a loaded
-	jsr update_npcs
-	lda #1
-	sta npc_frames_loaded
 
 	rts
 
