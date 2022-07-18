@@ -99,6 +99,25 @@ add_npc:
 	rts
 
 ;==================================================
+; set_npc_depth_flip
+;
+; Sets the NPCs depth and flip settings.
+;
+; void set_npc_depth_flip(byte depth_flip: A)
+;==================================================
+set_npc_depth_flip:
+
+	pha
+
+	jsr calculate_npc_address
+
+	pla
+	ldy #Npc::depth_and_flip
+	sta (u0),y
+
+	rts
+
+;==================================================
 ; set_npc_tiles
 ;
 ; Loads and sets the tiles for an NPC
@@ -107,7 +126,8 @@ add_npc:
 ;						byte size: a,
 ;						byte num_frames: y,
 ;						word file_name: u0,
-;						word file_name_size: u1)
+;						word file_name_size: u1,
+;						byte frame_mask: u2L)
 ;==================================================
 set_npc_tiles:
 
@@ -179,23 +199,22 @@ set_npc_tiles:
 	ora #%10000000		; set to 8bpp
 	sprstore 1
 
-	; TEST STUFF
-
-	lda #%01111111
+	lda u2L
 	ldy #Npc::frame_mask
 	sta (u0),y
+
+	ldy #Npc::size_and_frames
+	lda (u0),y
+	and #$f0
+	sprstore 7
+
+	; TEST STUFF
 
 	lda #0
 	sprstore 2
 	sprstore 3
 	sprstore 4
 	sprstore 5
-
-	lda #%00001000
-	sprstore 6
-
-	lda #%01010000
-	sprstore 7
 
 	; END TEST STUFF
 
@@ -464,6 +483,12 @@ update_npc:
 @update_pos:
 
 	; TODO: Update the sprite's XY position based on where it should be on the map
+
+@update_depth_flip:
+
+	ldy #Npc::depth_and_flip
+	lda (u0),y
+	sprstore 6
 
 @return:
 	rts

@@ -224,9 +224,13 @@ load_pixryn_npcs:
 	jsr add_npc
 	LoadW u0, testnpc_file
 	LoadW u1, end_testnpc_file-testnpc_file
+	lda #%00011111
+	sta u2L
 	lda #%01010000		; 16x16
 	ldy #4				; number of frames
 	jsr set_npc_tiles
+	lda #%00001000
+	jsr set_npc_depth_flip
 
 	; call update once to make sure all frames a loaded
 	jsr update_npcs
