@@ -55,6 +55,8 @@ next_npc_ram:		.res 2
 ; next VRAM address (shifted right 5 so it's aligned to 32 bytes)
 next_npc_vram:		.res 2
 
+npc_frames_loaded:	.res 1
+
 .segment "CODE"
 
 ;==================================================
@@ -179,7 +181,7 @@ set_npc_tiles:
 
 	; TEST STUFF
 
-	lda #%00001111
+	lda #%01111111
 	ldy #Npc::frame_mask
 	sta (u0),y
 
@@ -444,6 +446,36 @@ update_npcs:
 ; void update_npc(word npc_addr: u0)
 ;==================================================
 update_npc:
+	; if frames aren't loaded, always load the frame
+	lda npc_frames_loaded
+	cmp #0
+	beq @update_frame
+
+	; when it's not time to swap out the frames, don't
+	ldy #Npc::frame_mask
+	lda (u0),y
+	and tickcount
+	cmp #0
+	bne @update_pos
+
+@update_frame:
+	jsr update_npc_frame
+
+@update_pos:
+
+	; TODO: Update the sprite's XY position based on where it should be on the map
+
+@return:
+	rts
+
+;==================================================
+; update_npc_frame
+;
+; Update the frame of an NPC
+;
+; void update_npc_frame(word npc_addr: u0)
+;==================================================
+update_npc_frame:
 
 	; set x to the sprite index
 	ldy #Npc::sprite
@@ -534,16 +566,6 @@ update_npc:
 	DecW u4
 	bra @copy_loop
 @end_copy_loop:
-
-	; increment frame
-	; TODO: increment this based on the tickcount, like we do in
-	; `animation_calculate_player_frame`
-
-	ldy #Npc::frame_mask
-	lda (u0),y
-	and tickcount
-	cmp #0
-	bne @return
 	
 	; first retreive the frames to compare with
 	ldy #Npc::size_and_frames
