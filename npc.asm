@@ -10,20 +10,37 @@ NPC_ASM = 1
 ; array of tiles in high RAM, a sprite in VRAM, and the current tile in VRAM.
 
 .struct Npc
+
 	; the sprite index
 	sprite				.byte 1
+
 	; width/height of the sprite and number of animation frames
 	; %hhwwffff
 	size_and_frames		.byte 1
+
 	; depth, vflip, and hflip for the sprite attribute in VERA
 	; %0000ddvh
 	depth_and_flip		.byte 1
+
+	; X location on the map
+	mapx				.byte 2
+
+	; Y location on the map
+	mapy				.byte 2
+
 	; the current frame
 	frame				.byte 1
+
+	; how often to switch frames
+	; This number will be ANDed to the tickcount and then compared to 0
+	frame_mask			.byte 1
+
 	; the address of the first frame in the npc bank
 	ram_addr			.byte 2
+
 	; the location in vram, bits 5-16 (32 byte aligned, like in sprites)
 	vram_addr			.byte 2
+
 .endstruct
 
 ; the number of npcs
@@ -161,6 +178,10 @@ set_npc_tiles:
 	sprstore 1
 
 	; TEST STUFF
+
+	lda #%00001111
+	ldy #Npc::frame_mask
+	sta (u0),y
 
 	lda #0
 	sprstore 2
@@ -515,6 +536,14 @@ update_npc:
 @end_copy_loop:
 
 	; increment frame
+	; TODO: increment this based on the tickcount, like we do in
+	; `animation_calculate_player_frame`
+
+	ldy #Npc::frame_mask
+	lda (u0),y
+	and tickcount
+	cmp #0
+	bne @return
 	
 	; first retreive the frames to compare with
 	ldy #Npc::size_and_frames
