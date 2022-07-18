@@ -187,10 +187,12 @@ set_npc_tiles:
 	lda next_npc_vram+1
 	sta (u0),y
 
-	; set the vram address in the sprite attribute
+	; put the NPC's sprite index in X
 	ldy #Npc::sprite
 	lda (u0),y
 	tax
+
+	; set the vram address in the sprite attribute
 	ldy #Npc::vram_addr
 	lda (u0),y
 	sprstore 0
@@ -475,10 +477,16 @@ update_npc:
 	lda (u0),y
 	and tickcount
 	cmp #0
-	bne @update_pos
+	bne @update_sprite_attributes
 
 @update_frame:
 	jsr update_npc_frame
+
+@update_sprite_attributes:
+	; put the sprite index in X
+	ldy #Npc::sprite
+	lda (u0),y
+	tax
 
 @update_pos:
 
