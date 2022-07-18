@@ -226,8 +226,11 @@ load_pixryn_npcs:
 	lda #%01010000		; 16x16
 	ldy #4				; number of frames
 	jsr set_npc_tiles
-	lda #%00001000
+	lda #%00001100
 	jsr set_npc_depth_flip
+	LoadW u1, 128
+	LoadW u2, 128
+	jsr set_npc_map_location
 
 	rts
 

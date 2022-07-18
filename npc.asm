@@ -103,7 +103,8 @@ add_npc:
 ;
 ; Sets the NPCs depth and flip settings.
 ;
-; void set_npc_depth_flip(byte depth_flip: A)
+; void set_npc_depth_flip(byte npc_index: x,
+;							byte depth_flip: A)
 ;==================================================
 set_npc_depth_flip:
 
@@ -113,6 +114,35 @@ set_npc_depth_flip:
 
 	pla
 	ldy #Npc::depth_and_flip
+	sta (u0),y
+
+	rts
+
+;==================================================
+; set_npc_map_location
+;
+; Sets the NPCs location on the map.
+;
+; void set_npc_map_location(byte npc_index: x,
+;							word mapx: u1,
+;							word mapy: u2)
+;==================================================
+set_npc_map_location:
+
+	jsr calculate_npc_address
+
+	lda u1L
+	ldy #Npc::mapx
+	sta (u0),y
+	lda u1H
+	ldy #Npc::mapx+1
+	sta (u0),y
+
+	lda u2L
+	ldy #Npc::mapy
+	sta (u0),y
+	lda u2H
+	ldy #Npc::mapy+1
 	sta (u0),y
 
 	rts
@@ -132,6 +162,7 @@ set_npc_depth_flip:
 set_npc_tiles:
 
 	; push args to stack
+	phx
 	phy
 	pha
 
@@ -210,16 +241,6 @@ set_npc_tiles:
 	and #$f0
 	sprstore 7
 
-	; TEST STUFF
-
-	lda #0
-	sprstore 2
-	sprstore 3
-	sprstore 4
-	sprstore 5
-
-	; END TEST STUFF
-
 	; calculate increments
 	; The width/height can only be 16 different values and we assume 8bpp,
 	; meaning that there are only 7 possible outcomes: 64, 128, 256, 512, 1024,
@@ -272,6 +293,8 @@ set_npc_tiles:
 	lda next_npc_vram+1
 	adc u4H
 	sta next_npc_vram+1
+
+	plx
 
 	rts
 
@@ -496,6 +519,48 @@ update_npc:
 @update_pos:
 
 	; TODO: Update the sprite's XY position based on where it should be on the map
+
+	; set X
+	ldy #Npc::mapx
+	lda (u0),y
+	sta u1L
+	ldy #Npc::mapx+1
+	lda (u0),y
+	sta u1H
+
+	sec
+	lda u1L
+	sbc xoff
+	sta u1L
+	lda u1H
+	sbc xoff+1
+	sta u1H
+
+	lda u1L
+	sprstore 2
+	lda u1H
+	sprstore 3
+
+	; set Y
+	ldy #Npc::mapy
+	lda (u0),y
+	sta u2L
+	ldy #Npc::mapy+1
+	lda (u0),y
+	sta u2H
+
+	sec
+	lda u2L
+	sbc yoff
+	sta u2L
+	lda u2H
+	sbc yoff+1
+	sta u2H
+
+	lda u2L
+	sprstore 4
+	lda u2H
+	sprstore 5
 
 @update_depth_flip:
 
