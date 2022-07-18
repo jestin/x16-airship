@@ -516,6 +516,12 @@ update_npc:
 	lda (u0),y
 	tax
 
+@update_depth_flip:
+
+	ldy #Npc::depth_and_flip
+	lda (u0),y
+	sprstore 6
+
 @update_pos:
 
 	; TODO: Update the sprite's XY position based on where it should be on the map
@@ -535,6 +541,14 @@ update_npc:
 	lda u1H
 	sbc xoff+1
 	sta u1H
+
+	; check high byte first to see if we are off the map
+	cmp #$2 ; screens can't be big enough for this to be valid
+	bcc :+
+	lda #0
+	sprstore 6
+
+:
 
 	lda u1L
 	sprstore 2
@@ -562,11 +576,13 @@ update_npc:
 	lda u2H
 	sprstore 5
 
-@update_depth_flip:
-
-	ldy #Npc::depth_and_flip
-	lda (u0),y
+	; check high byte first to see if we are off the map
+	cmp #$2 ; screens can't be big enough for this to be valid
+	bcc :+
+	lda #0
 	sprstore 6
+
+:
 
 @return:
 	rts
