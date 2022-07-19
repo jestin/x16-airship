@@ -706,4 +706,45 @@ update_npc_frame:
 @return:
 	rts
 
+;==================================================
+; clear_npc_sprites
+;
+; Clears the sprites used for NPCs
+;
+; void clear_npc_sprites()
+;==================================================
+clear_npc_sprites:
+
+	LoadW u0, npcs
+	ldx #0
+@npc_loop:
+	cpx num_npcs
+	bcs @end_npc_loop
+
+	ldy #Npc::sprite
+	lda (u0),y
+	tax
+	lda #0
+	sprstore 6
+	
+	; increment the address
+	clc
+	lda u0L
+	adc #(.sizeof(Npc))
+	sta u0L
+	lda u0H
+	adc #0
+	sta u0H
+
+	; increment the loop counter
+	inx
+	bra @npc_loop
+@end_npc_loop:
+
+	lda #0
+	sta num_npcs
+	sta npc_frames_loaded
+
+	rts
+
 .endif ; NPC_ASM

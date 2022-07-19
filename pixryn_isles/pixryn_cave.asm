@@ -69,6 +69,9 @@ load_pixryn_cave:
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
+	; clear any NPC sprites from other maps
+	jsr clear_npc_sprites
+
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
 								;  height    |  width

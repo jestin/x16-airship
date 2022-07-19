@@ -70,6 +70,9 @@ load_pixryn_tavern:
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
+	; clear any NPC sprites from other maps
+	jsr clear_npc_sprites
+
 	; manually setup the animated tiles for the map
 	lda #74
 	sta u0L

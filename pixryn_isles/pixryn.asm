@@ -95,6 +95,9 @@ load_pixryn:
 	lda player_file_size+1
 	sta u1H
 	jsr load_player_sprites
+
+	; clear any NPC sprites from other maps
+	jsr clear_npc_sprites
 	
 	; load NPCs
 	jsr initialize_npcs
@@ -217,19 +220,19 @@ load_pixryn:
 ;==================================================
 load_pixryn_npcs:
 	; test NPC
-	lda #100			; sprite index
+	lda #97
 	jsr add_npc
 	LoadW u0, testnpc_file
 	LoadW u1, end_testnpc_file-testnpc_file
-	lda #%00011111
+	lda #%00111111
 	sta u2L
 	lda #%01010000		; 16x16
 	ldy #4				; number of frames
 	jsr set_npc_tiles
-	lda #%00001100
+	lda #%00001000
 	jsr set_npc_depth_flip
-	LoadW u1, 128
-	LoadW u2, 128
+	LoadW u1, 288
+	LoadW u2, 320
 	jsr set_npc_map_location
 
 	rts
