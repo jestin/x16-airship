@@ -242,10 +242,10 @@ load_pixryn_npcs:
 	jsr add_npc
 	LoadW u0, ship_file
 	LoadW u1, end_ship_file-ship_file
-	lda #%00111111
+	lda #%00000011
 	sta u2L
 	lda #%10110000		; 32x16
-	ldy #1				; number of frames
+	ldy #2				; number of frames
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip

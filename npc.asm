@@ -503,11 +503,23 @@ update_npc:
 	; push X to stack
 	phx
 
+	jsr update_npc_position
+
 	; if not all npcs have their frames loaded, always load the frame
 	lda npc_frames_loaded
 	cmp num_npcs
 	bcc @update_frame
 
+	; don't bother with frame updates if off the screen
+	lda u1H
+	cmp #$2 ; screens can't be big enough for this to be valid
+	bcs @return
+	lda u2H
+	cmp #$2 ; screens can't be big enough for this to be valid
+	bcs @return
+
+
+@animate:
 	; when it's not time to swap out the frames, don't
 	ldy #Npc::frame_mask
 	lda (u0),y
@@ -531,9 +543,27 @@ update_npc:
 	lda (u0),y
 	sprstore 6
 
-@update_pos:
+@return:
+	; restore X
+	plx
 
-	; TODO: Update the sprite's XY position based on where it should be on the map
+	rts
+
+;==================================================
+; update_npc_position
+;
+; Updates the position of an NPC
+;
+; void update_npc_position(word npc_addr: u0,
+;							word xpos: u1,
+;							word ypos: u2)
+;==================================================
+update_npc_position:
+
+	; put the sprite index in X
+	ldy #Npc::sprite
+	lda (u0),y
+	tax
 
 	; set X
 	ldy #Npc::mapx
@@ -592,11 +622,7 @@ update_npc:
 	sprstore 6
 
 :
-
 @return:
-	; restore X
-	plx
-
 	rts
 
 ;==================================================
