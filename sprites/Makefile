@@ -9,7 +9,8 @@ RESOURCES = AURORA.BIN \
 			GEORGE.BIN \
 			ELLIOT.BIN \
 			OLLIE.BIN \
-			TESTNPC.BIN
+			TESTNPC.BIN \
+			SHIP.BIN
 
 MESSAGES = $(PREFIX)MSG.BIN
 
@@ -35,6 +36,9 @@ OLLIE.BIN: Ollie_Sprites.xcf
 
 TESTNPC.BIN: testnpc.xcf
 	gimp -i -d -f -b '(export-vera "testnpc.xcf" "TESTNPC.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
+
+SHIP.BIN: simple_ship.xcf
+	gimp -i -d -f -b '(export-vera "simple_ship.xcf" "SHIP.BIN" 0 8 64 32 0 1 0)' -b '(gimp-quit 0)'
 
 resources: $(RESOURCES)
 

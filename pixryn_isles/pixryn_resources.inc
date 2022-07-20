@@ -79,4 +79,7 @@ end_pixryn_cave_music_file:
 testnpc_file: .literal "TESTNPC.BIN"
 end_testnpc_file:
 
+ship_file: .literal "SHIP.BIN"
+end_ship_file:
+
 .endif ; PIXRYN_RESOURCES_INC

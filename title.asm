@@ -14,6 +14,10 @@ TITLE_ASM = 1
 ;==================================================
 load_title:
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	lda #1
 	ldx #8
 	ldy #0
@@ -50,6 +54,10 @@ load_title:
 ; void load_title_music()
 ;==================================================
 load_title_music:
+
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	lda #music_bank_2
 	sta 0

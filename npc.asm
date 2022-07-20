@@ -187,6 +187,10 @@ set_npc_tiles:
 	; switch to NPC tile bank
 	lda #npc_tile_bank
 	sta $00
+	
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	;load the frames into high RAM
 	lda #1
@@ -242,10 +246,6 @@ set_npc_tiles:
 	sprstore 7
 
 	; calculate increments
-	; The width/height can only be 16 different values and we assume 8bpp,
-	; meaning that there are only 7 possible outcomes: 64, 128, 256, 512, 1024,
-	; 2048, and 4096.  This means we can use a jump table instead of
-	; calculating
 	ldy #Npc::size_and_frames
 	; width
 	lda (u0),y
@@ -257,12 +257,12 @@ set_npc_tiles:
 
 	jsr calculate_npc_bytes_per_frame
 
-	; u4 now holds the number of bytes required to store the NPC tiles
+	; u4 now holds the number of bytes required to store each NPC tile
 
 	; increment next_npc_ram by w*h*f
 	ldy #Npc::size_and_frames
 	lda (u0),y
-	ora %00001111
+	and #%00001111
 	tax
 @multiply_loop:
 	cpx #0
@@ -313,6 +313,11 @@ set_npc_tiles:
 ;							out word num_bytes: u4)
 ;==================================================
 calculate_npc_bytes_per_frame:
+
+	; The width/height can only be 16 different values and we assume 8bpp,
+	; meaning that there are only 7 possible outcomes: 64, 128, 256, 512, 1024,
+	; 2048, and 4096.  This means we can use a jump table instead of
+	; calculating
 
 	cmp #0			; 8x8
 	beq @store64
@@ -413,10 +418,11 @@ calculate_npc_address:
 @multiply_loop:
 	cpx #0
 	beq @return
-	lda #.sizeof(Npc)
 	clc
+	lda #.sizeof(Npc)
 	adc u0L
 	sta u0L
+	lda #0
 	adc u0H
 	sta u0H
 	dex
@@ -494,6 +500,9 @@ update_npcs:
 ; void update_npc(word npc_addr: u0)
 ;==================================================
 update_npc:
+	; push X to stack
+	phx
+
 	; if not all npcs have their frames loaded, always load the frame
 	lda npc_frames_loaded
 	cmp num_npcs
@@ -585,6 +594,9 @@ update_npc:
 :
 
 @return:
+	; restore X
+	plx
+
 	rts
 
 ;==================================================
@@ -627,6 +639,10 @@ update_npc_frame:
 	sta veralo
 	lda u2H
 	sta veramid
+
+	; ram_addr refers to hi ram, so select the correct bank
+	lda #npc_tile_bank
+	sta $00
 
 	; set the base ram address to u1
 	ldy #Npc::ram_addr
@@ -723,9 +739,11 @@ clear_npc_sprites:
 
 	ldy #Npc::sprite
 	lda (u0),y
+	phx				; push X
 	tax
 	lda #0
 	sprstore 6
+	plx				; pull X
 	
 	; increment the address
 	clc

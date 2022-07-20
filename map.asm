@@ -19,6 +19,10 @@ map_height:		.res 2
 ;==================================================
 load_tiles:
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	lda #1
 	ldx #8
 	ldy #0
@@ -44,6 +48,10 @@ load_tiles:
 ;==================================================
 load_l0_map:
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	lda #1
 	ldx #8
 	ldy #0
@@ -68,6 +76,10 @@ load_l0_map:
 ;				byte map_file_size: u1)
 ;==================================================
 load_l1_map:
+
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	lda #1
 	ldx #8
@@ -97,6 +109,10 @@ load_collision_map:
 	; switch to the collision map bank
 	lda #collision_map_data_bank
 	sta $00
+
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	; read collision tile map into memory
 	lda #1
@@ -128,6 +144,10 @@ load_interaction_map:
 	lda #interaction_map_data_bank
 	sta $00
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	; read interaction tile map into memory
 	lda #1
 	ldx #8
@@ -158,6 +178,10 @@ load_messages:
 	lda #map_message_data_bank
 	sta $00
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	; read messages file
 	lda #1
 	ldx #8
@@ -184,6 +208,10 @@ load_messages:
 ;==================================================
 load_palette:
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	lda #1
 	ldx #8
 	ldy #0
@@ -206,6 +234,10 @@ load_palette:
 ;					byte palette_file_size: u1)
 ;==================================================
 load_player_sprites:
+
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	lda #1
 	ldx #8

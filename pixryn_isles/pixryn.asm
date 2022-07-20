@@ -1,4 +1,7 @@
 .ifndef PIXRYN_ASM
+PIXRYN_ASM = 1
+
+PIXRYN_MAP_ID = 1
 
 .include "../map.asm"
 .include "../player.asm"
@@ -11,9 +14,7 @@
 .include "pixryn_cave.asm"
 .include "pixryn_resources.inc"
 
-PIXRYN_ASM = 1
-
-PIXRYN_MAP_ID = 1
+.segment "CODE"
 
 ;==================================================
 ; load_pixryn
@@ -219,6 +220,7 @@ load_pixryn:
 ; load_pixryn_npcs
 ;==================================================
 load_pixryn_npcs:
+
 	; test NPC
 	lda #97
 	jsr add_npc
@@ -235,12 +237,32 @@ load_pixryn_npcs:
 	LoadW u2, 320
 	jsr set_npc_map_location
 
+	; ship
+	lda #65
+	jsr add_npc
+	LoadW u0, ship_file
+	LoadW u1, end_ship_file-ship_file
+	lda #%00111111
+	sta u2L
+	lda #%10110000		; 32x16
+	ldy #1				; number of frames
+	jsr set_npc_tiles
+	lda #%00001100
+	jsr set_npc_depth_flip
+	LoadW u1, 542
+	LoadW u2, 360
+	jsr set_npc_map_location
+
 	rts
 
 ;==================================================
 ; load_pixryn_music
 ;==================================================
 load_pixryn_music:
+
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
 
 	; overworld
 	lda #overworld_music_bank

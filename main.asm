@@ -50,6 +50,10 @@ main:
 	; character initialization
 	stz next_char_sprite
 
+	; set ROM bank to KERNAL
+	lda #0
+	sta $01
+
 	lda #1
 	ldx #8
 	ldy #0
