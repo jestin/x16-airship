@@ -82,4 +82,7 @@ end_testnpc_file:
 ship_file: .literal "SHIP.BIN"
 end_ship_file:
 
+propeller_file: .literal "PROPELLER.BIN"
+end_propeller_file:
+
 .endif ; PIXRYN_RESOURCES_INC

@@ -520,6 +520,13 @@ update_npc:
 
 
 @animate:
+	; when there's only one frame, don't bother swapping
+	ldy #Npc::size_and_frames
+	lda (u0),y
+	and #$0f
+	cmp #1
+	beq @update_sprite_attributes
+
 	; when it's not time to swap out the frames, don't
 	ldy #Npc::frame_mask
 	lda (u0),y

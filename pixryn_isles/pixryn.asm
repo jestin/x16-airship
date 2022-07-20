@@ -238,19 +238,35 @@ load_pixryn_npcs:
 	jsr set_npc_map_location
 
 	; ship
-	lda #65
+	lda #66
 	jsr add_npc
 	LoadW u0, ship_file
 	LoadW u1, end_ship_file-ship_file
 	lda #%00000011
 	sta u2L
 	lda #%10110000		; 32x16
-	ldy #2				; number of frames
+	ldy #1				; number of frames
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip
 	LoadW u1, 542
 	LoadW u2, 360
+	jsr set_npc_map_location
+
+	; propeller
+	lda #65
+	jsr add_npc
+	LoadW u0, propeller_file
+	LoadW u1, end_propeller_file-propeller_file
+	lda #%00000011
+	sta u2L
+	lda #%00000000		; 8x8
+	ldy #2				; number of frames
+	jsr set_npc_tiles
+	lda #%00001100
+	jsr set_npc_depth_flip
+	LoadW u1, 594
+	LoadW u2, 384
 	jsr set_npc_map_location
 
 	rts
