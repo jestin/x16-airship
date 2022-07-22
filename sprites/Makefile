@@ -11,6 +11,7 @@ RESOURCES = AURORA.BIN \
 			OLLIE.BIN \
 			TESTNPC.BIN \
 			SHIP.BIN \
+			BALLOON.BIN \
 			PROPELLER.BIN
 
 MESSAGES = $(PREFIX)MSG.BIN
@@ -39,7 +40,10 @@ TESTNPC.BIN: testnpc.xcf
 	gimp -i -d -f -b '(export-vera "testnpc.xcf" "TESTNPC.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 SHIP.BIN: simple_ship.xcf
-	gimp -i -d -f -b '(export-vera "simple_ship.xcf" "SHIP.BIN" 0 8 64 32 0 1 0)' -b '(gimp-quit 0)'
+	gimp -i -d -f -b '(export-vera "simple_ship.xcf" "SHIP.BIN" 0 8 64 16 0 1 0)' -b '(gimp-quit 0)'
+
+BALLOON.BIN: balloon.xcf
+	gimp -i -d -f -b '(export-vera "balloon.xcf" "BALLOON.BIN" 0 8 64 32 0 1 0)' -b '(gimp-quit 0)'
 
 PROPELLER.BIN: propeller.xcf
 	gimp -i -d -f -b '(export-vera "propeller.xcf" "PROPELLER.BIN" 0 8 8 8 0 1 0)' -b '(gimp-quit 0)'

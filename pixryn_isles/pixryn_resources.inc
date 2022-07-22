@@ -82,6 +82,9 @@ end_testnpc_file:
 ship_file: .literal "SHIP.BIN"
 end_ship_file:
 
+balloon_file: .literal "BALLOON.BIN"
+end_balloon_file:
+
 propeller_file: .literal "PROPELLER.BIN"
 end_propeller_file:
 
