@@ -1,4 +1,6 @@
 NAME = AIRSHIP
+VERSION = 0.0.1
+
 ASSEMBLER6502 = cl65
 INCLUDEDIR = 3rdParty/include/
 LIBDIR = 3rdParty/lib/
@@ -8,6 +10,7 @@ ASFLAGS = -t cx16 -l $(NAME).list -L $(LIBDIR) --asm-include-dir $(INCLUDEDIR) -
 
 PROG = $(NAME).PRG
 LIST = $(NAME).list
+ZIPFILE = $(NAME)_$(VERSION).zip
 MAIN = main.asm
 SOURCES := $(shell find -type f -name '*.asm') $(shell find -type f -name '*.inc')
 
@@ -75,6 +78,11 @@ card: card.img
 run_card:
 	x16emu -sdcard card.img -prg bin/AIRSHIP.PRG -run -scale 2 -ram 2048 -joy1 -abufs 64 -debug
 
+$(ZIPFILE): all resources clean_zip
+	(cd bin; zip ../$(ZIPFILE) *)
+
+zip: $(ZIPFILE)
+
 clean:
 	rm  -f bin/$(PROG) $(LIST)
 
@@ -89,6 +97,9 @@ clean_resources: clean_subresources
 clean_card:
 	rm -rf card/
 	rm -f card.img
+
+clean_zip:
+	rm -f $(ZIPFILE)
 
 cleanall: clean clean_resources
 	rm -rf bin
