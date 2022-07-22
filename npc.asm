@@ -11,14 +11,14 @@ NPC_ASM = 1
 
 .struct Npc
 
-	; the sprite index
+	; The sprite index
 	sprite				.byte 1
 
-	; width/height of the sprite and number of animation frames
+	; Width/height of the sprite and number of animation frames
 	; %hhwwffff
 	size_and_frames		.byte 1
 
-	; depth, vflip, and hflip for the sprite attribute in VERA
+	; Depth, vflip, and hflip for the sprite attribute in VERA
 	; %0000ddvh
 	depth_and_flip		.byte 1
 
@@ -28,17 +28,18 @@ NPC_ASM = 1
 	; Y location on the map
 	mapy				.byte 2
 
-	; the current frame
+	; The current frame.  If $ff, it indicates that this is a clone, and
+	; therefore not in charge of its own frames
 	frame				.byte 1
 
-	; how often to switch frames
+	; How often to switch frames
 	; This number will be ANDed to the tickcount and then compared to 0
 	frame_mask			.byte 1
 
-	; the address of the first frame in the npc bank
+	; The address of the first frame in the npc bank
 	ram_addr			.byte 2
 
-	; the location in vram, bits 5-16 (32 byte aligned, like in sprites)
+	; The location in vram, bits 5-16 (32 byte aligned, like in sprites)
 	vram_addr			.byte 2
 
 .endstruct
@@ -91,6 +92,81 @@ add_npc:
 	lda #0
 	ldy #Npc::frame
 	sta (u0),y
+
+	; increment the number of NPCs
+	inc num_npcs
+
+@return:
+	rts
+	
+;==================================================
+; clone_npc
+; Creates a clone of an existing NPC that uses the
+;
+; same vram.  Clones will always be on the same
+; frame as the NPC they were cloned from.
+;
+; void clone_npc(byte sprite_index: a,
+;					byte existing_npc_index: x	
+;					out byte npc_index: x)
+;==================================================
+clone_npc:
+
+	; store the sprite index for later
+	pha
+
+	; grab the address of the existing NPC and move it to u1
+	jsr calculate_npc_address
+	MoveW u0, u1
+
+	; calculate the memory location of the new NPC
+	ldx num_npcs				; should be the next npc index
+	jsr calculate_npc_address
+
+	; u0 contains the address of the new NPC, and u1 contains the existing one
+
+	; copy the existing NPC to the new address
+	ldy #0
+@copy_loop:
+	cpy #.sizeof(Npc)
+	bcs @end_copy_loop
+	lda (u1),y
+	sta (u0),y
+	iny
+	bra @copy_loop
+@end_copy_loop:
+
+	; store the new sprite index, overwriting the one that was copied
+	pla
+	ldy #Npc::sprite
+	sta (u0),y
+
+	; set the frame to $ff, indicating that this is a clone
+	lda #$ff
+	ldy #Npc::frame
+	sta (u0),y
+
+	phx
+
+	; set sprite attributes that otherwise won't be set
+	ldy #Npc::sprite
+	lda (u0),y
+	tax
+
+	ldy #Npc::size_and_frames
+	lda (u0),y
+	and #$f0
+	sprstore 7
+
+	ldy #Npc::vram_addr
+	lda (u0),y
+	sprstore 0
+	ldy #Npc::vram_addr+1
+	lda (u0),y
+	ora #%10000000		; set to 8bpp
+	sprstore 1
+
+	plx
 
 	; increment the number of NPCs
 	inc num_npcs
@@ -640,6 +716,16 @@ update_npc_position:
 ; void update_npc_frame(word npc_addr: u0)
 ;==================================================
 update_npc_frame:
+
+	; first, check if this is a clone and return if so.  Clones share frames
+	; with the original, so we won't do anything here
+	ldy #Npc::frame
+	lda (u0),y
+	cmp #$ff
+	bne @not_a_clone
+	rts
+
+@not_a_clone:
 
 	; set x to the sprite index
 	ldy #Npc::sprite

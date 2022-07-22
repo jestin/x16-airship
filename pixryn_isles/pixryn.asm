@@ -285,6 +285,14 @@ load_pixryn_npcs:
 	LoadW u2, 384
 	jsr set_npc_map_location
 
+	; example clone
+	; lda #70
+	; ; x should already be the propeller
+	; jsr clone_npc
+	; LoadW u1, 604
+	; LoadW u2, 394
+	; jsr set_npc_map_location
+
 	rts
 
 ;==================================================
