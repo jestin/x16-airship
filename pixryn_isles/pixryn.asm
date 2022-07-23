@@ -281,7 +281,7 @@ load_pixryn_npcs:
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip
-	LoadW u1, 594
+	LoadW u1, 600
 	LoadW u2, 384
 	jsr set_npc_map_location
 
