@@ -19,6 +19,7 @@
 .word nothing_here
 .word lock_clicks
 .word locked_door
+.word wheres_grandma
 
 campfire_sign:			.literal "Come sit with us", $00
 home_sign:				.literal "Welcome home!", $00
@@ -31,3 +32,4 @@ deliveries_ahead:		.literal "All deliveries ahead", $00
 nothing_here:			.literal "Nothing to see here", $00
 lock_clicks:			.literal "A lock clicks behind you", $00
 locked_door:			.literal "The door is locked", $00
+wheres_grandma:			.literal "Have you seen Grandma?", $00

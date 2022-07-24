@@ -186,12 +186,19 @@ char_to_sprite_address:
 ; void show_message(byte message_index: A)
 ;==================================================
 show_message:
-	; double the message index and add it to the message lookup address
-	asl
-	clc
-	adc #<hi_mem
+
+	; move A to a word in case it rolls over when doubled
 	sta u1L
 	lda #0
+	sta u1H
+	AslW u1
+
+	; double the message index and add it to the message lookup address
+	clc
+	lda u1L
+	adc #<hi_mem
+	sta u1L
+	lda u1H
 	adc #>hi_mem
 	sta u1H
 
@@ -201,10 +208,10 @@ show_message:
 
 	; u1 now points to the address of the string.  u0 needs the be the address
 	; of the string in order to call draw_string
-	lda (u1)
+	lda (u1L)
 	sta u0L
-	ldx #1
-	lda u1,x
+	ldy #1
+	lda (u1),y
 	sta u0H
 
 	; load the other draw_string parameters

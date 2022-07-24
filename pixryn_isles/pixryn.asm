@@ -6,6 +6,7 @@ PIXRYN_MAP_ID = 1
 .include "../map.asm"
 .include "../player.asm"
 .include "../npc.asm"
+.include "../npc_group.asm"
 
 .include "pixryn_overworld_interactions.asm"
 .include "pixryn_cabin.asm"

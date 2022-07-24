@@ -22,82 +22,10 @@ PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 
 ; these interactions only trigger when the user has pressed the b button on the tile
 @b_button_interactions:
+	jsr button_interactions
+	cmp #0
+	bne @return
 
-	lda u0L
-	cmp #$1
-	bne :+
-	jsr load_pixryn_tavern
-	bra @return
-
-:
-	lda u0L
-	cmp #$2
-	bne :+
-	jsr load_pixryn_home
-	bra @return
-:
-	lda u0L
-	cmp #$3
-	bne :+
-	lda #10
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$4
-	bne :+
-	lda #10
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$5
-	bne :+
-	lda #10
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$6
-	bne :+
-	lda #10
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$10
-	bne :+
-	lda #0					; campfire sign
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$11
-	bne :+
-	lda #1					; home sign
-	jsr captured_message
-	bra @return
-
-:
-	lda u0L
-	cmp #$12
-	bne :+
-	lda #2					; tavern sign
-	jsr captured_message
-	bra :+
-:
-	lda u0L
-	cmp #$13
-	bne :+
-	jsr trapdoor_to_cave
-	bra :+
-
-:	; end the b_button_interactions section with an unnamed label
 
 ; these interactions happen automatically by entering a tile, and do not
 ; require the user to hit any other buttons
@@ -113,6 +41,113 @@ PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 :	; end the auto_interactions section with an unnamed label
 
 @return:
+	rts
+
+;==================================================
+; button_interactions
+;
+; Interactions that require a button to initiate.
+; If it returns non-zero, stop checking all other
+; interactions.
+;
+; void button_interactions(
+;					out byte return_immediate: A)
+;==================================================
+button_interactions:
+
+	lda u0L
+	cmp #$1
+	bne :+
+	jsr load_pixryn_tavern
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$2
+	bne :+
+	jsr load_pixryn_home
+	lda #1
+	rts
+:
+	lda u0L
+	cmp #$3
+	bne :+
+	lda #10
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$4
+	bne :+
+	lda #10
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$5
+	bne :+
+	lda #10
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$6
+	bne :+
+	lda #10
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$10
+	bne :+
+	lda #0					; campfire sign
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$11
+	bne :+
+	lda #1					; home sign
+	jsr captured_message
+	lda #1
+	rts
+
+:
+	lda u0L
+	cmp #$12
+	bne :+
+	lda #2					; tavern sign
+	jsr captured_message
+	bra :+
+:
+	lda u0L
+	cmp #$13
+	bne :+
+	jsr trapdoor_to_cave
+	bra :+
+:
+	lda u0L
+	cmp #$14
+	bne :+
+	lda #11					; where's Grandma?
+	jsr captured_message
+	bra :+
+
+:	; end the b_button_interactions section with an unnamed label
+
+@return:
+	lda #0
 	rts
 
 ;==================================================
