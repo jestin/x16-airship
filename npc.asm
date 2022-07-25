@@ -1,6 +1,9 @@
 .ifndef NPC_ASM
 NPC_ASM = 1
 
+; max allowed NPCs
+MAX_NPCS = 32
+
 .include "vram.inc"
 
 .segment "DATA"
@@ -47,8 +50,8 @@ NPC_ASM = 1
 ; the number of npcs
 num_npcs:		.res 1
 
-; an array of NPC data with a max of 32
-npcs:			.res .sizeof(Npc) * 32
+; an array of NPC data
+npcs:			.res .sizeof(Npc) * MAX_NPCS
 
 ; next high RAM address for npc tile data
 next_npc_ram:		.res 2

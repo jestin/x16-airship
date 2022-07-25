@@ -254,12 +254,12 @@ load_pixryn_npcs:
 	LoadW u2, 376
 	jsr set_npc_map_location
 
-	; ship
+	; ship in water
 	; lda #67
 	; jsr add_npc
 	; LoadW u0, ship_in_water_file
 	; LoadW u1, end_ship_in_water_file-ship_in_water_file
-	; lda #%00011111
+	; lda #%00000001
 	; sta u2L
 	; lda #%01110000		; 64x16
 	; ldy #1				; number of frames
