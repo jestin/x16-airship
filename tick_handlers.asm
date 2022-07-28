@@ -7,7 +7,7 @@ TICK_HANDLERS_ASM = 1
 .include "animation.asm"
 .include "joystick.asm"
 
-.segment "DATA"
+.segment "BSS"
 
 ; interaction function
 interaction_fn:		.res 2

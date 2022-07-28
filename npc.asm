@@ -6,7 +6,7 @@ MAX_NPCS = 32
 
 .include "vram.inc"
 
-.segment "DATA"
+.segment "BSS"
 
 ; An NPC is any animated sprite that is placed on the map, other than the
 ; player.  There are 4 parts to each NPC: an element of an array in low RAM, an
@@ -15,35 +15,35 @@ MAX_NPCS = 32
 .struct Npc
 
 	; The sprite index
-	sprite				.byte 1
+	sprite				.res 1
 
 	; Width/height of the sprite and number of animation frames
 	; %hhwwffff
-	size_and_frames		.byte 1
+	size_and_frames		.res 1
 
 	; Depth, vflip, and hflip for the sprite attribute in VERA
 	; %0000ddvh
-	depth_and_flip		.byte 1
+	depth_and_flip		.res 1
 
 	; X location on the map
-	mapx				.byte 2
+	mapx				.res 2
 
 	; Y location on the map
-	mapy				.byte 2
+	mapy				.res 2
 
 	; The current frame.  If $ff, it indicates that this is a clone, and
 	; therefore not in charge of its own frames
-	frame				.byte 1
+	frame				.res 1
 
 	; How often to switch frames
 	; This number will be ANDed to the tickcount and then compared to 0
-	frame_mask			.byte 1
+	frame_mask			.res 1
 
 	; The address of the first frame in the npc bank
-	ram_addr			.byte 2
+	ram_addr			.res 2
 
 	; The location in vram, bits 5-16 (32 byte aligned, like in sprites)
-	vram_addr			.byte 2
+	vram_addr			.res 2
 
 .endstruct
 

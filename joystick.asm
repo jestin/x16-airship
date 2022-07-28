@@ -1,7 +1,7 @@
 .ifndef JOYSTICK_ASM
 JOYSTICK_ASM = 1
 
-.segment "DATA"
+.segment "BSS"
 joystick_data:		.res 3
 joystick_changed_data:		.res 3
 

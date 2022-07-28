@@ -1,7 +1,7 @@
 .ifndef MAP_ASM
 MAP_ASM = 1
 
-.segment "DATA"
+.segment "BSS"
 
 map_id:		.res 1
 map_width:		.res 2

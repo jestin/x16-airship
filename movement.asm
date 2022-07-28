@@ -3,7 +3,7 @@ MOVEMENT_ASM = 1
 
 .include "collision.asm"
 
-.segment "DATA"
+.segment "BSS"
 
 ; scroll offsets
 xoff:			.res 2

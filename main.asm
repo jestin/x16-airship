@@ -24,7 +24,7 @@
 
 loading_text:			.literal "Loading...", $00
 
-.segment "DATA"
+.segment "BSS"
 
 ; vsync trigger for running the game loop
 vsync_trigger:		.res 1

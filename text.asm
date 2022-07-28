@@ -1,7 +1,7 @@
 .ifndef TEXT_INC
 TEXT_INC = 1
 
-.segment "DATA"
+.segment "BSS"
 
 ; Store an array of sprites used for message text
 message_sprites:		.res 64

@@ -1,7 +1,7 @@
 .ifndef PLAYER_ASM
 PLAYER_ASM = 1
 
-.segment "DATA"
+.segment "BSS"
 
 ; a bitmask of player statuses:
 ; 0 - unable to move

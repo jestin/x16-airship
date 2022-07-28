@@ -1,7 +1,7 @@
 .ifndef COLLISION_ASM
 COLLISION_ASM = 1
 
-.segment "DATA"
+.segment "BSS"
 
 ; for 32 16x16 1bpp tiles this takes $800 bytes
 collision_tile_data:		.res $800
