@@ -100,6 +100,7 @@ load_pixryn:
 
 	; clear any NPC sprites from other maps
 	jsr clear_npc_sprites
+	jsr clear_npc_groups
 	
 	; load NPCs
 	jsr initialize_npcs
