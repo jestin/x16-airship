@@ -282,16 +282,17 @@ animate_map:
 	lsr
 	and #%00000011
 
-	ldy #0
+	ldy anim_tiles_count
 @tile_loop:
+	dey
+	bmi @end_title_loop
 	pha							; need to push the frame num so we can load X properly
 	lda (u1),y
 	tax
 	pla							; pull the frame num
 	jsr set_tile_frame
-	iny
-	cpy anim_tiles_count
-	bne @tile_loop
+	bra @tile_loop
+@end_title_loop:
 
 @return:
 	rts
