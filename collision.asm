@@ -30,24 +30,26 @@ player_collision_tile:		.res 32
 check_collisions:
 	jsr construct_collision_tile
 
-	ldy #0
+	; loop backwards to save cycles comparing loop counter
+	ldy #32
 @collision_loop:
 
-	lda player_collision_tile,y
+	; we need to subtract 2 and 1 to get to the correct bytes, since our loop
+	; counter starts at the length of the data
+	lda player_collision_tile-2,y
 	sta u0L
-	lda player_collision_tile+1,y
+	lda player_collision_tile-1,y
 	sta u0H
-	lda construct_tile,y
+	lda construct_tile-2,y
 	sta u1L
-	lda construct_tile+1,y
+	lda construct_tile-1,y
 	sta u1H
 	jsr check_row
 	bne @collision
 
-	iny		; increment by 2
-	iny
-	cpy #32
-	bne @collision_loop
+	dey		; decrement by 2
+	dey
+	bpl @collision_loop
 @end_collision_loop:
 
 	lda #1
