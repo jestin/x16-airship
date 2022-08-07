@@ -200,17 +200,16 @@ add_animated_tile:
 ;==================================================
 clear_animated_tiles:
 	; restore each animation tile
-	ldy #0
+	ldy anim_tiles_count
 @anim_tile_loop:
-	cpy anim_tiles_count
-	beq @return
+	dey
+	bmi @return
 	; put the address of the animated tiles on the zero page so we can use
 	; (zp),y addressing
 	LoadW u0, anim_tiles
 	lda (u0),y
 	tax
 	jsr restore_original_tile
-	iny
 	bra @anim_tile_loop
 
 @return:
