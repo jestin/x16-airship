@@ -424,4 +424,21 @@ player_to_pixryn_field:
 
 	rts
 
+;==================================================
+; player_to_pixryn_dirigible_shop
+;
+; void player_to_pixryn_dirigible_shop()
+;==================================================
+player_to_pixryn_dirigible_shop:
+
+	; initialize player location on screen
+	LoadW xplayer, $00bc
+	LoadW yplayer, $007a
+
+	; initialize scroll variables
+	LoadW xoff, $0184
+	LoadW yoff, $015f
+
+	rts
+
 .endif ; PIXRYN_ASM
