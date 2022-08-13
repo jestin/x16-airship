@@ -61,7 +61,6 @@ button_interactions:
 	jsr load_pixryn_tavern
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$2
@@ -77,7 +76,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$4
@@ -86,7 +84,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$5
@@ -95,7 +92,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$6
@@ -104,7 +100,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$10
@@ -113,7 +108,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$11
@@ -122,7 +116,6 @@ button_interactions:
 	jsr captured_message
 	lda #1
 	rts
-
 :
 	lda u0L
 	cmp #$12
@@ -141,6 +134,13 @@ button_interactions:
 	cmp #$14
 	bne :+
 	lda #11					; where's Grandma?
+	jsr captured_message
+	bra :+
+:
+	lda u0L
+	cmp #$15
+	bne :+
+	lda #12					; where's Grandma?
 	jsr captured_message
 	bra :+
 
