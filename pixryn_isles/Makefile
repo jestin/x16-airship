@@ -21,6 +21,10 @@ RESOURCES = $(PREFIX)TILES.BIN \
 			$(PREFIX)CABINL1.BIN \
 			$(PREFIX)CABINCLSN.BIN \
 			$(PREFIX)CABININT.BIN \
+			$(PREFIX)SHIPSHOPL0.BIN \
+			$(PREFIX)SHIPSHOPL1.BIN \
+			$(PREFIX)SHIPSHOPCLSN.BIN \
+			$(PREFIX)SHIPSHOPINT.BIN \
 			$(PREFIX)CAVEL0.BIN \
 			$(PREFIX)CAVEL1.BIN \
 			$(PREFIX)CAVECLSN.BIN \
@@ -86,6 +90,18 @@ $(PREFIX)CABINCLSN.BIN: cabin.tmx
 
 $(PREFIX)CABININT.BIN: cabin.tmx
 	tmx2vera -c cabin.tmx $(PREFIX)CABININT.BIN -l interaction
+
+$(PREFIX)SHIPSHOPL0.BIN: dirigible_shop.tmx
+	tmx2vera dirigible_shop.tmx -l terrain $(PREFIX)SHIPSHOPL0.BIN -d
+
+$(PREFIX)SHIPSHOPL1.BIN: dirigible_shop.tmx
+	tmx2vera dirigible_shop.tmx -l things $(PREFIX)SHIPSHOPL1.BIN -d
+
+$(PREFIX)SHIPSHOPCLSN.BIN: dirigible_shop.tmx
+	tmx2vera -c dirigible_shop.tmx -l collision $(PREFIX)SHIPSHOPCLSN.BIN -d
+
+$(PREFIX)SHIPSHOPINT.BIN: dirigible_shop.tmx
+	tmx2vera -c dirigible_shop.tmx -l interaction $(PREFIX)SHIPSHOPINT.BIN -d
 
 $(PREFIX)CAVEL0.BIN: cave.tmx
 	tmx2vera cave.tmx $(PREFIX)CAVEL0.BIN -l terrain -d

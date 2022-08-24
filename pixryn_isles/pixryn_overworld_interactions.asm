@@ -72,8 +72,7 @@ button_interactions:
 	lda u0L
 	cmp #$3
 	bne :+
-	lda #10
-	jsr captured_message
+	jsr load_pixryn_dirigible_shop
 	lda #1
 	rts
 :

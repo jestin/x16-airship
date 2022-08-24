@@ -66,6 +66,20 @@ end_cabin_collision_map_file:
 pixryn_cabin_interaction_map_file: .literal "PICABININT.BIN"
 end_pixryn_cabin_interaction_map_file:
 
+; Dirigible Shop
+
+pixryn_dirigible_shop_l0_map_file: .literal "PISHIPSHOPL0.BIN"
+end_pixryn_dirigible_shop_l0_map_file:
+
+pixryn_dirigible_shop_l1_map_file: .literal "PISHIPSHOPL1.BIN"
+end_pixryn_dirigible_shop_l1_map_file:
+
+pixryn_dirigible_shop_collision_map_file: .literal "PISHIPSHOPCLSN.BIN"
+end_pixryn_dirigible_shop_collision_map_file:
+
+pixryn_dirigible_shop_interaction_map_file: .literal "PISHIPSHOPINT.BIN"
+end_pixryn_dirigible_shop_interaction_map_file:
+
 ; Cave Resources
 cave_l0_map_file: .literal "PICAVEL0.BIN"
 end_cave_l0_map_file:

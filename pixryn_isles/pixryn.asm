@@ -12,6 +12,7 @@ PIXRYN_MAP_ID = 1
 .include "pixryn_cabin.asm"
 .include "pixryn_home.asm"
 .include "pixryn_tavern.asm"
+.include "pixryn_dirigible_shop.asm"
 .include "pixryn_cave.asm"
 .include "pixryn_resources.inc"
 
