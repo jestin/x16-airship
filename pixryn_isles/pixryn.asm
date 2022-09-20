@@ -16,6 +16,10 @@ PIXRYN_MAP_ID = 1
 .include "pixryn_cave.asm"
 .include "pixryn_resources.inc"
 
+.segment "BSS"
+
+ship_npc_group:		.res 1
+
 .segment "CODE"
 
 ;==================================================
@@ -240,6 +244,11 @@ load_pixryn_npcs:
 	LoadW u2, 320
 	jsr set_npc_map_location
 
+	; ship group
+	jsr add_npc_group
+
+	stx ship_npc_group
+
 	; ship
 	lda #67
 	jsr add_npc
@@ -255,6 +264,12 @@ load_pixryn_npcs:
 	LoadW u1, 542
 	LoadW u2, 376
 	jsr set_npc_map_location
+
+	; add the ship to the NPC group (x should be the NPC index)
+	stz u2L
+	stz u2H
+	lda ship_npc_group
+	jsr add_npc_to_group
 
 	; ship in water
 	; lda #67

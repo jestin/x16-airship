@@ -271,7 +271,7 @@ set_npc_tiles:
 	lda #0
 	sta $01
 
-	;load the frames into high RAM
+	; load the frames into high RAM
 	lda #1
 	ldx #8
 	ldy #0

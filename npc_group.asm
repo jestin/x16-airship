@@ -13,14 +13,15 @@ NPC_GROUP_ASM = 1
 	; The number of NPCs in this group
 	count			.res 1
 
-	; The address of the array of Grouped NPCs
-	npcs			.res 2
+	; The array of Grouped NPCs
+	; reserve enough bytes for the maximum allowed group size (8)
+	npcs			.res 16
 
 	; X location on the map
-	mapx				.res 2
+	mapx			.res 2
 
 	; Y location on the map
-	mapy				.res 2
+	mapy			.res 2
 
 .endstruct
 
@@ -28,6 +29,7 @@ NPC_GROUP_ASM = 1
 ; NPC Group
 .struct GroupedNpc
 
+	; NPC index
 	index			.res 1
 
 	; relative X location
@@ -54,7 +56,7 @@ npc_group_next_array:		.res 2
 ; There will only ever be as many grouped NPCs as there are NPCs
 grouped_npcs:				.res .sizeof(GroupedNpc) * MAX_NPCS
 
-; ext grouped NPC address
+; the next grouped NPC address
 next_grouped_npc:			.res 2
 
 .segment "CODE"
@@ -78,9 +80,140 @@ clear_npc_groups:
 	sta npc_group_next_array+1
 
 	; reset the next grouped NPC
-	stz next_grouped_npc
-	stz next_grouped_npc+1
+	lda #<grouped_npcs
+	sta next_grouped_npc
+	lda #>grouped_npcs
+	sta next_grouped_npc+1 
+	rts
 
+;==================================================
+; add_npc_group
+;
+; Adds an NPC group
+;
+; void add_npc_group(out byte npc_group_index: x)
+;==================================================
+add_npc_group:
+
+	; calculate the memory location of the new NPC Group
+	ldx num_npc_groups				; should be the next npc group index
+	jsr calculate_npc_group_address
+
+	; set the location to 0
+	lda #0
+	ldy #NpcGroup::count
+	sta (u0),y
+	ldy #NpcGroup::mapx
+	sta (u0),y
+	ldy #NpcGroup::mapy
+	sta (u0),y
+
+	inc num_npc_groups
+
+	rts
+
+;==================================================
+; add_npc_to_group
+;
+; Adds an NPC to an NPC group
+;
+; void add_npc_to_group(byte npc_group_index: a
+;						byte npc_index: x,
+;						byte relx: u2L,
+;						byte rely: u2H)
+;==================================================
+add_npc_to_group:
+
+	phx			; store the NPC index on the stack for later
+
+	; calculate the memory location of the new NPC Group
+	tax
+	jsr calculate_npc_group_address
+
+	; u0 now holds the address of the NPC group
+
+	; create a new grouped NPC and add it to this NPC group's array
+	lda next_grouped_npc
+	sta u1L
+	lda next_grouped_npc+1
+	sta u1H
+
+	; u1 is now the address of our grouped NPC
+
+	; store the NPC index to the grouped NPC
+	pla		; pul the NPC index from the stack and put it in A
+	ldy #GroupedNpc::index
+	sta (u1),y
+
+	; store relx
+	lda u2L
+	ldy #GroupedNpc::relx
+	sta (u1),y
+
+	; store rely
+	lda u2H
+	ldy #GroupedNpc::relx
+	sta (u1),y
+
+	; store GroupedNpc to the NpcGroup's npc array
+	ldy #NpcGroup::npcs					; get the address of the NPC array and put it in u3
+	lda (u0),y
+	sta u3L
+	iny
+	lda (u0),y
+	sta u3H
+	ldy #NpcGroup::count				; get the current count and store it in X
+	lda (u0),y
+	tax
+	lda u1L								; store the GroupedNpc into the correct array position
+	sta u3,x
+	inx
+	lda u1H
+	sta u3,x
+
+	; increment the group's NPC count
+	ldy #NpcGroup::count
+	lda (u0),y
+	inc
+	sta (u0),y
+
+	; increment the next grouped NPC
+	IncW next_grouped_npc
+
+	rts
+
+;==================================================
+; calculate_npc_group_address
+;
+; Calculates the absolute address of a particular
+; NPC given its index.
+;
+; void calculate_npc_group_address(
+;							byte npc_group_index: x,
+;							out byte address: u0)
+;==================================================
+calculate_npc_group_address:
+
+	phx
+
+	; load the base address of the npc array
+	LoadW u0, npc_groups
+
+@multiply_loop:
+	cpx #0
+	beq @return
+	clc
+	lda #.sizeof(NpcGroup)
+	adc u0L
+	sta u0L
+	lda #0
+	adc u0H
+	sta u0H
+	dex
+	bra @multiply_loop
+
+@return:
+	plx
 	rts
 
 .endif ; NPC_GROUP_ASM
