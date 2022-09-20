@@ -247,7 +247,7 @@ load_pixryn_npcs:
 	; ship group
 	jsr add_npc_group
 	LoadW u1, 542
-	LoadW u2, 376
+	LoadW u2, 350
 	jsr set_npc_group_map_location
 
 	stx ship_npc_group
@@ -264,13 +264,14 @@ load_pixryn_npcs:
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip
-	LoadW u1, 542
-	LoadW u2, 376
+	; LoadW u1, 542
+	; LoadW u2, 376
 	jsr set_npc_map_location
 
 	; add the ship to the NPC group (x should be the NPC index)
 	stz u2L
-	stz u2H
+	lda #26
+	sta u2H
 	lda ship_npc_group
 	jsr add_npc_to_group
 
@@ -302,15 +303,15 @@ load_pixryn_npcs:
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip
-	LoadW u1, 542
-	LoadW u2, 350
+	; LoadW u1, 542
+	; LoadW u2, 350
 	jsr set_npc_map_location
 
-	; FIXME: add the balloon to the NPC group (x should be the NPC index)
+	; add the balloon to the NPC group (x should be the NPC index)
 	stz u2L
 	stz u2H
 	lda ship_npc_group
-	; jsr add_npc_to_group
+	jsr add_npc_to_group
 
 	; propeller
 	lda #65
@@ -324,9 +325,17 @@ load_pixryn_npcs:
 	jsr set_npc_tiles
 	lda #%00001100
 	jsr set_npc_depth_flip
-	LoadW u1, 600
-	LoadW u2, 384
+	; LoadW u1, 600
+	; LoadW u2, 384
 	jsr set_npc_map_location
+
+	; add the propeller to the NPC group (x should be the NPC index)
+	lda #58
+	sta u2L
+	lda #34
+	sta u2H
+	lda ship_npc_group
+	jsr add_npc_to_group
 
 	; example clone
 	; lda #70

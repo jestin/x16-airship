@@ -208,6 +208,12 @@ set_npc_depth_flip:
 ;==================================================
 set_npc_map_location:
 
+	; stash u0
+	lda u0H
+	pha
+	lda u0L
+	pha
+
 	jsr calculate_npc_address
 
 	lda u1L
@@ -223,6 +229,12 @@ set_npc_map_location:
 	lda u2H
 	ldy #Npc::mapy+1
 	sta (u0),y
+
+	; restore u0
+	pla
+	sta u0L
+	pla
+	sta u0H
 
 	rts
 

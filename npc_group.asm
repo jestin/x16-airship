@@ -167,8 +167,9 @@ add_npc_to_group:
 	adc u0H
 	sta u3H
 
-	ldy #NpcGroup::count				; get the current count and store it in X
+	ldy #NpcGroup::count				; get the current count and store it in Y
 	lda (u0),y
+	asl									; double the value, since addresses are 2 bytes
 	tay
 	lda u1L								; store the GroupedNpc into the correct array position
 	sta (u3),y
@@ -183,7 +184,13 @@ add_npc_to_group:
 	sta (u0),y
 
 	; increment the next grouped NPC
-	IncW next_grouped_npc
+	clc
+	lda next_grouped_npc
+	adc #(.sizeof(GroupedNpc))
+	sta next_grouped_npc
+	lda next_grouped_npc+1
+	adc #0
+	sta next_grouped_npc+1
 
 	rts
 
