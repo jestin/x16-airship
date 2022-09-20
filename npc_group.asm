@@ -152,24 +152,29 @@ add_npc_to_group:
 
 	; store rely
 	lda u2H
-	ldy #GroupedNpc::relx
+	ldy #GroupedNpc::rely
 	sta (u1),y
 
 	; store GroupedNpc to the NpcGroup's npc array
-	ldy #NpcGroup::npcs					; get the address of the NPC array and put it in u3
-	lda (u0),y
+
+	; get the address of the NPC array by adding the offset to the group
+	; address and store it in u3
+	clc
+	lda #NpcGroup::npcs
+	adc u0L
 	sta u3L
-	iny
-	lda (u0),y
+	lda #0
+	adc u0H
 	sta u3H
+
 	ldy #NpcGroup::count				; get the current count and store it in X
 	lda (u0),y
-	tax
+	tay
 	lda u1L								; store the GroupedNpc into the correct array position
-	sta u3,x
-	inx
+	sta (u3),y
+	iny
 	lda u1H
-	sta u3,x
+	sta (u3),y
 
 	; increment the group's NPC count
 	ldy #NpcGroup::count
@@ -180,6 +185,164 @@ add_npc_to_group:
 	; increment the next grouped NPC
 	IncW next_grouped_npc
 
+	rts
+
+;==================================================
+; set_npc_group_map_location
+;
+; Sets the NPCs location on the map.
+;
+; void set_npc_group_map_location(byte npc_group_index: x,
+;									word mapx: u1,
+;									word mapy: u2)
+;==================================================
+set_npc_group_map_location:
+
+	jsr calculate_npc_group_address
+
+	lda u1L
+	ldy #NpcGroup::mapx
+	sta (u0),y
+	lda u1H
+	ldy #NpcGroup::mapx+1
+	sta (u0),y
+
+	lda u2L
+	ldy #NpcGroup::mapy
+	sta (u0),y
+	lda u2H
+	ldy #NpcGroup::mapy+1
+	sta (u0),y
+
+	rts
+
+;==================================================
+; update_npc_groups
+;
+; Updates the npc groups
+;
+; void update_npc_groups()
+;==================================================
+update_npc_groups:
+
+	LoadW u0, npc_groups
+	ldx #0
+@group_loop:
+	cpx num_npc_groups
+	bcs @end_group_loop
+
+	phx
+	jsr update_npc_group
+	plx
+	
+	; increment the address
+	clc
+	lda u0L
+	adc #(.sizeof(NpcGroup))
+	sta u0L
+	lda u0H
+	adc #0
+	sta u0H
+
+	; increment the loop counter
+	inx
+	bra @group_loop
+@end_group_loop:
+
+@return:
+	rts
+
+;==================================================
+; update_npc_group
+;
+; Updates the values of a single npc.
+;
+; void update_npc_group(word npc_group_addr: u0)
+;==================================================
+update_npc_group:
+
+	; load the count into X
+	ldy #NpcGroup::count
+	lda (u0),y
+	tax
+
+	; put the start of the NPC array in u4
+	clc
+	lda #NpcGroup::npcs
+	adc u0L
+	sta u4L
+	lda #0
+	adc u0H
+	sta u4H
+
+	; u4 now contains the start of the NPC array
+
+	; loop through all the grouped NPCs
+@npc_loop:
+	dex			; start by decrementing so that x is now an index
+
+	; get the grouped NPC
+	txa
+	asl				; double X
+	tay
+	lda (u4),y
+	sta u5L
+	iny
+	lda (u4),y
+	sta u5H
+
+	; u5 now holds the address of the grouped NPC
+
+	; update the position of the NPC based on the group and the relative position
+
+	ldy #NpcGroup::mapx
+	lda (u0),y
+	sta u1L
+	ldy #NpcGroup::mapx+1
+	lda (u0),y
+	sta u1H
+	ldy #NpcGroup::mapy
+	lda (u0),y
+	sta u2L
+	ldy #NpcGroup::mapy+1
+	lda (u0),y
+	sta u2H
+
+	; u1 and u2 now contains the mapx and mapy of the group
+	
+	; add the relx and rely from the grouped NPC
+	clc
+	ldy #GroupedNpc::relx
+	lda (u5),y
+	adc u1L
+	sta u1L
+	lda #0
+	adc u1H
+	sta u1H
+	clc
+	ldy #GroupedNpc::rely
+	lda (u5),y
+	adc u2L
+	sta u2L
+	lda #0
+	adc u2H
+	sta u2H
+
+	; set X to the npc index
+	phx							; store the old X on the stack
+	ldy #GroupedNpc::index
+	lda (u5),y
+	tax
+
+	; with all calculations done, update the NPC itself
+	jsr set_npc_map_location
+
+	plx							; restore the old X
+	cpx #0
+	bne @npc_loop
+@end_npc_loop:
+
+@return:
 	rts
 
 ;==================================================

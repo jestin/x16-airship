@@ -58,7 +58,7 @@ VIMASK.BIN: visibility_mask.tmx
 	tmx2vera visibility_mask.tmx -l mask VIMASK.BIN
 
 run: all resources
-	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 2048 -debug -joy1 -abufs 64 -sound none)
+	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 2048 -debug -joy1 -abufs 64)
 
 card.img: all resources clean_card
 	mkdir card

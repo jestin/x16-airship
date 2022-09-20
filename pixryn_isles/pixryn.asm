@@ -246,6 +246,9 @@ load_pixryn_npcs:
 
 	; ship group
 	jsr add_npc_group
+	LoadW u1, 542
+	LoadW u2, 376
+	jsr set_npc_group_map_location
 
 	stx ship_npc_group
 
@@ -287,7 +290,7 @@ load_pixryn_npcs:
 	; LoadW u2, 376
 	; jsr set_npc_map_location
 
-	; ballon
+	; balloon
 	lda #66
 	jsr add_npc
 	LoadW u0, balloon_file
@@ -302,6 +305,12 @@ load_pixryn_npcs:
 	LoadW u1, 542
 	LoadW u2, 350
 	jsr set_npc_map_location
+
+	; FIXME: add the balloon to the NPC group (x should be the NPC index)
+	stz u2L
+	stz u2H
+	lda ship_npc_group
+	; jsr add_npc_to_group
 
 	; propeller
 	lda #65

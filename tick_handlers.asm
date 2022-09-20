@@ -36,6 +36,7 @@ character_overworld_tick:
 	bne @control
 
 	jsr animate_player
+	jsr update_npc_groups
 	jsr update_npcs
 	jsr move
 	lda #3
