@@ -1,5 +1,6 @@
 NAME = AIRSHIP
-VERSION = 0.0.1
+TITLE = Take-to-the-Skies
+VERSION = 0.0.2
 
 ASSEMBLER6502 = cl65
 INCLUDEDIR = 3rdParty/include/
@@ -10,7 +11,7 @@ ASFLAGS = -t cx16 -l $(NAME).list -L $(LIBDIR) --asm-include-dir $(INCLUDEDIR) -
 
 PROG = $(NAME).PRG
 LIST = $(NAME).list
-ZIPFILE = $(NAME)_$(VERSION).zip
+ZIPFILE = $(TITLE)_$(VERSION).zip
 MAIN = main.asm
 SOURCES := $(shell find -type f -name '*.asm') $(shell find -type f -name '*.inc')
 
@@ -68,7 +69,7 @@ card.img: all resources clean_card
 	sudo losetup -o 1048576 $$LOPNAM card.img; \
 	sudo mkfs -t vfat $$LOPNAM; \
 	sudo losetup -d $$LOPNAM; \
-	sudo mount -o rw,loop,offset=$$((2048*512)) card.img card; \
+	sudo mount -o rw,loop,offset=$$((1024*1024)) card.img card; \
 	sudo cp bin/* card; \
 	sudo umount card; \
 	rm -rf card
