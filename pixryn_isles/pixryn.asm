@@ -18,7 +18,7 @@ PIXRYN_MAP_ID = 1
 
 .segment "BSS"
 
-ship_npc_group:		.res 1
+ship_npc_group = npc_group_indexes + 0
 
 .segment "CODE"
 

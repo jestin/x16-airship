@@ -59,6 +59,11 @@ grouped_npcs:				.res .sizeof(GroupedNpc) * MAX_NPCS
 ; the next grouped NPC address
 next_grouped_npc:			.res 2
 
+
+; This is an array of indexes shared by all maps.  They can make friendly names
+; for their NPC groups by aliasing an offset into this array
+npc_group_indexes:			.res MAX_NPCS
+
 .segment "CODE"
 
 ;==================================================
