@@ -45,14 +45,6 @@ num_npc_groups:				.res 1
 ; We obviously will never need more NPC groups than we are allowed NPCs
 npc_groups:					.res .sizeof(NpcGroup) * MAX_NPCS
 
-; This is the area of memory where npc groups allocate for their arrays of npc
-; indexes.  Because we aren't supporting NPCs belonging to more than one group,
-; we only need as many bytes as we allow NPCs.
-npc_group_arrays:			.res MAX_NPCS
-
-; the next available array starting address
-npc_group_next_array:		.res 2
-
 ; There will only ever be as many grouped NPCs as there are NPCs
 grouped_npcs:				.res .sizeof(GroupedNpc) * MAX_NPCS
 
@@ -77,12 +69,6 @@ clear_npc_groups:
 
 	; reset the count
 	stz num_npc_groups
-
-	; reset the next array address
-	lda #<npc_group_arrays
-	sta npc_group_next_array
-	lda #>npc_group_arrays
-	sta npc_group_next_array+1
 
 	; reset the next grouped NPC
 	lda #<grouped_npcs
