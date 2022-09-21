@@ -94,6 +94,8 @@
    <wangtile tileid="71" wangid="3,3,1,1,1,1,1,3"/>
    <wangtile tileid="72" wangid="3,3,1,1,1,1,1,3"/>
    <wangtile tileid="73" wangid="1,1,1,1,1,1,1,3"/>
+   <wangtile tileid="79" wangid="1,1,1,1,1,3,1,1"/>
+   <wangtile tileid="95" wangid="3,1,3,3,3,3,3,3"/>
   </wangset>
   <wangset name="Cave" type="mixed" tile="-1">
    <wangcolor name="Rock" color="#ff0000" tile="-1" probability="1"/>
