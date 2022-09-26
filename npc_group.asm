@@ -191,24 +191,24 @@ add_npc_to_group:
 ; Sets the NPCs location on the map.
 ;
 ; void set_npc_group_map_location(byte npc_group_index: x,
-;									word mapx: u1,
-;									word mapy: u2)
+;									word mapx: u3,
+;									word mapy: u4)
 ;==================================================
 set_npc_group_map_location:
 
 	jsr calculate_npc_group_address
 
-	lda u1L
+	lda u3L
 	ldy #NpcGroup::mapx
 	sta (u0),y
-	lda u1H
+	lda u3H
 	ldy #NpcGroup::mapx+1
 	sta (u0),y
 
-	lda u2L
+	lda u4L
 	ldy #NpcGroup::mapy
 	sta (u0),y
-	lda u2H
+	lda u4H
 	ldy #NpcGroup::mapy+1
 	sta (u0),y
 
@@ -347,7 +347,7 @@ update_npc_group:
 ; calculate_npc_group_address
 ;
 ; Calculates the absolute address of a particular
-; NPC given its index.
+; NPC group given its index.
 ;
 ; void calculate_npc_group_address(
 ;							byte npc_group_index: x,
@@ -357,7 +357,7 @@ calculate_npc_group_address:
 
 	phx
 
-	; load the base address of the npc array
+	; load the base address of the npc group array
 	LoadW u0, npc_groups
 
 @multiply_loop:

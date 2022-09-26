@@ -7,6 +7,7 @@ PIXRYN_MAP_ID = 1
 .include "../player.asm"
 .include "../npc.asm"
 .include "../npc_group.asm"
+.include "../npc_path.asm"
 
 .include "pixryn_overworld_interactions.asm"
 .include "pixryn_cabin.asm"
@@ -246,8 +247,8 @@ load_pixryn_npcs:
 
 	; ship group
 	jsr add_npc_group
-	LoadW u1, 542
-	LoadW u2, 350
+	LoadW u3, 542
+	LoadW u4, 350
 	jsr set_npc_group_map_location
 
 	stx ship_npc_group
