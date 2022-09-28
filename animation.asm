@@ -1,7 +1,7 @@
 .ifndef ANIMATION_ASM
 ANIMATION_ASM = 1
 
-.segment "DATA"
+.segment "BSS"
 
 anim_tiles_count:		.res 1
 
@@ -9,8 +9,7 @@ anim_tiles_count:		.res 1
 ; 32 animated tiles, since the that is the most we can hold in the animation
 ; tile restore bank (32 tiles x 256 bytes per tile = 8K)
 anim_tiles:
-.align 64
-.word 32 ; 64 bytes (32 2-byte tile indexes)
+.res 32 ; 32 tile indexes (no reason to use 2-byte indexes, since we are limited to 256 tiles)
 
 .segment "CODE"
 
@@ -152,8 +151,7 @@ add_animated_tile:
 	LoadW u1, anim_tiles
 
 	; load the current animated tile count
-	lda anim_tiles_count
-	tay
+	ldy anim_tiles_count
 	lda u0L
 	sta (u1),y
 
