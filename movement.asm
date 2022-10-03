@@ -440,20 +440,6 @@ move:
 @update_scroll:
 	jsr set_scroll_offset
 
-	; calculate and set the correct vera scroll offsets
-	lda xoff+1
-	cmp #$08
-	bne @updatescrollx
-	stz xoff+1
-@updatescrollx:
-
-	lda yoff+1
-	cmp #$04
-	bne @updatescrolly
-	stz yoff+1
-
-@updatescrolly:
-
 @update_sprite:
 	ldx #player_sprite
 	lda xplayer
