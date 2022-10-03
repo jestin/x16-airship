@@ -2,6 +2,7 @@
 CONTROL_ASM = 1
 
 .include "pixryn_isles/pixryn.asm"
+.include "akoko_mountains/akoko.asm"
 
 .segment "CODE"
 
@@ -46,6 +47,8 @@ title_screen_control:
 
 	jsr player_to_pixryn_home
 	jsr load_pixryn
+	; jsr player_to_akoko_home
+	; jsr load_akoko
 
 @return:
 	rts

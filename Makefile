@@ -27,6 +27,7 @@ bin/$(PROG): $(SOURCES) bin
 	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN) $(LIBS)
 
 SUBDIRS = pixryn_isles \
+		  akoko_mountains \
 		  sprites \
 		  music
 
