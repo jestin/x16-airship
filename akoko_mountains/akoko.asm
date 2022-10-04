@@ -8,6 +8,8 @@ AKOKO_MAP_ID = 1
 .include "../npc.asm"
 .include "../npc_group.asm"
 .include "../npc_path.asm"
+.include "../palette.asm"
+.include "../random.asm"
 
 .include "akoko_resources.inc"
 .include "akoko_overworld_interactions.asm"
@@ -69,6 +71,10 @@ load_akoko:
 	LoadW u0, akoko_pal_file
 	LoadW u1, end_akoko_pal_file-akoko_pal_file
 	jsr load_palette
+
+	; store the palette in memory as well, so we can use palette effects on
+	; this map
+	jsr store_palette
 
 	; set the loading message
 	LoadW u0, loading_text
@@ -151,7 +157,7 @@ load_akoko:
 	sta veral0config
 	sta veral1config
 
-	LoadW tick_fn, character_overworld_tick
+	LoadW tick_fn, akoko_character_overworld_tick
 	LoadW interaction_fn, akoko_overworld_interaction_handler
 
 	; always restore and clear previous animated tiles
@@ -229,9 +235,46 @@ player_to_akoko_home:
 	LoadW yplayer, $007a
 
 	; initialize scroll variables
-	LoadW xoff, $0144
-	LoadW yoff, $0700
+	LoadW xoff, $0040
+	LoadW yoff, $0680
 
+	rts
+
+;==================================================
+; akoko_character_overworld_tick
+;
+; Custom tick handler for the Akoko character
+; overworld map.
+;
+; void akoko_character_overworld_tick()
+;==================================================
+akoko_character_overworld_tick:
+	jsr character_overworld_tick
+
+	lda palette_restore_flag
+	beq @random_lightning
+
+	cmp #4
+	beq @end_lightning
+	inc palette_restore_flag
+	bra @return
+
+@end_lightning:
+	jsr restore_palette
+	stz palette_restore_flag
+	bra @return
+
+@random_lightning:
+
+	jsr get_random_byte
+	cmp #0
+	bne @return
+
+	jsr lightning_effect
+	lda #1
+	sta palette_restore_flag
+
+@return:
 	rts
 
 .endif ; AKOKO_ASM
