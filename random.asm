@@ -1,10 +1,6 @@
 .ifndef RANDOM_ASM
 RANDOM_ASM = 1
 
-.segment "BSS"
-
-last_random_byte:			.res 1
-
 .segment "CODE"
 
 ;==================================================
@@ -17,12 +13,8 @@ get_random_byte:
 	jsr entropy_get
 	stx u15H
 	eor u15H
-	sty u15H
+	tya
 	eor u15H
-
-	clc
-	adc last_random_byte
-	sta last_random_byte
 
 	rts
 
