@@ -272,8 +272,13 @@ animate_map:
 	; (zp),y addressing
 	LoadW u1, anim_tiles
 
-	; base the animation frame on tickcount
+	; stash tickcount % 4 into u2L
+	lda tickcount
+	and #%00000011
+	sta u2L
 
+
+	; base the animation frame on tickcount
 	lda tickcount
 	lsr
 	lsr
@@ -287,6 +292,20 @@ animate_map:
 	pha							; need to push the frame num so we can load X properly
 	lda (u1),y
 	tax
+
+	; Only update a frame if tickcount % 4 == anim_tile_index % 4
+	tya
+	and #%00000011
+	cmp u2L
+	bne @early_continue
+
+	bra @animate_frame
+
+@early_continue:
+	pla
+	bra @tile_loop
+
+@animate_frame:
 	pla							; pull the frame num
 	jsr set_tile_frame
 	bra @tile_loop
