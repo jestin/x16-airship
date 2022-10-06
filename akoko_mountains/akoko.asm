@@ -167,19 +167,52 @@ load_akoko:
 	lda #1
 	sta u0L
 	jsr add_animated_tile
-	lda #5
+	lda #196
 	sta u0L
 	jsr add_animated_tile
-	lda #21
+	lda #128
 	sta u0L
 	jsr add_animated_tile
-	lda #37
+	lda #144
 	sta u0L
 	jsr add_animated_tile
-	lda #53
+	lda #160
 	sta u0L
 	jsr add_animated_tile
-	lda #69
+	lda #176
+	sta u0L
+	jsr add_animated_tile
+	lda #192
+	sta u0L
+	jsr add_animated_tile
+	lda #208
+	sta u0L
+	jsr add_animated_tile
+	lda #224
+	sta u0L
+	jsr add_animated_tile
+	lda #240
+	sta u0L
+	jsr add_animated_tile
+	lda #132
+	sta u0L
+	jsr add_animated_tile
+	lda #148
+	sta u0L
+	jsr add_animated_tile
+	lda #164
+	sta u0L
+	jsr add_animated_tile
+	lda #180
+	sta u0L
+	jsr add_animated_tile
+	lda #212
+	sta u0L
+	jsr add_animated_tile
+	lda #228
+	sta u0L
+	jsr add_animated_tile
+	lda #244
 	sta u0L
 	jsr add_animated_tile
 

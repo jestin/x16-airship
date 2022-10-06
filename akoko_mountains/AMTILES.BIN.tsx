@@ -9,44 +9,132 @@
    <frame tileid="4" duration="133"/>
   </animation>
  </tile>
- <tile id="5">
+ <tile id="128">
   <animation>
-   <frame tileid="5" duration="133"/>
-   <frame tileid="6" duration="133"/>
-   <frame tileid="7" duration="133"/>
-   <frame tileid="8" duration="133"/>
+   <frame tileid="128" duration="133"/>
+   <frame tileid="129" duration="133"/>
+   <frame tileid="130" duration="133"/>
+   <frame tileid="131" duration="133"/>
   </animation>
  </tile>
- <tile id="21">
+ <tile id="132">
   <animation>
-   <frame tileid="21" duration="133"/>
-   <frame tileid="22" duration="133"/>
-   <frame tileid="23" duration="133"/>
-   <frame tileid="24" duration="133"/>
+   <frame tileid="132" duration="133"/>
+   <frame tileid="133" duration="133"/>
+   <frame tileid="134" duration="133"/>
+   <frame tileid="135" duration="133"/>
   </animation>
  </tile>
- <tile id="37">
+ <tile id="144">
   <animation>
-   <frame tileid="37" duration="133"/>
-   <frame tileid="38" duration="133"/>
-   <frame tileid="39" duration="133"/>
-   <frame tileid="40" duration="133"/>
+   <frame tileid="144" duration="133"/>
+   <frame tileid="145" duration="133"/>
+   <frame tileid="146" duration="133"/>
+   <frame tileid="147" duration="133"/>
   </animation>
  </tile>
- <tile id="53">
+ <tile id="148">
   <animation>
-   <frame tileid="53" duration="133"/>
-   <frame tileid="54" duration="133"/>
-   <frame tileid="55" duration="133"/>
-   <frame tileid="56" duration="133"/>
+   <frame tileid="148" duration="133"/>
+   <frame tileid="149" duration="133"/>
+   <frame tileid="150" duration="133"/>
+   <frame tileid="151" duration="133"/>
   </animation>
  </tile>
- <tile id="69">
+ <tile id="160">
   <animation>
-   <frame tileid="69" duration="133"/>
-   <frame tileid="70" duration="133"/>
-   <frame tileid="71" duration="133"/>
-   <frame tileid="72" duration="133"/>
+   <frame tileid="160" duration="133"/>
+   <frame tileid="161" duration="133"/>
+   <frame tileid="162" duration="133"/>
+   <frame tileid="163" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="164">
+  <animation>
+   <frame tileid="164" duration="133"/>
+   <frame tileid="165" duration="133"/>
+   <frame tileid="166" duration="133"/>
+   <frame tileid="167" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="176">
+  <animation>
+   <frame tileid="176" duration="133"/>
+   <frame tileid="177" duration="133"/>
+   <frame tileid="178" duration="133"/>
+   <frame tileid="179" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="180">
+  <animation>
+   <frame tileid="180" duration="133"/>
+   <frame tileid="181" duration="133"/>
+   <frame tileid="182" duration="133"/>
+   <frame tileid="183" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="192">
+  <animation>
+   <frame tileid="192" duration="133"/>
+   <frame tileid="193" duration="133"/>
+   <frame tileid="194" duration="133"/>
+   <frame tileid="195" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="196">
+  <animation>
+   <frame tileid="196" duration="133"/>
+   <frame tileid="197" duration="133"/>
+   <frame tileid="198" duration="133"/>
+   <frame tileid="199" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="208">
+  <animation>
+   <frame tileid="208" duration="133"/>
+   <frame tileid="209" duration="133"/>
+   <frame tileid="210" duration="133"/>
+   <frame tileid="211" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="212">
+  <animation>
+   <frame tileid="212" duration="133"/>
+   <frame tileid="213" duration="133"/>
+   <frame tileid="214" duration="133"/>
+   <frame tileid="215" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="224">
+  <animation>
+   <frame tileid="224" duration="133"/>
+   <frame tileid="225" duration="133"/>
+   <frame tileid="226" duration="133"/>
+   <frame tileid="227" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="228">
+  <animation>
+   <frame tileid="228" duration="133"/>
+   <frame tileid="229" duration="133"/>
+   <frame tileid="230" duration="133"/>
+   <frame tileid="231" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="240">
+  <animation>
+   <frame tileid="240" duration="133"/>
+   <frame tileid="241" duration="133"/>
+   <frame tileid="242" duration="133"/>
+   <frame tileid="243" duration="133"/>
+  </animation>
+ </tile>
+ <tile id="244">
+  <animation>
+   <frame tileid="244" duration="133"/>
+   <frame tileid="245" duration="133"/>
+   <frame tileid="246" duration="133"/>
+   <frame tileid="247" duration="133"/>
   </animation>
  </tile>
  <wangsets>
@@ -55,19 +143,6 @@
    <wangcolor name="grass" color="#00ff00" tile="-1" probability="1"/>
    <wangcolor name="water" color="#0000ff" tile="-1" probability="1"/>
    <wangtile tileid="1" wangid="3,3,3,3,3,3,3,3"/>
-   <wangtile tileid="16" wangid="3,3,3,2,3,3,3,3"/>
-   <wangtile tileid="17" wangid="3,3,3,2,2,2,3,3"/>
-   <wangtile tileid="18" wangid="3,3,3,3,3,2,3,3"/>
-   <wangtile tileid="19" wangid="2,2,3,3,3,2,2,2"/>
-   <wangtile tileid="20" wangid="2,2,2,2,3,3,3,2"/>
-   <wangtile tileid="32" wangid="3,2,2,2,3,3,3,3"/>
-   <wangtile tileid="33" wangid="2,2,2,2,2,2,2,2"/>
-   <wangtile tileid="34" wangid="3,3,3,3,3,2,2,2"/>
-   <wangtile tileid="35" wangid="3,3,3,2,2,2,2,2"/>
-   <wangtile tileid="36" wangid="3,2,2,2,2,2,3,3"/>
-   <wangtile tileid="48" wangid="3,2,3,3,3,3,3,3"/>
-   <wangtile tileid="49" wangid="2,2,3,3,3,3,3,2"/>
-   <wangtile tileid="50" wangid="3,3,3,3,3,3,3,2"/>
    <wangtile tileid="51" wangid="1,1,2,2,2,1,1,1"/>
    <wangtile tileid="52" wangid="1,1,1,1,2,2,2,1"/>
    <wangtile tileid="64" wangid="2,2,2,1,2,2,2,2"/>
@@ -81,6 +156,19 @@
    <wangtile tileid="96" wangid="2,1,2,2,2,2,2,2"/>
    <wangtile tileid="97" wangid="1,1,2,2,2,2,2,1"/>
    <wangtile tileid="98" wangid="2,2,2,2,2,2,2,1"/>
+   <wangtile tileid="112" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="128" wangid="3,3,3,2,3,3,3,3"/>
+   <wangtile tileid="132" wangid="2,2,3,3,3,2,2,2"/>
+   <wangtile tileid="144" wangid="3,3,3,2,2,2,3,3"/>
+   <wangtile tileid="148" wangid="2,2,2,2,3,3,3,2"/>
+   <wangtile tileid="160" wangid="3,3,3,3,3,2,3,3"/>
+   <wangtile tileid="164" wangid="3,3,3,2,2,2,2,2"/>
+   <wangtile tileid="176" wangid="3,2,2,2,3,3,3,3"/>
+   <wangtile tileid="180" wangid="3,2,2,2,2,2,3,3"/>
+   <wangtile tileid="192" wangid="3,3,3,3,3,2,2,2"/>
+   <wangtile tileid="208" wangid="3,2,3,3,3,3,3,3"/>
+   <wangtile tileid="224" wangid="2,2,3,3,3,3,3,2"/>
+   <wangtile tileid="240" wangid="3,3,3,3,3,3,3,2"/>
   </wangset>
  </wangsets>
 </tileset>
