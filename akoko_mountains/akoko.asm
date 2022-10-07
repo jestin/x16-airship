@@ -65,7 +65,7 @@ load_akoko:
 
 	; set video mode
 	lda #%01000001		; sprites
-	sta veradcvideo
+	jsr set_dcvideo
 
 	; load palette first so that the loading message is correct
 	LoadW u0, akoko_pal_file
@@ -85,7 +85,7 @@ load_akoko:
 
 	; set video mode
 	lda #%01000001		; sprites
-	sta veradcvideo
+	jsr set_dcvideo
 
 	; load the player into the sprites
 	lda player_file
@@ -244,7 +244,7 @@ load_akoko:
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
-	sta veradcvideo
+	jsr set_dcvideo
 
 	lda #AKOKO_MAP_ID
 	sta map_id

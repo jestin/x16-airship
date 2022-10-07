@@ -12,6 +12,7 @@
 .include "vram.inc"
 .include "sprites.inc"
 .include "resources.inc"
+.include "video.asm"
 .include "text.asm"
 .include "title.asm"
 
@@ -41,7 +42,7 @@ main:
 
 	; set video mode
 	lda #%01000001		; turn off layers while loading (leave sprites)
-	sta veradcvideo
+	jsr set_dcvideo
 	
 	lda #64
 	sta veradchscale
@@ -143,14 +144,14 @@ main:
 
 	; set video mode
 	lda #%01000001		; sprites
-	sta veradcvideo
+	jsr set_dcvideo
 
 	jsr load_title
 	jsr load_title_music
 
 	; turn off loading sprites
 	lda #%00010001		; l0
-	sta veradcvideo
+	jsr set_dcvideo
 
 	jsr show_title
 

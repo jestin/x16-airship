@@ -15,7 +15,7 @@ load_pixryn_cabin:
 
 	; set video mode
 	lda #%01000001		; sprites
-	sta veradcvideo
+	jsr set_dcvideo
 
 	; set the loading message
 	LoadW u0, loading_text
