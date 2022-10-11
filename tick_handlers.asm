@@ -37,6 +37,7 @@ character_overworld_tick:
 
 	jsr animate_player
 	jsr update_npc_groups
+	jsr update_npc_paths
 	jsr update_npcs
 	jsr move
 	lda #3

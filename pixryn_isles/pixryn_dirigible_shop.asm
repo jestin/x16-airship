@@ -72,6 +72,8 @@ load_pixryn_dirigible_shop:
 
 	; clear any NPC sprites from other maps
 	jsr clear_npc_sprites
+	jsr clear_npc_groups
+	jsr clear_npc_paths
 
 	; manually setup the animated tiles for the map
 	lda #74

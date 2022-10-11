@@ -107,6 +107,7 @@ load_pixryn:
 	; clear any NPC sprites from other maps
 	jsr clear_npc_sprites
 	jsr clear_npc_groups
+	jsr clear_npc_paths
 	
 	; load NPCs
 	jsr initialize_npcs
@@ -337,6 +338,28 @@ load_pixryn_npcs:
 	sta u2H
 	lda ship_npc_group
 	jsr add_npc_to_group
+
+	; create path for ship
+	lda ship_npc_group
+	jsr add_npc_path
+	phx					; push path index
+	ldx #%00011101
+	LoadW u2, 200
+	LoadW u3, 250
+	pla					; pull path index
+	pha					; re-push path index
+	jsr add_stop_to_npc_path
+	ldx #%00011101
+	LoadW u2, 400
+	LoadW u3, 150
+	pla					; pull path index
+	pha					; re-push path index
+	jsr add_stop_to_npc_path
+	ldx #%00011101
+	LoadW u2, 600
+	LoadW u3, 350
+	pla					; pull path index
+	jsr add_stop_to_npc_path
 
 	; example clone
 	; lda #70

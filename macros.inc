@@ -86,4 +86,13 @@ MACROS = 1
 	rol dest+1
 .endmacro
 
+.macro CompareW w0, w1
+	lda w0+1
+	cmp w1+1
+	bne :+
+	lda w0
+	cmp w1
+:
+.endmacro
+
 .endif ; MACROS_INC

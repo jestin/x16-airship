@@ -101,6 +101,7 @@ load_akoko:
 	; clear any NPC sprites from other maps
 	jsr clear_npc_sprites
 	jsr clear_npc_groups
+	jsr clear_npc_paths
 	
 	; load NPCs
 	jsr initialize_npcs

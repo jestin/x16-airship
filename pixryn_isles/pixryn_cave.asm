@@ -71,6 +71,8 @@ load_pixryn_cave:
 
 	; clear any NPC sprites from other maps
 	jsr clear_npc_sprites
+	jsr clear_npc_groups
+	jsr clear_npc_paths
 
  	; set the tile base address
 	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)

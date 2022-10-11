@@ -14,7 +14,10 @@ NPC_PATH_ASM = 1
 	; the y of this stop
 	mapy		.res 2
 
-	; can be set to indicate how fast to move
+	; can be set to indicate how fast to and when to move
+	; format : tydytxdx
+	; ty/tx - an indicator on which tick counts to execute the directional move
+	; dx/dy - the change in each direction
 	speed_mask	.res 1
 
 .endstruct
@@ -93,10 +96,14 @@ add_npc_path:
 ;
 ; void add_stop_to_npc_path(byte npc_path_index: a,
 ;							byte speed_mask: x,
-;							byte mapx: u2L,
-;							byte mapy: u2H)
+;							byte mapx: u2,
+;							byte mapy: u3)
 ;==================================================
 add_stop_to_npc_path:
+
+	; Push the index so it can be restored at the end of the routine.  This
+	; makes it easy to call this routine many times in a row
+	pha
 	; push X for later
 	phx
 
@@ -116,7 +123,7 @@ add_stop_to_npc_path:
 	; u1 now contains the base of the stops address
 
 	; add the size of a stop in a loop to advance u1 to the new stop
-	lda #NpcPath::num_stops
+	ldy #NpcPath::num_stops
 	lda (u0),y
 	tax					; x now contains the index of the new stop
 @multiply_loop:
@@ -131,17 +138,35 @@ add_stop_to_npc_path:
 	adc #0
 	sta u1H
 
+	dex
 	bra @multiply_loop
 @end_multiply_loop:
 
 	; u1 now contains the address of the new stop
 
+	lda u2L
 	ldy #NpcPathStop::mapx
+	sta (u1),y
+	lda u2H
+	ldy #NpcPathStop::mapx+1
+	sta (u1),y
+	lda u3L
+	ldy #NpcPathStop::mapy
+	sta (u1),y
+	lda u3H
+	ldy #NpcPathStop::mapy+1
+	sta (u1),y
 
 	pla
 	ldy #NpcPathStop::speed_mask
 	sta (u1),y
 
+	ldy #NpcPath::num_stops
+	lda (u0),y
+	inc
+	sta (u0),y
+
+	pla
 	rts
 
 ;==================================================
@@ -215,10 +240,12 @@ update_npc_paths:
 	ldy #NpcPathStop::speed_mask
 	lda (u2),y
 	jsr calculate_next_npc_position
+	pha
 
 	jsr set_npc_group_map_location
 
 	; check if the stop needs advancing
+	pla
 	cmp #0
 	beq @continue
 
@@ -253,7 +280,8 @@ update_npc_paths:
 ;==================================================
 ; get_next_stop_in_path
 ;
-; void get_next_stop_in_path(word stop: u1)
+; void get_next_stop_in_path(word path: u1,
+;							word next_stop: u2)
 ;==================================================
 get_next_stop_in_path:
 	clc
@@ -299,8 +327,149 @@ get_next_stop_in_path:
 ;==================================================
 calculate_next_npc_position:
 
-	; TODO: figure out next position
+	; push the speed mask
+	pha
 
+	; check the mask to see if we need to update X
+	and #%00001100
+	lsr
+	lsr
+	ora tickcount
+	and #%00000011
+	cmp #3
+	bne @moveY
+
+	; determine which direction x needs to move
+	CompareW u3, u5
+	beq @moveY
+	bcc @addX
+
+	; apply the x speed in the speed mask
+@subtractX:
+	pla				; pull the speed mask
+	pha				; re-push the speed mask
+	and #$03		; only use the low bits of the low nibble
+	sta u7L			; use u7 as a scratch pad
+	stz u7H
+	sec
+	lda u3L
+	sbc u7L
+	sta u3L
+	lda u3H
+	sbc u7H
+	sta u3H
+	
+	; clamp
+	CompareW u3, u5
+	bcs @moveY
+	MoveW u5, u3
+	bra @moveY
+	
+@addX:
+	pla				; pull the speed mask
+	pha				; re-push the speed mask
+	and #$03		; only use the low bits of the low nibble
+	sta u7L			; use u7 as a scratch pad
+	stz u7H
+	clc
+	lda u3L
+	adc u7L
+	sta u3L
+	lda u3H
+	adc u7H
+	sta u3H
+	
+	; clamp
+	CompareW u3, u5
+	bcc @moveY
+	MoveW u5, u3
+
+@moveY:
+	; check the mask to see if we need to update Y
+	and #%11000000
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	ora tickcount
+	and #%00000011
+	cmp #3
+	bne @advance_stop
+
+	; determine which direction y needs to move
+	CompareW u4, u6
+	beq @advance_stop
+	bcc @addY
+
+	; apply the y speed in the speed mask
+@subtractY:
+	pla				; pull the speed mask
+	pha				; re-push the speed mask
+	and #$30		; only use the low bits of the high nibble
+	lsr				; shift the nibble down to the lower
+	lsr
+	lsr
+	lsr
+	sta u7L			; use u7 as a scratch pad
+	stz u7H
+	sec
+	lda u4L
+	sbc u7L
+	sta u4L
+	lda u4H
+	sbc u7H
+	sta u4H
+	
+	; clamp
+	CompareW u4, u6
+	bcs @advance_stop
+	MoveW u6, u4
+	bra @advance_stop
+	
+@addY:
+	pla				; pull the speed mask
+	pha				; re-push the speed mask
+	and #$30		; only use the low bits of the high nibble
+	lsr				; shift the nibble down to the lower
+	lsr
+	lsr
+	lsr
+	sta u7L			; use u5 as a scratch pad
+	stz u7H
+	clc
+	lda u4L
+	adc u7L
+	sta u4L
+	lda u4H
+	adc u7H
+	sta u4H
+	
+	; clamp
+	CompareW u4, u6
+	bcc @advance_stop
+	MoveW u6, u4
+
+	; Test of the stop has been reached.  If so, set advance stop
+
+@advance_stop:
+	; pull value off stack
+	pla
+
+	CompareW u3, u5
+	bne @set_no_advance
+	CompareW u4, u6
+	bne @set_no_advance
+
+	; advance the stop
+	lda #1
+	bra @return
+
+@set_no_advance:
+	lda #0
+
+@return:
 	rts
 
 ;==================================================
