@@ -35,9 +35,6 @@ NPC_PATH_ASM = 1
 	next_stop			.res 1
 
 	stops				.res 8 * .sizeof(NpcPathStop)
-	
-	xsteps				.res 1
-	ysteps				.res 1
 
 .endstruct
 
@@ -83,10 +80,6 @@ add_npc_path:
 	ldy #NpcPath::num_stops
 	sta (u0),y
 	ldy #NpcPath::next_stop
-	sta (u0),y
-	ldy #NpcPath::xsteps
-	sta (u0),y
-	ldy #NpcPath::ysteps
 	sta (u0),y
 	pla
 	ldy #NpcPath::npc_group_index
@@ -289,11 +282,6 @@ update_npc_paths:
 ;==================================================
 advance_to_next_stop:
 
-	lda #0
-	ldy #NpcPath::xsteps
-	sta (u1),y
-	ldy #NpcPath::ysteps
-	sta (u1),y
 	ldy #NpcPath::num_stops
 	lda (u1),y
 	sta u2L						; re-using u2, so it is no longer the stop address
@@ -371,12 +359,6 @@ calculate_next_npc_position:
 	and tickcount
 	bne @moveY
 
-	; increment xsteps
-	ldy #NpcPath::xsteps
-	lda (u1),y
-	inc
-	sta (u1),y
-
 	; determine which direction x needs to move
 	CompareW u3, u5
 	beq @moveY
@@ -430,12 +412,6 @@ calculate_next_npc_position:
 	lsr
 	and tickcount
 	bne @advance_stop
-
-	; increment ysteps
-	ldy #NpcPath::ysteps
-	lda (u1),y
-	inc
-	sta (u1),y
 
 	; determine which direction y needs to move
 	CompareW u4, u6
