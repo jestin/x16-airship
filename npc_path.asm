@@ -14,11 +14,11 @@ NPC_PATH_ASM = 1
 	; the y of this stop
 	mapy		.res 2
 
-	; can be set to indicate how fast to and when to move
-	; format : tydytxdx
-	; ty/tx - an indicator on which tick counts to execute the directional move
-	; dx/dy - the change in each direction
-	speed_mask	.res 1
+	; format: mmmmssss
+	; m - mask of when to update
+	; s - steps to take per update
+	xspeed		.res 1
+	yspeed		.res 1
 
 .endstruct
 
@@ -35,6 +35,9 @@ NPC_PATH_ASM = 1
 	next_stop			.res 1
 
 	stops				.res 8 * .sizeof(NpcPathStop)
+	
+	xsteps				.res 1
+	ysteps				.res 1
 
 .endstruct
 
@@ -81,6 +84,10 @@ add_npc_path:
 	sta (u0),y
 	ldy #NpcPath::next_stop
 	sta (u0),y
+	ldy #NpcPath::xsteps
+	sta (u0),y
+	ldy #NpcPath::ysteps
+	sta (u0),y
 	pla
 	ldy #NpcPath::npc_group_index
 	sta (u0),y
@@ -95,7 +102,8 @@ add_npc_path:
 ; Adds a stop to an NPC path
 ;
 ; void add_stop_to_npc_path(byte npc_path_index: a,
-;							byte speed_mask: x,
+;							byte xspeed: x,
+;							byte yspeed: y,
 ;							byte mapx: u2,
 ;							byte mapy: u3)
 ;==================================================
@@ -104,8 +112,9 @@ add_stop_to_npc_path:
 	; Push the index so it can be restored at the end of the routine.  This
 	; makes it easy to call this routine many times in a row
 	pha
-	; push X for later
+	; push X and Y for later
 	phx
+	phy
 
 	; get the address of the path
 	tax
@@ -158,7 +167,11 @@ add_stop_to_npc_path:
 	sta (u1),y
 
 	pla
-	ldy #NpcPathStop::speed_mask
+	ldy #NpcPathStop::yspeed
+	sta (u1),y
+
+	pla
+	ldy #NpcPathStop::xspeed
 	sta (u1),y
 
 	ldy #NpcPath::num_stops
@@ -190,8 +203,6 @@ update_npc_paths:
 	jsr get_next_stop_in_path
 
 	; u2 now had the address of the next NPC path stop
-
-	; TODO: check the speed_mask to determine if it's time for an update
 
 	; get the xy from the stop
 	ldy #NpcPathStop::mapx
@@ -237,8 +248,12 @@ update_npc_paths:
 	ldy #NpcPath::npc_group_index
 	lda (u1),y
 	tax
-	ldy #NpcPathStop::speed_mask
+	ldy #NpcPathStop::xspeed
 	lda (u2),y
+	sta u8L
+	ldy #NpcPathStop::yspeed
+	lda (u2),y
+	sta u8H
 	jsr calculate_next_npc_position
 	pha
 
@@ -249,17 +264,7 @@ update_npc_paths:
 	cmp #0
 	beq @continue
 
-	ldy #NpcPath::num_stops
-	lda (u1),y
-	sta u2L						; re-using u2, so it is no longer the stop address
-	ldy #NpcPath::next_stop
-	lda (u1),y
-	inc							; increment the next stop
-	cmp u2L
-	bcc @set_next_stop
-	lda #0
-@set_next_stop:
-	sta (u1),y					; y should already be #NpcPath::next_stop
+	jsr advance_to_next_stop
 
 @continue:
 	; increment address
@@ -274,6 +279,32 @@ update_npc_paths:
 	inx		; increment loop counter
 	jmp @path_loop
 @end_path_loop:
+
+	rts
+
+;==================================================
+; advance_to_next_stop
+;
+; void advance_to_next_stop(word npc_path: u1)
+;==================================================
+advance_to_next_stop:
+
+	lda #0
+	ldy #NpcPath::xsteps
+	sta (u1),y
+	ldy #NpcPath::ysteps
+	sta (u1),y
+	ldy #NpcPath::num_stops
+	lda (u1),y
+	sta u2L						; re-using u2, so it is no longer the stop address
+	ldy #NpcPath::next_stop
+	lda (u1),y
+	inc							; increment the next stop
+	cmp u2L
+	bcc @set_next_stop
+	lda #0
+@set_next_stop:
+	sta (u1),y					; y should already be #NpcPath::next_stop
 
 	rts
 
@@ -316,28 +347,35 @@ get_next_stop_in_path:
 ; calculate_next_npc_position
 ;
 ; void calculate_next_npc_position(
+;								word npc_path: u1
+;								word npc_path_stop: u2
 ;								word curx: u3,
 ;								word cury: u4,
 ;								word stopx: u5,
 ;								word stopy: u6,
-;								byte speed_mask: a,
+;								byte xspeed: u8L,
+;								byte yspeed: u8H,
 ;								out word newx: u3,
 ;								out word newy: u4
 ;								out advance_stop: a)
 ;==================================================
 calculate_next_npc_position:
 
-	; push the speed mask
-	pha
-
 	; check the mask to see if we need to update X
-	and #%00001100
+	lda u8L
+	and #$f0
 	lsr
 	lsr
-	ora tickcount
-	and #%00000011
-	cmp #3
+	lsr
+	lsr
+	and tickcount
 	bne @moveY
+
+	; increment xsteps
+	ldy #NpcPath::xsteps
+	lda (u1),y
+	inc
+	sta (u1),y
 
 	; determine which direction x needs to move
 	CompareW u3, u5
@@ -346,9 +384,8 @@ calculate_next_npc_position:
 
 	; apply the x speed in the speed mask
 @subtractX:
-	pla				; pull the speed mask
-	pha				; re-push the speed mask
-	and #$03		; only use the low bits of the low nibble
+	lda u8L
+	and #$0f		; only use the low bits of the low nibble
 	sta u7L			; use u7 as a scratch pad
 	stz u7H
 	sec
@@ -366,9 +403,8 @@ calculate_next_npc_position:
 	bra @moveY
 	
 @addX:
-	pla				; pull the speed mask
-	pha				; re-push the speed mask
-	and #$03		; only use the low bits of the low nibble
+	lda u8L
+	and #$0f		; only use the low bits of the low nibble
 	sta u7L			; use u7 as a scratch pad
 	stz u7H
 	clc
@@ -386,17 +422,20 @@ calculate_next_npc_position:
 
 @moveY:
 	; check the mask to see if we need to update Y
-	and #%11000000
+	lda u8H
+	and #$f0
 	lsr
 	lsr
 	lsr
 	lsr
-	lsr
-	lsr
-	ora tickcount
-	and #%00000011
-	cmp #3
+	and tickcount
 	bne @advance_stop
+
+	; increment ysteps
+	ldy #NpcPath::ysteps
+	lda (u1),y
+	inc
+	sta (u1),y
 
 	; determine which direction y needs to move
 	CompareW u4, u6
@@ -405,13 +444,8 @@ calculate_next_npc_position:
 
 	; apply the y speed in the speed mask
 @subtractY:
-	pla				; pull the speed mask
-	pha				; re-push the speed mask
-	and #$30		; only use the low bits of the high nibble
-	lsr				; shift the nibble down to the lower
-	lsr
-	lsr
-	lsr
+	lda u8H
+	and #$0f		; only use the low nibble
 	sta u7L			; use u7 as a scratch pad
 	stz u7H
 	sec
@@ -429,13 +463,8 @@ calculate_next_npc_position:
 	bra @advance_stop
 	
 @addY:
-	pla				; pull the speed mask
-	pha				; re-push the speed mask
-	and #$30		; only use the low bits of the high nibble
-	lsr				; shift the nibble down to the lower
-	lsr
-	lsr
-	lsr
+	lda u8H
+	and #$0f		; only use the low nibble
 	sta u7L			; use u5 as a scratch pad
 	stz u7H
 	clc
@@ -454,8 +483,6 @@ calculate_next_npc_position:
 	; Test of the stop has been reached.  If so, set advance stop
 
 @advance_stop:
-	; pull value off stack
-	pla
 
 	CompareW u3, u5
 	bne @set_no_advance

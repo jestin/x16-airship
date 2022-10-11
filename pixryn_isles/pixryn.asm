@@ -343,19 +343,22 @@ load_pixryn_npcs:
 	lda ship_npc_group
 	jsr add_npc_path
 	phx					; push path index
-	ldx #%00011101
+	ldx #%00010001
+	ldy #%01110001
 	LoadW u2, 200
 	LoadW u3, 250
 	pla					; pull path index
 	pha					; re-push path index
 	jsr add_stop_to_npc_path
-	ldx #%00011101
+	ldx #%00010001
+	ldy #%00110001
 	LoadW u2, 400
 	LoadW u3, 150
 	pla					; pull path index
 	pha					; re-push path index
 	jsr add_stop_to_npc_path
-	ldx #%00011101
+	ldx #%00010001
+	ldy #%00010001
 	LoadW u2, 600
 	LoadW u3, 350
 	pla					; pull path index
