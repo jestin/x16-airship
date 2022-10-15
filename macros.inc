@@ -57,23 +57,20 @@ MACROS = 1
 .endmacro
 
 .macro IncW dest
-	clc						; clear the carry bit
-	lda dest				; increment the low order byte such that it sets c
-	adc #1
-	sta dest
-	lda dest+1				; add 0 without clearing the carry bit
-	adc #0					; if c is set, it will increment the high order byte
-	sta dest+1
+	.local @Skip
+	inc dest
+	bne @Skip
+	inc dest+1
+@Skip:
 .endmacro
 
 .macro DecW dest
-	sec						; set the carry bit (unset the barrow bit)
-	lda dest				; decrement the low order byte such that it sets barrow
-	sbc #1
-	sta dest
-	lda dest+1				; add 0 without clearing the carry bit
-	sbc #0					; if c is set, it will decrement the high order byte
-	sta dest+1
+	.local @Skip
+	lda dest
+	bne @Skip
+	dec dest+1
+@Skip:
+	dec dest
 .endmacro
 
 .macro LsrW dest
