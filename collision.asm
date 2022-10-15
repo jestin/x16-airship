@@ -110,6 +110,9 @@ construct_collision_tile:
 	lda #collision_map_data_bank
 	sta $00
 
+	; keep track of whether all 4 tiles are index 0
+	stz u5L
+
 	; First, load the 4 relevant tiles into our collision tile memory
 	ldx #0
 @populate_pad_loop:
@@ -131,6 +134,8 @@ construct_collision_tile:
 	LoadW u3, 0						; zero out u3
 	lda (u2)
 	sta u3							; store in u3 to perform shift
+	ora u5L
+	sta u5L
 	AslW u3							; 5 left shifts multiplies by 32
 	AslW u3
 	AslW u3
@@ -180,6 +185,13 @@ construct_collision_tile:
 	cpx #4
 	bcc @populate_pad_loop
 @populate_pad_loop_end:
+
+	; if u5L is zero, that means each tile is the empty tile
+	lda u5L
+	bne :+
+	rts
+
+:
 
 	; Now that we have populated the 4-tile "pad", we need to shift the correct
 	; bits into the first tile.  This is the only tile that will be compared
