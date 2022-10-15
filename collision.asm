@@ -197,9 +197,13 @@ construct_collision_tile:
 	cpx #0
 	beq @end_left_shift_loop
 
-	; since we no longer need it, use u2L as a loop counter
-	lda #0
+	; since we no longer need it, use u2L as a index counter
+	lda u1L
+	and #$0f						; skip the rows that will be shifted up off the final tile
 	sta u2L
+
+	lda #0
+	sta u5L							; count how many passes we go through the loop
 @row_shift_loop:
 	; shift a single row left by one bit, twice (once for upper and lower pairs)
 
@@ -214,7 +218,7 @@ construct_collision_tile:
 	adc #>(construct_tile)			; now u3 contains the address of the row
 	sta u3H
 
-	; top pair
+	; on passes 0-15, this is the top pair, and 16-31 the bottom pair
 	; the address of the last byte will be u3 + 32 + 1, which we can do through zp indirect y addressing
 	ldy #(32+1)
 	lda (u3),y
@@ -233,27 +237,21 @@ construct_collision_tile:
 	rol
 	sta (u3),y
 
-	; bottom pair
-	; the address of the last byte will be u3 + 96 + 1, which we can do through zp indirect y addressing
-	ldy #(96+1)
-	lda (u3),y
-	asl
-	sta (u3),y
-	ldy #(96)
-	lda (u3),y
-	rol
-	sta (u3),y
-	ldy #(64+1)
-	lda (u3),y
-	rol
-	sta (u3),y
-	ldy #64
-	lda (u3),y
-	rol
-	sta (u3),y
-
+	inc u5L							; update the loop counter u5L and the index counter u2L
 	inc u2L
+
+	; top pair row check
 	lda u2L
+	cmp #16
+	bcc @row_shift_loop
+	bne @bottom_pair_row_check
+
+	; jump index counter to 32 to calculate the bottom pair
+	lda #32
+	sta u2L
+
+@bottom_pair_row_check:
+	lda u5L
 	cmp #16
 	bcc @row_shift_loop
 @end_row_shift_loop:
@@ -265,8 +263,8 @@ construct_collision_tile:
 	; now with the x shifted to the left, we need to move on to shifting
 	; upwards
 
-	; NOTE: we no longer have to deal with the left tiles, since they have been
-	; shifted into the right tiles
+	; NOTE: we no longer have to deal with the right tiles, since they have been
+	; shifted into the left tiles
 
 	lda u1L							; Move lower nibble of u1 into X
 	and #$0f
