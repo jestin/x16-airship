@@ -391,6 +391,34 @@ move:
 	sta playerdir
 	IncW xplayer
 :
+
+	; check for diagonal motion, and if so, undo one of the directions
+	lda joystick_data
+	eor #$ff
+	and #$0f
+
+	; if any of these hits, it was a single direction
+	cmp #8
+	beq @update
+	cmp #4
+	beq @update
+	cmp #2
+	beq @update
+	cmp #1
+	beq @update
+
+	; at this point we know it was a combination of directions
+	lda tickcount
+	bit #$02					; don't always move only x or y on diagonal
+	bne @update
+	bit #$01					; choose whether to revert x or y
+	bne :+
+	MoveW prev_xoff, xoff
+	MoveW prev_xplayer, xplayer
+	bra @update
+:
+	MoveW prev_yoff, yoff
+	MoveW prev_yplayer, yplayer
 	
 @update:
 	jsr set_active_tile
