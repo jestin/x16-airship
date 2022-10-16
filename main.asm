@@ -34,9 +34,22 @@ default_irq:		.res 2
 ; 256 repeating ticks
 tickcount:		.res 1
 
+; CPU_MONITOR = 1
+
 .segment "CODE"
 
 main:
+
+	.ifdef CPU_MONITOR
+	lda #$02
+	sta veractl
+
+	lda #159
+	sta veradchstop
+	
+	lda #$00
+	sta veractl
+	.endif
 
 	jsr init_player
 
