@@ -366,6 +366,7 @@ move:
 	lda #9
 	sta playerdir
 	DecW yplayer
+	bra @check_vertical_collision
 :
 	; down
 	lda joystick_data
@@ -375,6 +376,21 @@ move:
 	sta playerdir
 	IncW yplayer
 :
+
+@check_vertical_collision:
+
+	; check if vertical movement caused a collision
+	jsr set_active_tile
+	jsr check_collisions
+	cmp #0
+	bne @horizontal_control
+
+	; restore the Y position
+	MoveW prev_yoff, yoff
+	MoveW prev_yplayer, yplayer
+
+@horizontal_control:
+
 	; left
 	lda joystick_data
 	bit #$2
@@ -382,6 +398,7 @@ move:
 	lda #6
 	sta playerdir
 	DecW xplayer
+	bra @check_horizontal_collision
 :
 	; right
 	lda joystick_data
@@ -392,17 +409,15 @@ move:
 	IncW xplayer
 :
 	
-@update:
+@check_horizontal_collision:
 	jsr set_active_tile
 	jsr check_collisions
 	cmp #0
 	bne @cap_player_x_lower
 
-@restore_loc_cache:
+	; restore the X position
 	MoveW prev_xoff, xoff
-	MoveW prev_yoff, yoff
 	MoveW prev_xplayer, xplayer
-	MoveW prev_yplayer, yplayer
 
 @cap_player_x_lower:
 	lda xplayer+1
