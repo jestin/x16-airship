@@ -61,6 +61,10 @@ next_npc_vram:		.res 2
 
 npc_frames_loaded:	.res 1
 
+; This is an array of indexes shared by all maps.  They can make friendly names
+; for their NPCs  by aliasing an offset into this array
+npc_indexes:			.res MAX_NPCS
+
 .segment "CODE"
 
 ;==================================================
