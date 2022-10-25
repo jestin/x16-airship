@@ -143,32 +143,32 @@
    <wangcolor name="grass" color="#00ff00" tile="-1" probability="1"/>
    <wangcolor name="water" color="#0000ff" tile="-1" probability="1"/>
    <wangtile tileid="1" wangid="3,3,3,3,3,3,3,3"/>
-   <wangtile tileid="51" wangid="1,1,2,2,2,1,1,1"/>
-   <wangtile tileid="52" wangid="1,1,1,1,2,2,2,1"/>
-   <wangtile tileid="64" wangid="2,2,2,1,2,2,2,2"/>
-   <wangtile tileid="65" wangid="2,2,2,1,1,1,2,2"/>
-   <wangtile tileid="66" wangid="2,2,2,2,2,1,2,2"/>
-   <wangtile tileid="67" wangid="2,2,2,1,1,1,1,1"/>
-   <wangtile tileid="68" wangid="2,1,1,1,1,1,2,2"/>
-   <wangtile tileid="80" wangid="2,1,1,1,2,2,2,2"/>
-   <wangtile tileid="81" wangid="1,1,1,1,1,1,1,1"/>
-   <wangtile tileid="82" wangid="2,2,2,2,2,1,1,1"/>
-   <wangtile tileid="96" wangid="2,1,2,2,2,2,2,2"/>
-   <wangtile tileid="97" wangid="1,1,2,2,2,2,2,1"/>
-   <wangtile tileid="98" wangid="2,2,2,2,2,2,2,1"/>
    <wangtile tileid="112" wangid="2,2,2,2,2,2,2,2"/>
+   <wangtile tileid="113" wangid="1,1,1,1,1,1,1,1"/>
    <wangtile tileid="128" wangid="3,3,3,2,3,3,3,3"/>
    <wangtile tileid="132" wangid="2,2,3,3,3,2,2,2"/>
+   <wangtile tileid="136" wangid="2,1,1,1,2,2,2,2"/>
    <wangtile tileid="144" wangid="3,3,3,2,2,2,3,3"/>
    <wangtile tileid="148" wangid="2,2,2,2,3,3,3,2"/>
+   <wangtile tileid="152" wangid="2,2,2,2,2,1,2,2"/>
    <wangtile tileid="160" wangid="3,3,3,3,3,2,3,3"/>
    <wangtile tileid="164" wangid="3,3,3,2,2,2,2,2"/>
+   <wangtile tileid="168" wangid="2,2,2,1,1,1,2,2"/>
    <wangtile tileid="176" wangid="3,2,2,2,3,3,3,3"/>
    <wangtile tileid="180" wangid="3,2,2,2,2,2,3,3"/>
+   <wangtile tileid="184" wangid="2,2,2,1,2,2,2,2"/>
    <wangtile tileid="192" wangid="3,3,3,3,3,2,2,2"/>
+   <wangtile tileid="200" wangid="2,1,1,1,1,1,2,2"/>
+   <wangtile tileid="204" wangid="2,2,2,2,2,2,2,1"/>
    <wangtile tileid="208" wangid="3,2,3,3,3,3,3,3"/>
+   <wangtile tileid="216" wangid="2,2,2,1,1,1,1,1"/>
+   <wangtile tileid="220" wangid="1,1,2,2,2,2,2,1"/>
    <wangtile tileid="224" wangid="2,2,3,3,3,3,3,2"/>
+   <wangtile tileid="232" wangid="1,1,1,1,2,2,2,1"/>
+   <wangtile tileid="236" wangid="2,1,2,2,2,2,2,2"/>
    <wangtile tileid="240" wangid="3,3,3,3,3,3,3,2"/>
+   <wangtile tileid="248" wangid="1,1,2,2,2,1,1,1"/>
+   <wangtile tileid="252" wangid="2,2,2,2,2,1,1,1"/>
   </wangset>
  </wangsets>
 </tileset>
