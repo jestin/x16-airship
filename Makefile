@@ -43,6 +43,7 @@ resources: subresources bin $(RESOURCES)
 	cp *.BIN bin 2> /dev/null
 	cp sprites/*.BIN bin 2> /dev/null
 	cp music/*.ZSM bin 2> /dev/null
+	cp AUTOBOOT.X16 bin 2> /dev/null
 
 CHARSET.BIN: Charset.xcf
 	gimp -i -d -f -b '(export-vera "Charset.xcf" "CHARSET.BIN" 0 4 8 8 0 0 0)' -b '(gimp-quit 0)'
@@ -60,25 +61,18 @@ VIMASK.BIN: visibility_mask.tmx
 	tmx2vera visibility_mask.tmx -l mask VIMASK.BIN
 
 run: all resources
-	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 2048 -debug -joy1 -abufs 64)
+	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 512 -debug -joy1 -abufs 64)
 
 card.img: all resources clean_card
-	mkdir card
-	dd if=/dev/zero of=card.img bs=1M count=1024; \
-	printf 'n\n\n\n\n\nt\nc\nw\n' | fdisk card.img; \
-	LOPNAM=`losetup -f`; \
-	sudo losetup -o 1048576 $$LOPNAM card.img; \
-	sudo mkfs -t vfat $$LOPNAM; \
-	sudo losetup -d $$LOPNAM; \
-	sudo mount -o rw,loop,offset=$$((1024*1024)) card.img card; \
-	sudo cp bin/* card; \
-	sudo umount card; \
-	rm -rf card
+	truncate -s 100M card.img
+	parted -s card.img mklabel msdos mkpart primary fat32 2048s -- -1
+	mformat -i card.img@@1M -F
+	mcopy -i card.img@@1M -o -m bin/* ::
 
 card: card.img
 
-run_card:
-	x16emu -sdcard card.img -prg bin/AIRSHIP.PRG -run -scale 2 -ram 2048 -joy1 -abufs 64 -debug
+run_card: card
+	x16emu -sdcard card.img -scale 2 -ram 512 -joy1 -abufs 64 -debug
 
 $(ZIPFILE): all resources clean_zip
 	(cd bin; zip ../$(ZIPFILE) *)
@@ -97,7 +91,6 @@ clean_resources: clean_subresources
 	rm -f $(RESOURCES)
 
 clean_card:
-	rm -rf card/
 	rm -f card.img
 
 clean_zip:
