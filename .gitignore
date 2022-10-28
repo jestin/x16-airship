@@ -1,4 +1,5 @@
 # assembled binaries
+/bin
 *.prg
 *.PRG
 *.bin
