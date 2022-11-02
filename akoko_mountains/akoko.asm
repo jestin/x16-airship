@@ -216,6 +216,42 @@ load_akoko:
 	lda #244
 	sta u0L
 	jsr add_animated_tile
+	lda #136
+	sta u0L
+	jsr add_animated_tile
+	lda #152
+	sta u0L
+	jsr add_animated_tile
+	lda #168
+	sta u0L
+	jsr add_animated_tile
+	lda #184
+	sta u0L
+	jsr add_animated_tile
+	lda #200
+	sta u0L
+	jsr add_animated_tile
+	lda #216
+	sta u0L
+	jsr add_animated_tile
+	lda #232
+	sta u0L
+	jsr add_animated_tile
+	lda #248
+	sta u0L
+	jsr add_animated_tile
+	lda #204
+	sta u0L
+	jsr add_animated_tile
+	lda #220
+	sta u0L
+	jsr add_animated_tile
+	lda #236
+	sta u0L
+	jsr add_animated_tile
+	lda #252
+	sta u0L
+	jsr add_animated_tile
 
 	; add the NPCs
 	; jsr load_akoko_npcs
