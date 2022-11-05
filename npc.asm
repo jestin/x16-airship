@@ -202,6 +202,30 @@ set_npc_depth_flip:
 	rts
 
 ;==================================================
+; set_npc_flip
+;
+; Sets the NPCs flip setting
+;
+; void set_npc_flip(byte npc_index: x,
+;					byte flip: A)
+;==================================================
+set_npc_flip:
+
+	and #%00000011				; zero out non flip bits to leave depth alone
+	sta u1L
+
+	jsr calculate_npc_address
+
+	ldy #Npc::depth_and_flip
+	lda (u0),y
+	
+	ora #%11111100				; zero out the flip bits
+	ora u1L						; apply the flip bits
+	sta (u0),y					; re-store the depth flip bits
+
+	rts
+
+;==================================================
 ; set_npc_map_location
 ;
 ; Sets the NPCs location on the map.

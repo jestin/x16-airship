@@ -247,6 +247,10 @@ load_pixryn_npcs:
 	jsr set_npc_map_location
 
 	; ship group
+	lda #66
+	sta u0L
+	lda #42
+	sta u0L
 	jsr add_npc_group
 	LoadW u3, 542
 	LoadW u4, 350

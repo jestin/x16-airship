@@ -23,6 +23,14 @@ NPC_GROUP_ASM = 1
 	; Y location on the map
 	mapy			.res 2
 
+	; Size of the group
+	sizex			.res 1
+	sizey			.res 1
+
+	; flip 
+	; %000000vh
+	flip			.res 1
+
 .endstruct
 
 ; Each NPC in an NPC Group needs meta data in regards to its position in the
@@ -82,9 +90,17 @@ clear_npc_groups:
 ;
 ; Adds an NPC group
 ;
-; void add_npc_group(out byte npc_group_index: x)
+; void add_npc_group(byte sizex: u0L,
+;						byte sizey: u0H,
+;						out byte npc_group_index: x)
 ;==================================================
 add_npc_group:
+
+	; save the size for later
+	lda u0H
+	pha
+	lda u0L
+	pha
 
 	; calculate the memory location of the new NPC Group
 	ldx num_npc_groups				; should be the next npc group index
@@ -97,6 +113,14 @@ add_npc_group:
 	ldy #NpcGroup::mapx
 	sta (u0),y
 	ldy #NpcGroup::mapy
+	sta (u0),y
+	ldy #NpcGroup::flip
+	sta (u0),y
+	pla						; size X
+	ldy #NpcGroup::sizex
+	sta (u0),y
+	pla						; size Y
+	ldy #NpcGroup::sizey
 	sta (u0),y
 
 	inc num_npc_groups
@@ -211,6 +235,18 @@ set_npc_group_map_location:
 	lda u4H
 	ldy #NpcGroup::mapy+1
 	sta (u0),y
+
+	rts
+
+;==================================================
+; set_npc_group_flip
+;
+; Sets the NPCs flip setting
+;
+; void set_npc_group_flip(byte npc_group_index: x,
+;							byte flip: A)
+;==================================================
+set_npc_group_flip:
 
 	rts
 
