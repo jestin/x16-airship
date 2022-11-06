@@ -34,6 +34,9 @@ end_elliotfile:
 olliefile: .literal "OLLIE.BIN"
 end_olliefile:
 
+willfile: .literal "WILL.BIN"
+end_willfile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 

@@ -82,8 +82,8 @@ main:
 	jsr LOAD
 
 	; TODO: Move this to a player selection screen
-	LoadW player_file, aurorafile
-	LoadW player_file_size, end_aurorafile - aurorafile
+	LoadW player_file, willfile
+	LoadW player_file_size, end_willfile - willfile
 
 	LoadWBE player_collision_tile+00, %0000000000000000
 	LoadWBE player_collision_tile+02, %0000000000000000

@@ -9,6 +9,7 @@ RESOURCES = AURORA.BIN \
 			GEORGE.BIN \
 			ELLIOT.BIN \
 			OLLIE.BIN \
+			WILL.BIN \
 			TESTNPC.BIN \
 			SHIP.BIN \
 			SHIPWATER.BIN \
@@ -36,6 +37,9 @@ ELLIOT.BIN: Elliot_Sprites.xcf
 
 OLLIE.BIN: Ollie_Sprites.xcf
 	gimp -i -d -f -b '(export-vera "Ollie_Sprites.xcf" "OLLIE.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
+
+WILL.BIN: Will_Sprites.xcf
+	gimp -i -d -f -b '(export-vera "Will_Sprites.xcf" "WILL.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 TESTNPC.BIN: testnpc.xcf
 	gimp -i -d -f -b '(export-vera "testnpc.xcf" "TESTNPC.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
