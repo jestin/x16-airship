@@ -274,15 +274,16 @@ sprite_size_to_pixels:
 	rts
 
 ;==================================================
-; set_npc_group_map_location
+; set_npc_group_map_location_flip
 ;
 ; Sets the NPCs location on the map.
 ;
-; void set_npc_group_map_location(byte npc_group_index: x,
+; void set_npc_group_map_location_flip(byte npc_group_index: x,
 ;									word mapx: u3,
-;									word mapy: u4)
+;									word mapy: u4,
+;									byte flip: u5L)
 ;==================================================
-set_npc_group_map_location:
+set_npc_group_map_location_flip:
 
 	jsr calculate_npc_group_address
 
@@ -298,6 +299,10 @@ set_npc_group_map_location:
 	sta (u0),y
 	lda u4H
 	ldy #NpcGroup::mapy+1
+	sta (u0),y
+
+	lda u5L
+	ldy #NpcGroup::flip
 	sta (u0),y
 
 	rts

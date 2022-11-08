@@ -254,7 +254,9 @@ load_pixryn_npcs:
 	jsr add_npc_group
 	LoadW u3, 542
 	LoadW u4, 350
-	jsr set_npc_group_map_location
+	lda #%00000000
+	sta u5L
+	jsr set_npc_group_map_location_flip
 
 	stx ship_npc_group
 
@@ -351,6 +353,8 @@ load_pixryn_npcs:
 	ldy #%01110001
 	LoadW u2, 200
 	LoadW u3, 250
+	lda #%00000000
+	sta u4L
 	pla					; pull path index
 	pha					; re-push path index
 	jsr add_stop_to_npc_path
@@ -358,6 +362,8 @@ load_pixryn_npcs:
 	ldy #%00110001
 	LoadW u2, 400
 	LoadW u3, 150
+	lda #%00000001
+	sta u4L
 	pla					; pull path index
 	pha					; re-push path index
 	jsr add_stop_to_npc_path
@@ -365,6 +371,8 @@ load_pixryn_npcs:
 	ldy #%00010001
 	LoadW u2, 600
 	LoadW u3, 350
+	lda #%00000001
+	sta u4L
 	pla					; pull path index
 	jsr add_stop_to_npc_path
 

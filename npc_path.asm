@@ -20,6 +20,10 @@ NPC_PATH_ASM = 1
 	xspeed		.res 1
 	yspeed		.res 1
 
+	; flip 
+	; %000000vh
+	flip			.res 1
+
 .endstruct
 
 ; This represents a movement path for an NPC group
@@ -98,7 +102,8 @@ add_npc_path:
 ;							byte xspeed: x,
 ;							byte yspeed: y,
 ;							byte mapx: u2,
-;							byte mapy: u3)
+;							byte mapy: u3,
+;							byte flip: u4L)
 ;==================================================
 add_stop_to_npc_path:
 
@@ -157,6 +162,10 @@ add_stop_to_npc_path:
 	sta (u1),y
 	lda u3H
 	ldy #NpcPathStop::mapy+1
+	sta (u1),y
+
+	lda u4L
+	ldy #NpcPathStop::flip
 	sta (u1),y
 
 	pla
@@ -249,8 +258,11 @@ update_npc_paths:
 	sta u8H
 	jsr calculate_next_npc_position
 	pha
+	ldy #NpcPathStop::flip					; flip needs to be retrieved after position calculation
+	lda (u2),y
+	sta u5L
 
-	jsr set_npc_group_map_location
+	jsr set_npc_group_map_location_flip
 
 	; check if the stop needs advancing
 	pla
@@ -258,6 +270,7 @@ update_npc_paths:
 	beq @continue
 
 	jsr advance_to_next_stop
+
 
 @continue:
 	; increment address
