@@ -493,7 +493,7 @@ calculate_grouped_npc_location:
 
 :
 
-	bit #$01						; flipped horizontally only
+	bit #$01						; flipped horizontally
 	beq :+
 	pha								; push A to check for vertical flip later
 
@@ -528,7 +528,7 @@ calculate_grouped_npc_location:
 
 	; check if we need to flip vertically as well
 	pla
-	bit #$02						; flipped vertically only
+	bit #$02						; flipped vertically
 	bne :+
 
 	; add rely
