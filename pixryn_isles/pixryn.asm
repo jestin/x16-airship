@@ -252,7 +252,7 @@ load_pixryn_npcs:
 	lda #42
 	sta u0H
 	jsr add_npc_group
-	LoadW u3, 542
+	LoadW u3, 600
 	LoadW u4, 350
 	lda #%00000000
 	sta u5L
