@@ -46,6 +46,10 @@ NPC_GROUP_ASM = 1
 	; relative Y location
 	rely			.res 1
 
+	; size in pixels
+	sizex			.res 1
+	sizey			.res 1
+
 .endstruct
 
 num_npc_groups:				.res 1
@@ -146,6 +150,8 @@ add_npc_to_group:
 	jsr calculate_npc_group_address
 
 	; u0 now holds the address of the NPC group
+	; move it to u4 so we can look up the NPC
+	MoveW u0, u4
 
 	; create a new grouped NPC and add it to this NPC group's array
 	lda next_grouped_npc
@@ -158,6 +164,34 @@ add_npc_to_group:
 	; store the NPC index to the grouped NPC
 	pla		; pul the NPC index from the stack and put it in A
 	ldy #GroupedNpc::index
+	sta (u1),y
+
+	; get the NPC's size and store it for quick lookup
+	tax
+	jsr calculate_npc_address
+
+	; u0 now holds the address of the NPC
+
+	; store the npc's size
+
+	ldy #Npc::size_and_frames
+	lda (u0),y
+	lsr									; shift frames out
+	lsr
+	lsr
+	lsr
+	sta u5L								; store for re-use
+	and #%00000011						; just the width
+
+	jsr sprite_size_to_pixels
+	ldy #GroupedNpc::sizex
+	sta (u1),y
+
+	lda u5L
+	lsr
+	lsr
+	jsr sprite_size_to_pixels
+	ldy #GroupedNpc::sizey
 	sta (u1),y
 
 	; store relx
@@ -176,14 +210,14 @@ add_npc_to_group:
 	; address and store it in u3
 	clc
 	lda #NpcGroup::npcs
-	adc u0L
+	adc u4L
 	sta u3L
 	lda #0
-	adc u0H
+	adc u4H
 	sta u3H
 
 	ldy #NpcGroup::count				; get the current count and store it in Y
-	lda (u0),y
+	lda (u4),y
 	asl									; double the value, since addresses are 2 bytes
 	tay
 	lda u1L								; store the GroupedNpc into the correct array position
@@ -194,9 +228,9 @@ add_npc_to_group:
 
 	; increment the group's NPC count
 	ldy #NpcGroup::count
-	lda (u0),y
+	lda (u4),y
 	inc
-	sta (u0),y
+	sta (u4),y
 
 	; increment the next grouped NPC
 	clc
@@ -207,6 +241,36 @@ add_npc_to_group:
 	adc #0
 	sta next_grouped_npc+1
 
+	rts
+
+;==================================================
+; sprite_size_to_pixels
+;
+; void sprite_size_to_pixels(byte sprite_size: A,
+;								byte pixel_size A)
+;==================================================
+sprite_size_to_pixels:
+
+	cmp #0
+	bne :+
+	lda #8
+	bra @return
+:
+	cmp #1
+	bne :+
+	lda #16
+	bra @return
+:
+	cmp #2
+	bne :+
+	lda #32
+	bra @return
+:
+	cmp #3
+	bne :+
+	lda #64
+:
+@return:
 	rts
 
 ;==================================================
@@ -247,6 +311,14 @@ set_npc_group_map_location:
 ;							byte flip: A)
 ;==================================================
 set_npc_group_flip:
+
+	pha
+
+	jsr calculate_npc_group_address
+
+	pla
+	ldy #NpcGroup::flip
+	sta (u0),y
 
 	rts
 
@@ -343,7 +415,58 @@ update_npc_group:
 	sta u2H
 
 	; u1 and u2 now contains the mapx and mapy of the group
+
+	ldy #NpcGroup::flip
+	lda (u0),y
+	sta u3L
+	ldy #NpcGroup::sizex
+	lda (u0),y
+	sta u6L
+	ldy #NpcGroup::sizey
+	lda (u0),y
+	sta u6H
 	
+	jsr calculate_grouped_npc_location
+
+	; set X to the npc index
+	phx							; store the old X on the stack
+	ldy #GroupedNpc::index
+	lda (u5),y
+	tax
+
+	; with all calculations done, update the NPC itself
+	jsr set_npc_map_location_depth_and_flip
+
+	plx							; restore the old X
+	cpx #0
+	bne @npc_loop
+@end_npc_loop:
+
+@return:
+	rts
+
+;==================================================
+; calculate_grouped_npc_location
+;
+; Calculates the absolute address of a particular
+; NPC group given its index.
+;
+; void calculate_grouped_npc_location(
+;							word group_x: u1,
+;							word group_y: u2,
+;							byte flip: u3L,
+;							byte group_size_x: u6L,
+;							byte group_size_y: u6H,
+;							word grouped_npc: u5,
+;							out word grouped_npc_x: u1,
+;							out word grouped_npc_y: u2)
+;==================================================
+calculate_grouped_npc_location:
+
+	lda u3L
+	bne :+
+
+	; flipped in neither direction
 	; add the relx and rely from the grouped NPC
 	clc
 	ldy #GroupedNpc::relx
@@ -361,22 +484,109 @@ update_npc_group:
 	lda #0
 	adc u2H
 	sta u2H
+	jmp @return
 
-	; set X to the npc index
-	phx							; store the old X on the stack
-	ldy #GroupedNpc::index
+:
+
+	bit #$01						; flipped horizontally only
+	beq :+
+	pha								; push A to check for vertical flip later
+
+	; add the group size
+	clc
+	lda u1L
+	adc u6L
+	sta u1L
+	lda u1H
+	adc #0
+	sta u1H
+
+	; subtract the relative position
+	sec
+	lda u1L
+	ldy #GroupedNpc::relx
+	sbc (u5),y
+	sta u1L
+	lda u1H
+	sbc #0
+	sta u1H
+
+	; subtract the NPC size
+	sec
+	lda u1L
+	ldy #GroupedNpc::sizex
+	sbc(u5),y
+	sta u1L
+	lda u1H
+	sbc #0
+	sta u1H
+
+	; check if we need to flip vertically as well
+	pla
+	bit #$02						; flipped vertically only
+	bne :+
+
+	; add rely
+	clc
+	ldy #GroupedNpc::rely
 	lda (u5),y
-	tax
+	adc u2L
+	sta u2L
+	lda #0
+	adc u2H
+	sta u2H
+	bra @return
 
-	; with all calculations done, update the NPC itself
-	jsr set_npc_map_location
+:
+	pha
+	; add the group size
+	clc
+	lda u2L
+	adc u6H
+	sta u2L
+	lda u2H
+	adc #0
+	sta u2H
 
-	plx							; restore the old X
-	cpx #0
-	bne @npc_loop
-@end_npc_loop:
+	; subtract the relative position
+	sec
+	lda u2L
+	ldy #GroupedNpc::rely
+	sbc (u5),y
+	sta u2L
+	lda u2H
+	sbc #0
+	sta u2H
+
+	; subtract the NPC size
+	sec
+	lda u2L
+	ldy #GroupedNpc::sizey
+	sbc(u5),y
+	sta u2L
+	lda u2H
+	sbc #0
+	sta u2H
+
+	pla
+	bit #$01
+	bne @return					; this means we already flipped horizontally
+
+	; add relx
+	clc
+	ldy #GroupedNpc::relx
+	lda (u5),y
+	adc u1L
+	sta u1L
+	lda #0
+	adc u1H
+	sta u1H
+	bra @return
+
+	; TODO calculate flipped vertically
 
 @return:
+
 	rts
 
 ;==================================================
@@ -387,7 +597,7 @@ update_npc_group:
 ;
 ; void calculate_npc_group_address(
 ;							byte npc_group_index: x,
-;							out byte address: u0)
+;							out word address: u0)
 ;==================================================
 calculate_npc_group_address:
 

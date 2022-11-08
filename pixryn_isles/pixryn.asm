@@ -368,6 +368,10 @@ load_pixryn_npcs:
 	pla					; pull path index
 	jsr add_stop_to_npc_path
 
+	; ldx ship_npc_group
+	; lda #%00000000
+	; jsr set_npc_group_flip
+
 	; example clone
 	; lda #70
 	; ; x should already be the propeller

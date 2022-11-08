@@ -267,6 +267,54 @@ set_npc_map_location:
 	rts
 
 ;==================================================
+; set_npc_map_location_depth_and_flip
+;
+; Sets the NPCs location on the map.
+;
+; void set_npc_map_location_depth_and_flip(byte npc_index: x,
+;							word mapx: u1,
+;							word mapy: u2,
+;							word mapy: u3L)
+;==================================================
+set_npc_map_location_depth_and_flip:
+
+	; stash u0
+	lda u0H
+	pha
+	lda u0L
+	pha
+
+	jsr calculate_npc_address
+
+	lda u1L
+	ldy #Npc::mapx
+	sta (u0),y
+	lda u1H
+	ldy #Npc::mapx+1
+	sta (u0),y
+
+	lda u2L
+	ldy #Npc::mapy
+	sta (u0),y
+	lda u2H
+	ldy #Npc::mapy+1
+	sta (u0),y
+
+	ldy #Npc::depth_and_flip
+	lda (u0),y					; retain depth value
+	and #%11111100
+	ora u3L
+	sta (u0),y
+
+	; restore u0
+	pla
+	sta u0L
+	pla
+	sta u0H
+
+	rts
+
+;==================================================
 ; set_npc_tiles
 ;
 ; Loads and sets the tiles for an NPC
