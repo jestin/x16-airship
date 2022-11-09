@@ -588,8 +588,6 @@ calculate_grouped_npc_location:
 	sta u1H
 	bra @return
 
-	; TODO calculate flipped vertically
-
 @return:
 
 	rts
