@@ -179,13 +179,15 @@ char_to_sprite_address:
 	rts
 
 ;==================================================
-; show_message
+; load_message
 ;
-; Shows a message address to the user
+; Loads a message from the message bank into a
+; string pointer
 ;
-; void show_message(byte message_index: A)
+; void load_message(byte message_index: A
+;						out word string_address: u0)
 ;==================================================
-show_message:
+load_message:
 
 	; move A to a word in case it rolls over when doubled
 	sta u1L
@@ -214,11 +216,7 @@ show_message:
 	lda (u1),y
 	sta u0H
 
-	; load the other draw_string parameters
-	LoadW u1, 20
-	LoadW u2, 220
-	LoadW u3, message_sprites
-	jsr draw_string					; draw message text
+	; u0 now contains a pointer to the string
 
 	rts
 
@@ -231,7 +229,13 @@ show_message:
 ; void captured_message(byte message: A)
 ;==================================================
 captured_message:
-	jsr show_message
+	jsr load_message
+
+	; load the other draw_string parameters
+	LoadW u1, 20
+	LoadW u2, 220
+	LoadW u3, message_sprites
+	jsr draw_string					; draw message text
 
 	lda player_status				; set the player status to restrained and reading
 	ora #%00000011
