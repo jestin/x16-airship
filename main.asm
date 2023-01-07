@@ -29,6 +29,13 @@ loading_text:			.literal "Loading...", $00
 
 ; vsync trigger for running the game loop
 vsync_trigger:		.res 1
+line_trigger:		.res 1
+spr_trigger:		.res 1
+
+start_dialog:		.res 1
+dialog_top = 100
+dialog_bottom = 380
+
 default_irq:		.res 2
 
 ; 256 repeating ticks
@@ -175,6 +182,8 @@ main:
 mainloop:
 	wai
 	jsr check_vsync
+	jsr check_line
+	jsr check_sprite
 	jmp mainloop  ; loop forever
 
 	rts
@@ -206,11 +215,35 @@ handle_irq:
 	; check for VSYNC
 	lda veraisr
 	and #$01
-	beq @return
+	beq :+
 	sta vsync_trigger
 	; clear vera irq flag
 	sta veraisr
-
+	bra @return
+:
+	; check for raster line
+	lda veraisr
+	and #$02
+	beq :+
+	sta line_trigger
+	; clear vera irq flag
+	sta veraisr
+	; return from the IRQ manually
+	ply
+	plx
+	pla
+	rti
+	; end of line IRQ
+:
+	; check for sprite
+	lda veraisr
+	and #$04
+	beq :+
+	sta spr_trigger
+	; clear vera irq flag
+	sta veraisr
+	bra @return
+:
 @return:
 	jmp (default_irq)
 
@@ -223,6 +256,18 @@ check_vsync:
 
 	; VSYNC has occurred, handle
 
+	lda player_status
+	bit #%00000100		; showing dialog
+	beq :+
+
+	; in dialog mode so set up line interrupt
+	lda #<(dialog_top)
+	sta verairqlo
+	lda #$3 | ((>dialog_top) << 7)
+	sta veraien
+	lda #1
+	sta start_dialog
+:
 	inc tickcount
 
 	; Manually push the address of the jmp to the stack to simulate jsr
@@ -242,4 +287,55 @@ check_vsync:
 
 @return:
 	stz vsync_trigger
+	rts
+
+;==================================================
+; check_line
+;==================================================
+check_line:
+	lda line_trigger
+	beq @return
+
+	; check if we are at the start of the dialog or end
+	lda start_dialog
+	beq :+
+	; start of the dialog
+
+	; set video mode
+	lda #%01000001		; turn off layers while loading (leave sprites)
+	jsr set_dcvideo
+
+	; set the next line interrupt at the end of the dialog
+	lda #<(dialog_bottom)
+	sta verairqlo
+	lda veraien
+	ora #((>dialog_bottom) << 7)
+	sta veraien
+
+	stz start_dialog
+	bra :++
+:
+	; end of the dialog
+	; set video mode
+	lda #%01110001		; turn off layers while loading (leave sprites)
+	jsr set_dcvideo
+
+	lda veraien
+	and #%11111101		; disable line interrupt
+	sta veraien
+:
+
+@return:
+	stz line_trigger
+	rts
+
+;==================================================
+; check_sprite
+;==================================================
+check_sprite:
+	lda spr_trigger
+	beq @return
+
+@return:
+	stz spr_trigger
 	rts

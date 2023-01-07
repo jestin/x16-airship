@@ -235,10 +235,33 @@ captured_message:
 	LoadW u1, 20
 	LoadW u2, 220
 	LoadW u3, message_sprites
-	jsr draw_string					; draw message text
+	jsr draw_string			; draw message text
 
-	lda player_status				; set the player status to restrained and reading
+	lda player_status		; set the player status to restrained and reading
 	ora #%00000011
+	sta player_status
+
+	rts
+
+;==================================================
+; message_dialog
+;
+; Shows a message in the center of the screen as a
+; dialog box
+;
+; void message_dialog (byte message: A)
+;==================================================
+message_dialog:
+	jsr load_message
+
+	; load the other draw_string parameters
+	LoadW u1, 70
+	LoadW u2, 120
+	LoadW u3, message_sprites
+	jsr draw_string			; draw message text
+
+	lda player_status		; set the player status to restrained and reading a dialog
+	ora #%00000111
 	sta player_status
 
 	rts

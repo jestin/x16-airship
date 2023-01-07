@@ -16,6 +16,12 @@ CONTROL_ASM = 1
 ;==================================================
 character_overworld_control:
 
+	; check if they are viewing a dialog
+	lda player_status
+	bit #%00000010
+	beq @return
+	jsr dialog_control
+
 	; check if they are reading message text
 	lda player_status
 	bit #%00000010
@@ -74,6 +80,36 @@ reading_message_control:
 
 	lda player_status
 	and #%11111100
+	sta player_status
+
+	; disable message sprites
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
+
+@return:
+	rts
+
+;==================================================
+; dialog_control
+;
+; Handles the player's UI choices while reading
+; text from a dialog
+;
+; void dialog_control()
+;==================================================
+dialog_control:
+
+	; check if the button was pushed
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	bne @return
+
+	; here we need to turn off the sprites in the message and allow the user to move again
+
+	lda player_status
+	and #%11111000
 	sta player_status
 
 	; disable message sprites
