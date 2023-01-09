@@ -41,6 +41,7 @@ inc_next_char_sprite:
 ; 					word sprite_array: u3)
 ;==================================================
 draw_string:
+	phx
 
 @loop:
 	lda (u0)
@@ -85,6 +86,7 @@ draw_string:
 	sta (u3)
 
 @return:
+	plx
 	rts
 
 ;==================================================
@@ -188,6 +190,7 @@ char_to_sprite_address:
 ;						out word string_address: u0)
 ;==================================================
 load_message:
+	pha
 
 	; move A to a word in case it rolls over when doubled
 	sta u1L
@@ -218,6 +221,7 @@ load_message:
 
 	; u0 now contains a pointer to the string
 
+	pla
 	rts
 
 ;==================================================
@@ -249,16 +253,59 @@ captured_message:
 ; Shows a message in the center of the screen as a
 ; dialog box
 ;
-; void message_dialog (byte message: A)
+; void message_dialog (byte message: A,
+;						byte messages_per_screen: X,
+;						byte screens: Y)
 ;==================================================
 message_dialog:
+	pha
+
+	; clear dialog map
+	lda #0
+	sta veractl
+	lda #<(vram_dialog_map >> 16) | $10
+	sta verahi
+	lda #<(vram_dialog_map >> 8)
+	sta veramid
+	lda #<(vram_dialog_map)
+	sta veralo
+
+	ldy #$a
+@clear_loop:
+	ldx #128
+@page_loop:
+	lda #0
+	sta veradat
+	stz veradat				; no offset, flips, or high bit
+	dex
+	bne @page_loop
+	dey
+	bne @clear_loop
+
+	; the text is now cleared
+	pla
 	jsr load_message
 
-	; load the other draw_string parameters
-	LoadW u1, 70
-	LoadW u2, 120
-	LoadW u3, message_sprites
-	jsr draw_string			; draw message text
+	; load a single line (temporary test)
+	lda #0
+	sta veractl
+	lda #<(vram_dialog_map >> 16) | $20
+	sta verahi
+	lda #<(vram_dialog_map >> 8)
+	sta veramid
+	lda #<(vram_dialog_map)
+	sta veralo
+
+	ldy #0
+@write_line_loop_start:
+	lda (u0),y
+	beq @write_line_loop_end
+	sec
+	sbc #$20
+	sta veradat
+	iny
+	bra @write_line_loop_start
+@write_line_loop_end:
 
 	lda player_status		; set the player status to restrained and reading a dialog
 	ora #%00000111

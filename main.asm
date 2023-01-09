@@ -298,12 +298,38 @@ check_line:
 
 	; check if we are at the start of the dialog or end
 	lda start_dialog
-	beq :+
+	beq @end_dialog
+
 	; start of the dialog
 
 	; set video mode
-	lda #%01000001		; turn off layers while loading (leave sprites)
+	lda #%00010001
 	jsr set_dcvideo
+
+	; set the l0 tile mode	
+	lda #%00000010 	; height (2-bits) - 0 (32 tiles)
+					; width (2-bits) - 0 (32 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 2 (4bpp)
+	sta veral0config
+
+	; set the tile map base address
+	lda #<(vram_dialog_map >> 9)
+	sta veral0mapbase
+
+	lda #(<(vram_charset_sprites >> 9) | (0 << 1) | 0)
+								;  height    |  width
+	sta veral0tilebase
+
+	stz veral0hscrolllo
+	stz veral0hscrollhi
+	lda #(256-(dialog_top/2))
+	sta veral0vscrolllo
+	stz veral0vscrollhi
+
+	lda #51				; use a scale that fits exactly 32 characters on the screen
+	sta veradchscale
 
 	; set the next line interrupt at the end of the dialog
 	lda #<(dialog_bottom)
@@ -313,17 +339,41 @@ check_line:
 	sta veraien
 
 	stz start_dialog
-	bra :++
-:
+	bra @return
+
+@end_dialog:
 	; end of the dialog
+
 	; set video mode
-	lda #%01110001		; turn off layers while loading (leave sprites)
+	lda #%01110001
 	jsr set_dcvideo
+
+	; set the l0 tile mode	
+	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
+					; width (2-bits) - 2 (128 tiles
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
+
+	; set the l0 tile map base address
+	lda #<(vram_l0_map_data >> 9)
+	sta veral0mapbase
+
+ 	; set the tile base address
+	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
+								;  height    |  width
+	sta veral0tilebase
+
+	lda #1
+	jsr apply_scroll_offsets
+
+	lda #64
+	sta veradchscale
 
 	lda veraien
 	and #%11111101		; disable line interrupt
 	sta veraien
-:
 
 @return:
 	stz line_trigger

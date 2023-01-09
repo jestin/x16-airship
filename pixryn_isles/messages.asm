@@ -21,6 +21,11 @@
 .word locked_door
 .word wheres_grandma
 .word dirigible_shop_sign
+.word welcome_1
+.word welcome_2
+.word welcome_3
+.word welcome_4
+.word welcome_5
 
 campfire_sign:					.literal "Come sit with us", $00
 home_sign:						.literal "Welcome home!", $00
@@ -35,3 +40,14 @@ lock_clicks:					.literal "A lock clicks behind you", $00
 locked_door:					.literal "The door is locked", $00
 wheres_grandma:					.literal "Have you seen Grandma?", $00
 dirigible_shop_sign:			.literal "Dagnol's New and Used Dirigibles", $00
+
+; dialogs
+
+welcome_1:						.literal "Welcome to the Pixryn Islands!", $00
+welcome_2:						.literal "This archipelago is home to", $00
+welcome_3:						.literal "some of the best airship", $00
+welcome_4:						.literal "makers and mechanics in the", $00
+welcome_5:						.literal "world.  The residents of", $00
+welcome_6:						.literal "Pixryn rely on airship travel", $00
+welcome_7:						.literal "to live and work in the sunny", $00
+welcome_8:						.literal "island paradise.", $00
