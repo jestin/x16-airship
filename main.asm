@@ -12,6 +12,7 @@
 .include "vram.inc"
 .include "sprites.inc"
 .include "resources.inc"
+.include "interrupts.asm"
 .include "video.asm"
 .include "text.asm"
 .include "title.asm"
@@ -26,15 +27,6 @@
 loading_text:			.literal "Loading...", $00
 
 .segment "BSS"
-
-; vsync trigger for running the game loop
-vsync_trigger:		.res 1
-line_trigger:		.res 1
-spr_trigger:		.res 1
-
-start_dialog:		.res 1
-dialog_top = 100
-dialog_bottom = 380
 
 default_irq:		.res 2
 
@@ -181,9 +173,12 @@ main:
 ;==================================================
 mainloop:
 	wai
+
+	; check which type of interrupt occurred
 	jsr check_vsync
 	jsr check_line
 	jsr check_sprite
+
 	jmp mainloop  ; loop forever
 
 	rts
@@ -193,10 +188,14 @@ mainloop:
 ; Initializes interrupt vector
 ;==================================================
 init_irq:
+
+	; backup the default interrupt vector
 	lda IRQVec
 	sta default_irq
 	lda IRQVec+1
 	sta default_irq+1
+
+	; replace default vector with custom one
 	sei
 	lda #<handle_irq
 	sta IRQVec
@@ -205,6 +204,7 @@ init_irq:
 	lda #$01				; set vera to only interrupt on vsync
 	sta veraien
 	cli
+
 	rts
 
 ;==================================================
@@ -215,177 +215,37 @@ handle_irq:
 	; check for VSYNC
 	lda veraisr
 	and #$01
-	beq :+
+	beq @raster_line
 	sta vsync_trigger
 	; clear vera irq flag
 	sta veraisr
 	bra @return
-:
+
+@raster_line:
 	; check for raster line
 	lda veraisr
 	and #$02
-	beq :+
+	beq @sprite_collision
 	sta line_trigger
 	; clear vera irq flag
 	sta veraisr
-	; return from the IRQ manually
+	; return from the IRQ manually because the default_irq shouldn't be called
+	; on raster line interrupts
 	ply
 	plx
 	pla
 	rti
 	; end of line IRQ
-:
+
+@sprite_collision:
 	; check for sprite
 	lda veraisr
 	and #$04
-	beq :+
+	beq @return
 	sta spr_trigger
 	; clear vera irq flag
 	sta veraisr
 	bra @return
-:
+
 @return:
 	jmp (default_irq)
-
-;==================================================
-; check_vsync
-;==================================================
-check_vsync:
-	lda vsync_trigger
-	beq @return
-
-	; VSYNC has occurred, handle
-
-	lda player_status
-	bit #%00000100		; showing dialog
-	beq :+
-
-	; in dialog mode so set up line interrupt
-	lda #<(dialog_top)
-	sta verairqlo
-	lda #$3 | ((>dialog_top) << 7)
-	sta veraien
-	lda #1
-	sta start_dialog
-:
-	inc tickcount
-
-	; Manually push the address of the jmp to the stack to simulate jsr
-	; instruction.
-	; NOTE:  Due to an ancient 6502 bug, we need to make sure that tick_fn
-	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
-	; sooner or later.  When it does, just fix by putting in a nop somewhere to
-	; bump the address foward.
-	lda #>(@jmp_tick_return)
-	pha
-	lda #<(@jmp_tick_return)
-	pha
-	jmp (tick_fn)				; jump to whatever the current screen defines
-								; as the tick handler
-@jmp_tick_return:
-	nop
-
-@return:
-	stz vsync_trigger
-	rts
-
-;==================================================
-; check_line
-;==================================================
-check_line:
-	lda line_trigger
-	beq @return
-
-	; check if we are at the start of the dialog or end
-	lda start_dialog
-	beq @end_dialog
-
-	; start of the dialog
-
-	; set video mode
-	lda #%00010001
-	jsr set_dcvideo
-
-	; set the l0 tile mode	
-	lda #%00000010 	; height (2-bits) - 0 (32 tiles)
-					; width (2-bits) - 0 (32 tiles
-					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 2 (4bpp)
-	sta veral0config
-
-	; set the tile map base address
-	lda #<(vram_dialog_map >> 9)
-	sta veral0mapbase
-
-	lda #(<(vram_charset_sprites >> 9) | (0 << 1) | 0)
-								;  height    |  width
-	sta veral0tilebase
-
-	stz veral0hscrolllo
-	stz veral0hscrollhi
-	lda #(256-(dialog_top/2))
-	sta veral0vscrolllo
-	stz veral0vscrollhi
-
-	lda #51				; use a scale that fits exactly 32 characters on the screen
-	sta veradchscale
-
-	; set the next line interrupt at the end of the dialog
-	lda #<(dialog_bottom)
-	sta verairqlo
-	lda veraien
-	ora #((>dialog_bottom) << 7)
-	sta veraien
-
-	stz start_dialog
-	bra @return
-
-@end_dialog:
-	; end of the dialog
-
-	; set video mode
-	lda #%01110001
-	jsr set_dcvideo
-
-	; set the l0 tile mode	
-	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
-					; width (2-bits) - 2 (128 tiles
-					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 3 (8bpp)
-	sta veral0config
-
-	; set the l0 tile map base address
-	lda #<(vram_l0_map_data >> 9)
-	sta veral0mapbase
-
- 	; set the tile base address
-	lda #(<(vram_tile_data >> 9) | (1 << 1) | 1)
-								;  height    |  width
-	sta veral0tilebase
-
-	lda #1
-	jsr apply_scroll_offsets
-
-	lda #64
-	sta veradchscale
-
-	lda veraien
-	and #%11111101		; disable line interrupt
-	sta veraien
-
-@return:
-	stz line_trigger
-	rts
-
-;==================================================
-; check_sprite
-;==================================================
-check_sprite:
-	lda spr_trigger
-	beq @return
-
-@return:
-	stz spr_trigger
-	rts
