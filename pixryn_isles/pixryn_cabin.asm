@@ -130,6 +130,7 @@ load_pixryn_cabin:
 	bne :+
 
 	jsr exit_cabin
+	bra @return
 :
 
 	lda u0L
