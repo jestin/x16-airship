@@ -26,6 +26,9 @@
 .word welcome_3
 .word welcome_4
 .word welcome_5
+.word welcome_6
+.word welcome_7
+.word welcome_8
 
 campfire_sign:					.literal "Come sit with us", $00
 home_sign:						.literal "Welcome home!", $00
@@ -43,11 +46,11 @@ dirigible_shop_sign:			.literal "Dagnol's New and Used Dirigibles", $00
 
 ; dialogs
 
-welcome_1:						.literal "Welcome to the Pixryn Islands!", $00
-welcome_2:						.literal "This archipelago is home to", $00
-welcome_3:						.literal "some of the best airship", $00
-welcome_4:						.literal "makers and mechanics in the", $00
+welcome_1:						.literal "Welcome to the Pixryn", $00
+welcome_2:						.literal "Islands! This archipelago", $00
+welcome_3:						.literal "is home to some of the best", $00
+welcome_4:						.literal "airship mechanics in the", $00
 welcome_5:						.literal "world.  The residents of", $00
-welcome_6:						.literal "Pixryn rely on airship travel", $00
-welcome_7:						.literal "to live and work in the sunny", $00
-welcome_8:						.literal "island paradise.", $00
+welcome_6:						.literal "Pixryn rely on airship", $00
+welcome_7:						.literal "travel to live and work in", $00
+welcome_8:						.literal "the sunny island paradise!", $00

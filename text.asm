@@ -259,6 +259,7 @@ captured_message:
 ;==================================================
 message_dialog:
 	pha
+	phx
 
 	; clear dialog map
 	lda #0
@@ -283,29 +284,60 @@ message_dialog:
 	bne @clear_loop
 
 	; the text is now cleared
-	pla
-	jsr load_message
 
-	; load a single line (temporary test)
+	plx
+	pla
+	sta u3L
+
+@line_loop:
+	; decrement X first so that the first line will be 0 not 1
+	dex
+
+	LoadW u2, vram_dialog_map
+
 	lda #0
 	sta veractl
+
+	; we assume that no line will ever increment the hi vram address
 	lda #<(vram_dialog_map >> 16) | $20
 	sta verahi
-	lda #<(vram_dialog_map >> 8)
-	sta veramid
-	lda #<(vram_dialog_map)
+
+	clc
+	stx u1L
+	stz u1H
+	AslW u1
+	AslW u1
+	AslW u1
+	AslW u1
+	AslW u1
+	AslW u1
+	AslW u1
+	lda u1L
+	adc u2L
 	sta veralo
+	lda u1H
+	adc u2H
+	sta veramid
+
+	txa						; add X to A for the correct message
+	clc
+	adc u3L
+	jsr load_message
 
 	ldy #0
-@write_line_loop_start:
+@char_loop:
 	lda (u0),y
-	beq @write_line_loop_end
+	beq @end_char_loop
 	sec
 	sbc #$20
 	sta veradat
 	iny
-	bra @write_line_loop_start
-@write_line_loop_end:
+	bra @char_loop
+@end_char_loop:
+
+	cpx #0
+	bne @line_loop
+@end_line_loop:
 
 	lda player_status		; set the player status to restrained and reading a dialog
 	ora #%00000111

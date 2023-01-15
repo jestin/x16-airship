@@ -111,8 +111,10 @@ button_interactions:
 	lda u0L
 	cmp #$11
 	bne :+
-	lda #1					; home sign
-	jsr captured_message
+	lda #13					; home sign
+	ldx #8
+	ldy #1
+	jsr message_dialog
 	lda #1
 	rts
 :

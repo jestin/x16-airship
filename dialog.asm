@@ -35,7 +35,8 @@ set_vera_dialog_top:
 								;  height    |  width
 	sta veral0tilebase
 
-	stz veral0hscrolllo
+	lda #$ef
+	sta veral0hscrolllo
 	stz veral0hscrollhi
 	lda #(256-(dialog_top/2))
 	sta veral0vscrolllo
