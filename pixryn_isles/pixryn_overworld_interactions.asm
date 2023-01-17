@@ -112,7 +112,7 @@ button_interactions:
 	cmp #$11
 	bne :+
 	lda #13					; home sign
-	ldx #15
+	ldx #8
 	ldy #1
 	jsr message_dialog
 	lda #1

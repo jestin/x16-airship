@@ -311,6 +311,7 @@ message_dialog:
 	AslW u1
 	AslW u1
 	AslW u1
+	AslW u1
 	lda u1L
 	adc u2L
 	sta veralo
