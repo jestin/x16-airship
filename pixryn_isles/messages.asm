@@ -29,6 +29,13 @@
 .word welcome_6
 .word welcome_7
 .word welcome_8
+.word welcome_9
+.word welcome_10
+.word welcome_11
+.word welcome_12
+.word welcome_13
+.word welcome_14
+.word welcome_15
 
 campfire_sign:					.literal "Come sit with us", $00
 home_sign:						.literal "Welcome home!", $00
@@ -46,11 +53,18 @@ dirigible_shop_sign:			.literal "Dagnol's New and Used Dirigibles", $00
 
 ; dialogs
 
-welcome_1:						.literal "Welcome to the Pixryn", $00
-welcome_2:						.literal "Islands! This archipelago", $00
-welcome_3:						.literal "is home to some of the best", $00
-welcome_4:						.literal "airship mechanics in the", $00
-welcome_5:						.literal "world.  The residents of", $00
-welcome_6:						.literal "Pixryn rely on airship", $00
-welcome_7:						.literal "travel to live and work in", $00
-welcome_8:						.literal "the sunny island paradise!", $00
+welcome_1:						.literal "   Welcome to the Pixryn", $00
+welcome_2:						.literal "", $00
+welcome_3:						.literal " Islands! This archipelago", $00
+welcome_4:						.literal "", $00
+welcome_5:						.literal "is home to some of the best", $00
+welcome_6:						.literal "", $00
+welcome_7:						.literal " airship mechanics in the", $00
+welcome_8:						.literal "", $00
+welcome_9:						.literal " world.  The residents of", $00
+welcome_10:						.literal "", $00
+welcome_11:						.literal "  Pixryn rely on airship", $00
+welcome_12:						.literal "", $00
+welcome_13:						.literal "travel to live and work in", $00
+welcome_14:						.literal "", $00
+welcome_15:						.literal "the sunny island paradise!", $00

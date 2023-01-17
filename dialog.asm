@@ -38,7 +38,9 @@ set_vera_dialog_top:
 	lda #$ef
 	sta veral0hscrolllo
 	stz veral0hscrollhi
-	lda #(256-(dialog_top/2))
+
+	; scroll down half dialog_top (because of the 2x vscale) plus another half-line
+	lda #((256-(dialog_top/2)) - 4)
 	sta veral0vscrolllo
 	stz veral0vscrollhi
 
