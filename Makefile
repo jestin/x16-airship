@@ -62,7 +62,9 @@ VIMASK.BIN: visibility_mask.tmx
 
 run: all resources
 	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 512 -debug -joy1 -abufs 64)
-	# (cd bin; box16 -prg $(PROG) -run -scale 2 -ram 512 -abufs 64)
+
+box16:
+	(cd bin; box16 -prg $(PROG) -run -scale 2 -ram 512 -abufs 64)
 
 card.img: all resources clean_card
 	truncate -s 100M card.img
