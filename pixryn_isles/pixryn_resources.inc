@@ -97,8 +97,8 @@ pixryn_cave_music_file: .literal "PICAVE.ZSM"
 end_pixryn_cave_music_file:
 
 ; NPC Resources
-testnpc_file: .literal "TESTNPC.BIN"
-end_testnpc_file:
+cousin_file: .literal "COUSIN.BIN"
+end_cousin_file:
 
 ship_file: .literal "SHIP.BIN"
 end_ship_file:

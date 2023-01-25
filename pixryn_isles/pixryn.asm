@@ -233,8 +233,8 @@ load_pixryn_npcs:
 	; test NPC
 	lda #97
 	jsr add_npc
-	LoadW u0, testnpc_file
-	LoadW u1, end_testnpc_file-testnpc_file
+	LoadW u0, cousin_file
+	LoadW u1, end_cousin_file-cousin_file
 	lda #%00111111
 	sta u2L
 	lda #%01010000		; 16x16
