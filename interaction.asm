@@ -31,8 +31,6 @@ check_interactions:
 	lda (u0)
 	sta interaction_id
 
-	; now u0L holds the value, itself rather than the address
-
 @return:
 	rts
 

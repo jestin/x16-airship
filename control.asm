@@ -107,11 +107,21 @@ dialog_control:
 	cmp #%10000000				; checks if the button is currently down, and wasn't before
 	bne @return
 
-	; here we need to turn off the sprites in the message and allow the user to move again
+	; advance the page and check if it is already on the last page
+	inc cur_dialog_page
+	lda cur_dialog_page
+	cmp dialog_pages
+	bcc @advance_page
 
 	lda player_status
 	and #%11111010
 	sta player_status
+	bra @return
+
+@advance_page:
+	jsr clear_dialog_message
+	ldx messages_per_dialog_page
+	jsr display_dialog_page
 
 @return:
 	rts

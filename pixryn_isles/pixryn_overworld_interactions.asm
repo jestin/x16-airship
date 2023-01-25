@@ -113,7 +113,7 @@ button_interactions:
 	bne :+
 	lda #13					; home sign
 	ldx #8
-	ldy #1
+	ldy #2
 	jsr message_dialog
 	lda #1
 	rts

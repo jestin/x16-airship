@@ -29,6 +29,15 @@
 .word welcome_6
 .word welcome_7
 .word welcome_8
+.word welcome_9
+.word welcome_10
+.word welcome_11
+.word welcome_12
+.word welcome_13
+.word welcome_14
+.word welcome_15
+.word welcome_16
+
 
 campfire_sign:					.literal "Come sit with us", $00
 home_sign:						.literal "Welcome home!", $00
@@ -54,3 +63,12 @@ welcome_5:						.literal " world.  The residents of", $00
 welcome_6:						.literal "  Pixryn rely on airship", $00
 welcome_7:						.literal "travel to live and work in", $00
 welcome_8:						.literal "the sunny island paradise!", $00
+
+welcome_9:						.literal "  Everyone born in Pixryn", $00
+welcome_10:						.literal "  dreams of buying a ship,", $00
+welcome_11:						.literal "hiring a crew, and sailing", $00
+welcome_12:						.literal " into the sky to explore", $00
+welcome_13:						.literal "the larger world! Ask around", $00
+welcome_14:						.literal "to see if anyone is selling", $00
+welcome_15:						.literal " an airship. Then you can", $00
+welcome_16:						.literal "   take to the skies!", $00

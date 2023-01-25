@@ -4,9 +4,13 @@ TEXT_INC = 1
 .segment "BSS"
 
 ; Store an array of sprites used for message text
-message_sprites:		.res 64
+message_sprites:			.res 64
+next_char_sprite:			.res 1
 
-next_char_sprite:		.res 1
+dialog_pages:				.res 1
+cur_dialog_page:			.res 1
+next_dialog_line:			.res 1
+messages_per_dialog_page:	.res 1
 
 .segment "CODE"
 
@@ -259,35 +263,37 @@ captured_message:
 ;==================================================
 message_dialog:
 	pha
-	phx
+	stx messages_per_dialog_page
 
-	; clear dialog map
-	lda #0
-	sta veractl
-	lda #<(vram_dialog_map >> 16) | $10
-	sta verahi
-	lda #<(vram_dialog_map >> 8)
-	sta veramid
-	lda #<(vram_dialog_map)
-	sta veralo
+	; store the total number of pages
+	sty dialog_pages
+	stz cur_dialog_page
 
-	ldy #$a
-@clear_loop:
-	ldx #128
-@page_loop:
-	lda #0
-	sta veradat
-	stz veradat				; no offset, flips, or high bit
-	dex
-	bne @page_loop
-	dey
-	bne @clear_loop
+	jsr clear_dialog_message
 
-	; the text is now cleared
-
-	plx
 	pla
-	sta u3L
+	ldx messages_per_dialog_page
+	sta next_dialog_line
+
+	jsr display_dialog_page
+
+	lda player_status		; set the player status to restrained and reading a dialog
+	ora #%00000101
+	sta player_status
+
+	rts
+
+;==================================================
+; display_dialog_page
+;
+; Clears the dialog message tile map
+;
+; void display_dialog_page(byte messages_per_screen: X)
+;==================================================
+display_dialog_page:
+
+	; loop counter
+	stz u3L
 
 @line_loop:
 	; decrement X first so that the first line will be 0 not 1
@@ -302,9 +308,10 @@ message_dialog:
 	lda #<(vram_dialog_map >> 16) | $20
 	sta verahi
 
-	clc
-	stx u1L
+	lda u3L
+	sta u1L
 	stz u1H
+	clc
 	AslW u1
 	AslW u1
 	AslW u1
@@ -319,9 +326,7 @@ message_dialog:
 	adc u2H
 	sta veramid
 
-	txa						; add X to A for the correct message
-	clc
-	adc u3L
+	lda next_dialog_line
 	jsr load_message
 
 	ldy #0
@@ -335,13 +340,42 @@ message_dialog:
 	bra @char_loop
 @end_char_loop:
 
+	inc u3L
+	inc next_dialog_line
 	cpx #0
 	bne @line_loop
 @end_line_loop:
 
-	lda player_status		; set the player status to restrained and reading a dialog
-	ora #%00000101
-	sta player_status
+	rts
+
+;==================================================
+; clear_dialog_message
+;
+; Clears the dialog message tile map
+;
+; void clear_dialog_message()
+;==================================================
+clear_dialog_message:
+	; clear dialog map
+	lda #0
+	sta veractl
+	lda #<(vram_dialog_map >> 16) | $10
+	sta verahi
+	lda #<(vram_dialog_map >> 8)
+	sta veramid
+	lda #<(vram_dialog_map)
+	sta veralo
+
+	ldy #$a
+@clear_loop:
+	ldx #128
+@page_loop:
+	stz veradat
+	stz veradat				; no offset, flips, or high bit
+	dex
+	bne @page_loop
+	dey
+	bne @clear_loop
 
 	rts
 
