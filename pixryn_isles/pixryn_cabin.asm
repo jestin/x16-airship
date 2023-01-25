@@ -111,7 +111,7 @@ load_pixryn_cabin:
 ;==================================================
 .proc pixryn_cabin_interaction_handler
 
-	lda u0L
+	lda interaction_id
 	cmp #0
 	beq @return
 
@@ -125,7 +125,7 @@ load_pixryn_cabin:
 ; these interactions only trigger when the user has pressed the b button on the tile
 @b_button_interactions:
 
-	lda u0L
+	lda interaction_id
 	cmp #1
 	bne :+
 
@@ -133,7 +133,7 @@ load_pixryn_cabin:
 	bra @return
 :
 
-	lda u0L
+	lda interaction_id
 	cmp #$10
 	bne :+
 

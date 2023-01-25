@@ -116,7 +116,7 @@ load_pixryn_tavern:
 ;==================================================
 .proc pixryn_tavern_interaction_handler
 
-	lda u0L
+	lda interaction_id
 	cmp #0
 	beq @return
 

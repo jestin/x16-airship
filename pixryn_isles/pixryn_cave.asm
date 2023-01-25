@@ -236,7 +236,7 @@ player_to_cabin_ladder:
 ;==================================================
 .proc pixryn_cave_interaction_handler
 
-	lda u0L
+	lda interaction_id
 	cmp #0
 	beq @return
 
@@ -255,28 +255,28 @@ player_to_cabin_ladder:
 ; these interactions only trigger when the user has pressed the b button on the tile
 @b_button_interactions:
 
-	lda u0L
+	lda interaction_id
 	cmp #$10
 	bne :+
 	lda #6		; cave entrance sign
 	jsr captured_message
 	bra @return
 :
-	lda u0L
+	lda interaction_id
 	cmp #$11
 	bne :+
 	lda #8		; nothing to see here
 	jsr captured_message
 	bra @return
 :
-	lda u0L
+	lda interaction_id
 	cmp #$12
 	bne :+
 	lda #7		; deliveries ahead sign
 	jsr captured_message
 	bra @return
 :
-	lda u0L
+	lda interaction_id
 	cmp #$13
 	bne :+
 	lda #5		; cabin ladder sign
@@ -286,7 +286,7 @@ player_to_cabin_ladder:
 @auto_interactions:
 :
 
-	lda u0L
+	lda interaction_id
 	cmp #$1
 	bne :+
 	jsr find_trapdoor_to_cabin
@@ -294,7 +294,7 @@ player_to_cabin_ladder:
 
 :
 
-	lda u0L
+	lda interaction_id
 	cmp #$2
 	bne :+
 	jsr find_trapdoor_to_field

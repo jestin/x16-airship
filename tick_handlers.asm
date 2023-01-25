@@ -64,6 +64,7 @@ character_overworld_tick:
 	jmp (interaction_fn)				; jump to whatever the current screen defines
 @jmp_interaction_return:
 	nop
+	stz interaction_id
 
 @return: 
 	rts

@@ -116,7 +116,7 @@ load_pixryn_dirigible_shop:
 ;==================================================
 .proc pixryn_dirigible_shop_interaction_handler
 
-	lda u0L
+	lda interaction_id
 	cmp #0
 	beq @return
 

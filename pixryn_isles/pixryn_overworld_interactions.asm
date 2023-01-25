@@ -31,7 +31,7 @@ PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 ; require the user to hit any other buttons
 @auto_interactions:
 
-	lda u0L
+	lda interaction_id
 	cmp #$7
 	bne :+
 	; jsr load_pixryn_tavern
@@ -55,28 +55,28 @@ PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 ;==================================================
 button_interactions:
 
-	lda u0L
+	lda interaction_id
 	cmp #$1
 	bne :+
 	jsr load_pixryn_tavern
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$2
 	bne :+
 	jsr load_pixryn_home
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$3
 	bne :+
 	jsr load_pixryn_dirigible_shop
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$4
 	bne :+
 	lda #10
@@ -84,7 +84,7 @@ button_interactions:
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$5
 	bne :+
 	lda #10
@@ -92,7 +92,7 @@ button_interactions:
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$6
 	bne :+
 	lda #10
@@ -100,7 +100,7 @@ button_interactions:
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$10
 	bne :+
 	lda #0					; campfire sign
@@ -108,7 +108,7 @@ button_interactions:
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$11
 	bne :+
 	lda #13					; home sign
@@ -118,27 +118,27 @@ button_interactions:
 	lda #1
 	rts
 :
-	lda u0L
+	lda interaction_id
 	cmp #$12
 	bne :+
 	lda #2					; tavern sign
 	jsr captured_message
 	bra :+
 :
-	lda u0L
+	lda interaction_id
 	cmp #$13
 	bne :+
 	jsr trapdoor_to_cave
 	bra :+
 :
-	lda u0L
+	lda interaction_id
 	cmp #$14
 	bne :+
 	lda #11					; where's Grandma?
 	jsr captured_message
 	bra :+
 :
-	lda u0L
+	lda interaction_id
 	cmp #$15
 	bne :+
 	lda #12					; where's Grandma?

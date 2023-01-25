@@ -18,16 +18,17 @@ character_overworld_control:
 
 	; check if they are viewing a dialog
 	lda player_status
-	bit #%00000010
-	beq @return
+	bit #%00000100
+	beq :+
 	jsr dialog_control
-
+	bra @return
+:
 	; check if they are reading message text
 	lda player_status
 	bit #%00000010
-	beq @return
+	beq :+
 	jsr reading_message_control
-
+:
 @return:
 	rts
 
@@ -109,12 +110,8 @@ dialog_control:
 	; here we need to turn off the sprites in the message and allow the user to move again
 
 	lda player_status
-	and #%11111000
+	and #%11111010
 	sta player_status
-
-	; disable message sprites
-	LoadW u0, message_sprites
-	jsr clear_text_sprites
 
 @return:
 	rts

@@ -6,7 +6,7 @@ PLAYER_ASM = 1
 ; a bitmask of player statuses:
 ; 0 - unable to move
 ; 1 - reading text
-; 2 - show dialog
+; 2 - reading dialog
 ; 3 -
 ; 4 -
 ; 5 -

@@ -340,7 +340,7 @@ message_dialog:
 @end_line_loop:
 
 	lda player_status		; set the player status to restrained and reading a dialog
-	ora #%00000111
+	ora #%00000101
 	sta player_status
 
 	rts

@@ -1,12 +1,16 @@
 .ifndef INTERACTION_ASM
 INTERACTION_ASM = 1
 
+.segment "BSS"
+
+interaction_id:		.res 1
+
 .segment "CODE"
 
 ;==================================================
 ; check_interactions
 ;
-; void check_interactions(out byte interaction_id: u0L)
+; void check_interactions(out byte interaction_id)
 ;==================================================
 check_interactions:
 
@@ -25,7 +29,7 @@ check_interactions:
 	; u0 now holds the address of the relevant tile on the interaction map
 
 	lda (u0)
-	sta u0L
+	sta interaction_id
 
 	; now u0L holds the value, itself rather than the address
 
