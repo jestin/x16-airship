@@ -1,6 +1,6 @@
 NAME = AIRSHIP
 TITLE = Take-to-the-Skies
-VERSION = 0.0.3
+VERSION = 0.0.4
 
 ASSEMBLER6502 = cl65
 INCLUDEDIR = 3rdParty/include/
