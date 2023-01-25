@@ -20,7 +20,6 @@
 .word lock_clicks
 .word locked_door
 .word wheres_grandma
-.word dirigible_shop_sign
 .word welcome_1
 .word welcome_2
 .word welcome_3
@@ -37,6 +36,11 @@
 .word welcome_14
 .word welcome_15
 .word welcome_16
+.word dagnols_sign_1
+.word dagnols_sign_2
+.word dagnols_sign_3
+.word dagnols_sign_4
+.word dagnols_sign_5
 
 
 campfire_sign:					.literal "Come sit with us", $00
@@ -51,7 +55,6 @@ nothing_here:					.literal "Nothing to see here", $00
 lock_clicks:					.literal "A lock clicks behind you", $00
 locked_door:					.literal "The door is locked", $00
 wheres_grandma:					.literal "Have you seen Grandma?", $00
-dirigible_shop_sign:			.literal "Dagnol's New and Used Dirigibles", $00
 
 ; dialogs
 
@@ -72,3 +75,9 @@ welcome_13:						.literal "the larger world! Ask around", $00
 welcome_14:						.literal "to see if anyone is selling", $00
 welcome_15:						.literal " an airship. Then you can", $00
 welcome_16:						.literal "   take to the skies!", $00
+
+dagnols_sign_1:					.literal "Welcome to Dagnol's New and", $00
+dagnols_sign_2:					.literal "    Used Dirigibles!", $00
+dagnols_sign_3:					.literal "", $00
+dagnols_sign_4:					.literal "    Trade-ins welcome!", $00
+dagnols_sign_5:					.literal "  All sales are final!!!", $00

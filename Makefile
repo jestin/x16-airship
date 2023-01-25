@@ -21,20 +21,27 @@ RESOURCES = CHARSET.BIN \
 			TIPAL.BIN \
 			VIMASK.BIN
 
-all: clean bin/$(PROG)
+all: clean submessages bin/$(PROG)
 
 bin/$(PROG): $(SOURCES) bin
 	$(ASSEMBLER6502) $(ASFLAGS) -o bin/$(PROG) $(MAIN) $(LIBS)
 
-SUBDIRS = pixryn_isles \
-		  akoko_mountains \
-		  sprites \
-		  music
+LEVELS = pixryn_isles \
+		 akoko_mountains
+
+SUBDIRS = sprites \
+		  music \
+		  $(LEVELS)
 
 subresources:
 	-for i in $(SUBDIRS); do \
 		echo "make resources in $$i..."; \
 		(cd $$i; make all); done
+
+submessages:
+	-for i in $(LEVELS); do \
+		echo "make messages in $$i..."; \
+		(cd $$i; make messages); done
 
 resources: subresources bin $(RESOURCES)
 	-for i in $(SUBDIRS); do \

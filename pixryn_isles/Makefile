@@ -31,7 +31,7 @@ RESOURCES = $(PREFIX)TILES.BIN \
 			$(PREFIX)CAVEINT.BIN \
 			$(PREFIX)PAL.BIN
 
-MESSAGES = $(PREFIX)MSG.BIN
+MESSAGES = $(PREFIX)MSG.BIN messages.inc
 
 MISC_ARTIFACTS = $(PREFIX)TILES.BIN.PAL
 
@@ -120,6 +120,9 @@ $(PREFIX)MSG.BIN: messages.asm
 	# cheap hack because I can't figure out how to remove a header from cl65 output
 	tail -c +13 temp.bin > $(PREFIX)MSG.BIN
 	rm temp.bin
+
+messages.inc: messages.asm
+	../tools/create_message_include.sh messages.asm $(PREFIX) > messages.inc
 
 
 resources: $(RESOURCES)

@@ -1,6 +1,8 @@
 .ifndef PIXRYN_OVERWORLD_INTERACTIONS_ASM
 PIXRYN_OVERWORLD_INTERACTIONS_ASM = 1
 
+.include "messages.inc"
+
 ;==================================================
 ; pixryn_overworld_interaction_handler
 ;
@@ -79,7 +81,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$4
 	bne :+
-	lda #10
+	lda #PI_locked_door
 	jsr captured_message
 	lda #1
 	rts
@@ -87,7 +89,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$5
 	bne :+
-	lda #10
+	lda #PI_locked_door
 	jsr captured_message
 	lda #1
 	rts
@@ -95,7 +97,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$6
 	bne :+
-	lda #10
+	lda #PI_locked_door
 	jsr captured_message
 	lda #1
 	rts
@@ -103,7 +105,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$10
 	bne :+
-	lda #0					; campfire sign
+	lda #PI_campfire_sign
 	jsr captured_message
 	lda #1
 	rts
@@ -111,7 +113,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$11
 	bne :+
-	lda #13					; home sign
+	lda #PI_welcome_1
 	ldx #8
 	ldy #2
 	jsr message_dialog
@@ -121,7 +123,7 @@ button_interactions:
 	lda interaction_id
 	cmp #$12
 	bne :+
-	lda #2					; tavern sign
+	lda #PI_tavern_sign
 	jsr captured_message
 	bra :+
 :
@@ -134,15 +136,17 @@ button_interactions:
 	lda interaction_id
 	cmp #$14
 	bne :+
-	lda #11					; where's Grandma?
+	lda #PI_wheres_grandma
 	jsr captured_message
 	bra :+
 :
 	lda interaction_id
 	cmp #$15
 	bne :+
-	lda #12					; where's Grandma?
-	jsr captured_message
+	lda #PI_dagnols_sign_1
+	ldx #5
+	ldy #1
+	jsr message_dialog
 	bra :+
 
 :	; end the b_button_interactions section with an unnamed label
@@ -163,7 +167,7 @@ fall_down_cave:
 	; player unpositioned
 	jsr pixryn_cave_tick_handler
 
-	lda #3
+	lda #PI_fell_down_cave
 	jsr captured_message
 
 @return:
@@ -183,7 +187,7 @@ trapdoor_to_cave:
 	; player unpositioned
 	jsr pixryn_cave_tick_handler
 
-	lda #4
+	lda #PI_found_a_trapdoor
 	jsr captured_message
 
 @return:

@@ -144,7 +144,7 @@ load_pixryn_cabin:
 	; player unpositioned
 	jsr pixryn_cave_tick_handler
 
-	lda #4
+	lda #PI_found_a_trapdoor
 	jsr captured_message
 :
 
@@ -168,7 +168,7 @@ exit_cabin:
 	; player unpositioned
 	jsr character_overworld_tick
 
-	lda #9
+	lda #PI_lock_clicks
 	jsr captured_message
 
 	rts

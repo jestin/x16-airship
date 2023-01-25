@@ -259,28 +259,28 @@ player_to_cabin_ladder:
 	lda interaction_id
 	cmp #$10
 	bne :+
-	lda #6		; cave entrance sign
+	lda #PI_cave_entrance_sign
 	jsr captured_message
 	bra @return
 :
 	lda interaction_id
 	cmp #$11
 	bne :+
-	lda #8		; nothing to see here
+	lda #PI_nothing_here
 	jsr captured_message
 	bra @return
 :
 	lda interaction_id
 	cmp #$12
 	bne :+
-	lda #7		; deliveries ahead sign
+	lda #PI_deliveries_ahead
 	jsr captured_message
 	bra @return
 :
 	lda interaction_id
 	cmp #$13
 	bne :+
-	lda #5		; cabin ladder sign
+	lda #PI_wipe_feet
 	jsr captured_message
 	bra @return
 

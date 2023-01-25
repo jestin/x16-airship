@@ -17,6 +17,9 @@ x16emu
 # other files
 *.tiled-session
 
+# generated code files
+messages.inc
+
 # dumps
 dump*.bin
 
