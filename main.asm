@@ -125,7 +125,7 @@ main:
 	sprstore 4
 	lda yplayer+1
 	sprstore 5
-	lda #%00000000	; Collision/Z-depth/vflip/hflip
+	lda #(%00001000 | player_sprite_collision_mask)
 	sprstore 6
 	lda #%01010000	; Height/Width/Paloffset
 	sprstore 7
@@ -201,9 +201,10 @@ init_irq:
 	sta IRQVec
 	lda #>handle_irq
 	sta IRQVec+1
+	cli
+
 	lda #$01				; set vera to only interrupt on vsync
 	sta veraien
-	cli
 
 	rts
 

@@ -32,7 +32,9 @@ check_vsync:
 	; in dialog mode so set up line interrupt
 	lda #<(dialog_top)
 	sta verairqlo
-	lda #$3 | ((>dialog_top) << 7)
+	lda veraien
+	and #$07
+	ora #$3 | ((>dialog_top) << 7)
 	sta veraien
 	lda #1
 	sta start_dialog
@@ -91,6 +93,10 @@ check_line:
 check_sprite:
 	lda spr_trigger
 	beq @return
+
+	lda player_status
+	ora #%00001000		; set player collision
+	sta player_status
 
 @return:
 	stz spr_trigger

@@ -276,7 +276,7 @@ load_akoko:
 
 	; set player sprite
 	ldx #player_sprite
-	lda #%00001000
+	lda #(%00001000 | player_sprite_collision_mask)
 	sprstore 6
 
 	; set video mode

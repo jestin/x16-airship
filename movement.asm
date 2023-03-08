@@ -353,6 +353,8 @@ set_scroll_offset:
 ; void move()
 ;==================================================
 move:
+
+@backup_previous:
 	; push the existing location variables to the stack, low first
 	MoveW xoff, prev_xoff
 	MoveW yoff, prev_yoff
@@ -424,13 +426,15 @@ move:
 	jsr set_active_tile
 	jsr check_collisions
 	cmp #0
-	bne @cap_player_x_lower
+	bne @position_set
 
 @restore_loc_cache:
 	MoveW prev_xoff, xoff
 	MoveW prev_yoff, yoff
 	MoveW prev_xplayer, xplayer
 	MoveW prev_yplayer, yplayer
+
+@position_set:
 
 @cap_player_x_lower:
 	lda xplayer+1

@@ -7,7 +7,7 @@ PLAYER_ASM = 1
 ; 0 - unable to move
 ; 1 - reading text
 ; 2 - reading dialog
-; 3 -
+; 3 - collision
 ; 4 -
 ; 5 -
 ; 6 -

@@ -45,6 +45,9 @@ load_pixryn:
 	; stop music
 	jsr stopmusic
 
+	lda #$05				; turn on vsync and sprite collisions interrupts
+	sta veraien
+
 @start_load:
 
 	; initialize map width and height
@@ -207,7 +210,7 @@ load_pixryn:
 
 	; set player sprite
 	ldx #player_sprite
-	lda #%00001000
+	lda #(%00001000 | player_sprite_collision_mask)
 	sprstore 6
 
 	; set video mode

@@ -8,5 +8,6 @@ char_sprite_end = 64
 ; so it can be positioned both in front and behind other sprites in the rendering
 ; order
 player_sprite = 96
+player_sprite_collision_mask = %00010000
 
 .endif ; SPRITES_INC
