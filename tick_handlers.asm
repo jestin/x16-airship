@@ -32,7 +32,7 @@ character_overworld_tick:
 
 	; check if player can move
 	lda player_status
-	bit #%00000001
+	bit #player_status_unable_to_move
 	bne @control
 
 	jsr animate_player

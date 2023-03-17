@@ -246,7 +246,7 @@ captured_message:
 	jsr draw_string			; draw message text
 
 	lda player_status		; set the player status to restrained and reading
-	ora #%00000011
+	ora #(player_status_reading_text | player_status_unable_to_move)
 	sta player_status
 
 	rts
@@ -278,7 +278,7 @@ message_dialog:
 	jsr display_dialog_page
 
 	lda player_status		; set the player status to restrained and reading a dialog
-	ora #%00000101
+	ora #(player_status_reading_dialog | player_status_unable_to_move)
 	sta player_status
 
 	rts

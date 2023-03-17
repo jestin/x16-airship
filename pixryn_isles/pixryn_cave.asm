@@ -120,7 +120,7 @@ pixryn_cave_tick_handler:
 
 	; check if player can move
 	lda player_status
-	bit #%00000001
+	bit #player_status_unable_to_move
 	bne @control
 
 	jsr animate_player

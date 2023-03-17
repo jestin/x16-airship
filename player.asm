@@ -14,6 +14,12 @@ PLAYER_ASM = 1
 ; 7 -
 player_status:		.res 1
 
+player_status_unable_to_move	= %00000001
+player_status_reading_text		= %00000010
+player_status_reading_dialog	= %00000100
+player_status_collision			= %00001000
+player_status_inventory_mode	= %00010000
+
 ; Other addresses
 
 player_file:		.res 2

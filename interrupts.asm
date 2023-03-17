@@ -26,7 +26,7 @@ check_vsync:
 	; VSYNC has occurred, handle
 
 	lda player_status
-	bit #%00000100		; showing dialog
+	bit #player_status_reading_dialog
 	beq :+
 
 	; in dialog mode so set up line interrupt
@@ -95,7 +95,7 @@ check_sprite:
 	beq @return
 
 	lda player_status
-	ora #%00001000		; set player collision
+	ora #player_status_collision	; set player collision
 	sta player_status
 
 @return:
