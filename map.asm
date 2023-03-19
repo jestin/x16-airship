@@ -3,9 +3,10 @@ MAP_ASM = 1
 
 .segment "BSS"
 
-map_id:		.res 1
-map_width:		.res 2
-map_height:		.res 2
+map_id:				.res 1
+map_width:			.res 2
+map_height:			.res 2
+map_scroll_layers:	.res 1
 
 .segment "CODE"
 

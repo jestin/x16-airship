@@ -41,6 +41,10 @@ load_akoko:
 	LoadW map_width, 1024
 	LoadW map_height, 2048
 
+	; set the scroll layers
+	lda #3
+	sta map_scroll_layers
+
 	LoadW u0, akoko_collision_map_file
 	LoadW u1, end_akoko_collision_map_file-akoko_collision_map_file
 	jsr load_collision_map

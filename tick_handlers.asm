@@ -40,7 +40,7 @@ character_overworld_tick:
 	jsr update_npc_paths
 	jsr update_npcs
 	jsr move
-	lda #3
+	lda map_scroll_layers
 	jsr apply_scroll_offsets
 	jsr set_player_tile
 	jsr check_interactions

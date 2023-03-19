@@ -31,6 +31,10 @@ load_pixryn_home:
 	LoadW map_width, 512
 	LoadW map_height, 512
 
+	; set the scroll layers
+	lda #3
+	sta map_scroll_layers
+
 	; initialize player location on screen
 	LoadW xplayer, $0090
 	LoadW yplayer, $00a8

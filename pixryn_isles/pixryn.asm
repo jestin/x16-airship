@@ -54,6 +54,10 @@ load_pixryn:
 	LoadW map_width, 2048
 	LoadW map_height, 1024
 
+	; set the scroll layers
+	lda #3
+	sta map_scroll_layers
+
 	LoadW u0, pixryn_collision_map_file
 	LoadW u1, end_pixryn_collision_map_file-pixryn_collision_map_file
 	jsr load_collision_map

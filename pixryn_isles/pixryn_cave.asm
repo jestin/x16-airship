@@ -31,6 +31,10 @@ load_pixryn_cave:
 	LoadW map_width, 512
 	LoadW map_height, 1024
 
+	; set the scroll layers
+	lda #1
+	sta map_scroll_layers
+
 	LoadW u0, cave_l0_map_file
 	LoadW u1, end_cave_l0_map_file-cave_l0_map_file
 	jsr load_l0_map
@@ -115,43 +119,8 @@ load_pixryn_cave:
 ;==================================================
 pixryn_cave_tick_handler:
 
-	jsr update_joystick_data
-	jsr animate_map
-
-	; check if player can move
-	lda player_status
-	bit #player_status_unable_to_move
-	bne @control
-
-	jsr animate_player
-	jsr move
-	lda #1
-	jsr apply_scroll_offsets
 	jsr position_mask_over_player
-	jsr set_player_tile
-	jsr check_interactions
-
-@control:
-	jsr character_overworld_control
-
-@music:
-	jsr playmusic
-
-	; Manually push the address of the jmp to the stack to simulate jsr
-	; instruction.
-	; NOTE:  Due to an ancient 6502 bug, we need to make sure that tick_fn
-	; doesn't have $ff in the low byte.  It's a slim chance, but will happen
-	; sooner or later.  When it does, just fix by putting in a nop somewhere to
-	; bump the address foward.
-	lda #>(@jmp_interaction_return)
-	pha
-	lda #<(@jmp_interaction_return)
-	pha
-	jmp (interaction_fn)				; jump to whatever the current screen defines
-@jmp_interaction_return:
-	nop
-	stz interaction_id
-
+	jsr character_overworld_tick
 @return: 
 	rts
 
