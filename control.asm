@@ -45,7 +45,7 @@ title_screen_control:
 	lda joystick_data
 	eor $ff
 	and joystick_changed_data
-	cmp #%00010000				; checks if the button is currently down, and wasn't before
+	cmp #joystick_0_STA				; checks if the button is currently down, and wasn't before
 	bne @return
 
 	; disable message sprites
@@ -74,7 +74,7 @@ reading_message_control:
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	cmp #joystick_0_B				; checks if the button is currently down, and wasn't before
 	bne @return
 
 	; here we need to turn off the sprites in the message and allow the user to move again
@@ -104,7 +104,7 @@ dialog_control:
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
-	cmp #%10000000				; checks if the button is currently down, and wasn't before
+	cmp #joystick_0_B				; checks if the button is currently down, and wasn't before
 	bne @return
 
 	; advance the page and check if it is already on the last page

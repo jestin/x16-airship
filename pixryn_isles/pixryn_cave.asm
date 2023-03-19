@@ -245,7 +245,7 @@ player_to_cabin_ladder:
 	lda joystick_data
 	eor #$ff						; NOT the accumulator
 	and joystick_changed_data
-	cmp #%10000000				; checks if the b button is currently down, and wasn't before
+	cmp #joystick_0_B				; checks if the b button is currently down, and wasn't before
 	bne @auto_interactions
 
 	; NOTE: We are using unnamed labels here so that we don't care which

@@ -1,7 +1,23 @@
 .ifndef JOYSTICK_ASM
 JOYSTICK_ASM = 1
 
+; Button States
+joystick_0_B	= %10000000
+joystick_0_Y	= %01000000
+joystick_0_SEL	= %00100000
+joystick_0_STA	= %00010000
+joystick_0_UP	= %00001000
+joystick_0_DN	= %00000100
+joystick_0_LT	= %00000010
+joystick_0_RT	= %00000001
+
+joystick_1_A	= %10000000
+joystick_1_X	= %01000000
+joystick_1_L	= %00100000
+joystick_1_R	= %00010000
+
 .segment "BSS"
+
 joystick_data:		.res 3
 joystick_changed_data:		.res 3
 
