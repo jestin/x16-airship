@@ -28,6 +28,16 @@ tick_fn:		.res 2
 character_overworld_tick:
 
 	jsr update_joystick_data
+
+	lda player_status
+	bit #player_status_paused
+	beq @animate
+
+	; the game is paused
+	jsr pause_control
+	bra @music
+
+@animate:
 	jsr animate_map
 
 	; check if player can move

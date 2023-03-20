@@ -4,6 +4,10 @@ CONTROL_ASM = 1
 .include "pixryn_isles/pixryn.asm"
 .include "akoko_mountains/akoko.asm"
 
+.segment "DATA"
+
+pause_text:					.literal "Pause", $00
+
 .segment "CODE"
 
 ;==================================================
@@ -28,6 +32,24 @@ character_overworld_control:
 	bit #player_status_reading_text
 	beq :+
 	jsr reading_message_control
+	bra @return
+:
+	; check for pause
+	lda joystick_data
+	eor #$ff
+	and joystick_changed_data
+	cmp #joystick_0_STA				; checks if the start button is currently down, and wasn't before
+	bne :+
+
+	lda player_status
+	ora #player_status_paused
+	sta player_status
+
+	LoadW u0, pause_text
+	LoadW u1, 140
+	LoadW u2, 110
+	LoadW u3, message_sprites
+	jsr draw_string			; draw message text
 :
 @return:
 	rts
@@ -43,7 +65,7 @@ character_overworld_control:
 title_screen_control:
 
 	lda joystick_data
-	eor $ff
+	eor #$ff
 	and joystick_changed_data
 	cmp #joystick_0_STA				; checks if the button is currently down, and wasn't before
 	bne @return
@@ -122,6 +144,32 @@ dialog_control:
 	jsr clear_dialog_message
 	ldx messages_per_dialog_page
 	jsr display_dialog_page
+
+@return:
+	rts
+
+;==================================================
+; pause_control
+;
+; Hanles the player's UI choices while paused
+;
+; void pause_control()
+;==================================================
+pause_control:
+	; check if the button was pushed
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #joystick_0_STA				; checks if the start button is currently down, and wasn't before
+	bne @return
+
+	; clear the pause message
+	LoadW u0, message_sprites
+	jsr clear_text_sprites
+
+	lda player_status
+	and #!player_status_paused
+	sta player_status
 
 @return:
 	rts
