@@ -119,4 +119,81 @@ lightning_effect:
 
 	rts
 
+;==================================================
+; dimming_effect
+;
+; Restores the palette from memory
+;
+; void dimming_effect()
+;==================================================
+dimming_effect:
+
+	lda #0						; use data port 0 for reading from the palette
+	sta veractl
+	stz veralo
+	lda #$fa
+	sta veramid
+	lda #$11					; increment of 1
+	sta verahi
+
+	lda #1						; use data port 1 for writing to the palette
+	sta veractl
+	stz veralo
+	lda #$fa
+	sta veramid
+	lda #$11					; increment of 1
+	sta verahi
+
+	ldy #0
+@dimming_loop:
+	; green, blue
+	lda veradat
+	pha
+
+	; green
+	and #%11110000
+	lsr
+	lsr
+	lsr
+	lsr
+
+	sec
+	sbc #3
+	bcs :+
+	lda #0
+:
+	asl
+	asl
+	asl
+	asl
+	sta u0L
+	pla
+
+	; blue
+	and #%00001111
+	sec
+	sbc #3
+	bcs :+
+	lda #0
+:
+	; recombine
+	ora u0L
+	sta veradat2
+
+	; red
+	lda veradat
+	and #%00001111
+	sec
+	sbc #3
+	bcs :+
+	lda #0
+:
+	sta veradat2
+
+	iny
+	bne @dimming_loop
+@end_dimming_loop:
+
+	rts
+
 .endif ; PALETTE_ASM

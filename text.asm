@@ -104,6 +104,8 @@ draw_string:
 ;							word screen_y: u2)
 ;==================================================
 set_character_sprite:
+	lda #0						; use data port 0
+	sta veractl
 	lda u4L
 	sprstore 0
 	lda u4H

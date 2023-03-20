@@ -45,11 +45,24 @@ character_overworld_control:
 	ora #player_status_paused
 	sta player_status
 
+	lda palette_restore_flag
+	beq @dim_palette
+
+	; the restore flag is set, so restore the original palette before
+	; re-storing and dimming
+	jsr restore_palette
+	stz palette_restore_flag
+
+@dim_palette:
+	jsr store_palette
+	jsr dimming_effect
+
 	LoadW u0, pause_text
 	LoadW u1, 140
 	LoadW u2, 110
 	LoadW u3, message_sprites
 	jsr draw_string			; draw message text
+
 :
 @return:
 	rts
@@ -166,6 +179,8 @@ pause_control:
 	; clear the pause message
 	LoadW u0, message_sprites
 	jsr clear_text_sprites
+
+	jsr restore_palette
 
 	lda player_status
 	and #!player_status_paused

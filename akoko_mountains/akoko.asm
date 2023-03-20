@@ -340,6 +340,10 @@ akoko_character_overworld_tick:
 
 @random_lightning:
 
+	lda player_status
+	bit #player_status_paused
+	bne @return
+
 	jsr get_random_byte
 	cmp #0
 	bne @return
