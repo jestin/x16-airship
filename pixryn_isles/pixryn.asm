@@ -268,7 +268,7 @@ load_pixryn_npcs:
 	stx ship_npc_group
 
 	; ship
-	lda #67
+	lda #95
 	jsr add_npc
 	LoadW u0, ship_file
 	LoadW u1, end_ship_file-ship_file
@@ -308,7 +308,7 @@ load_pixryn_npcs:
 	; jsr set_npc_map_location
 
 	; balloon (top left)
-	lda #66
+	lda #94
 	jsr add_npc
 	LoadW u0, balloon_file
 	LoadW u1, end_balloon_file-balloon_file
@@ -328,7 +328,7 @@ load_pixryn_npcs:
 	jsr add_npc_to_group
 
 	; clone balloon (top right)
-	lda #65
+	lda #93
 	; x should already be the balloon quarter
 	jsr clone_npc
 	; add the balloon to the NPC group (x should be the NPC index)
@@ -342,7 +342,7 @@ load_pixryn_npcs:
 	jsr add_npc_to_group
 
 	; clone balloon (bottom left)
-	lda #64
+	lda #92
 	; x should already be the balloon quarter
 	jsr clone_npc
 	; add the balloon to the NPC group (x should be the NPC index)
@@ -356,7 +356,7 @@ load_pixryn_npcs:
 	jsr add_npc_to_group
 
 	; clone balloon (bottom right)
-	lda #63
+	lda #91
 	; x should already be the balloon quarter
 	jsr clone_npc
 	; add the balloon to the NPC group (x should be the NPC index)
@@ -371,7 +371,7 @@ load_pixryn_npcs:
 	jsr add_npc_to_group
 
 	; propeller
-	lda #62
+	lda #90
 	jsr add_npc
 	LoadW u0, propeller_file
 	LoadW u1, end_propeller_file-propeller_file
