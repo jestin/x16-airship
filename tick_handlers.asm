@@ -38,6 +38,10 @@ character_overworld_tick:
 	bra @music
 
 @animate:
+	jsr update_npc_groups
+	jsr update_npc_paths
+	jsr update_npcs
+
 	jsr animate_map
 
 	; check if player can move
@@ -46,9 +50,6 @@ character_overworld_tick:
 	bne @control
 
 	jsr animate_player
-	jsr update_npc_groups
-	jsr update_npc_paths
-	jsr update_npcs
 	jsr move
 	lda map_scroll_layers
 	jsr apply_scroll_offsets
