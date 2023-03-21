@@ -46,6 +46,9 @@ NPC_GROUP_ASM = 1
 	; relative Y location
 	rely			.res 1
 
+	; relative flip
+	relflip			.res 1
+
 	; size in pixels
 	sizex			.res 1
 	sizey			.res 1
@@ -139,7 +142,8 @@ add_npc_group:
 ; void add_npc_to_group(byte npc_group_index: a
 ;						byte npc_index: x,
 ;						byte relx: u2L,
-;						byte rely: u2H)
+;						byte rely: u2H,
+;						byte relflip: u3L)
 ;==================================================
 add_npc_to_group:
 
@@ -202,6 +206,12 @@ add_npc_to_group:
 	; store rely
 	lda u2H
 	ldy #GroupedNpc::rely
+	sta (u1),y
+
+	; store relflip
+	lda u3L
+	and #%00000011
+	ldy #GroupedNpc::relflip
 	sta (u1),y
 
 	; store GroupedNpc to the NpcGroup's npc array
@@ -432,6 +442,12 @@ update_npc_group:
 	sta u6H
 	
 	jsr calculate_grouped_npc_location
+
+	; apply the relative flip
+	ldy #GroupedNpc::relflip
+	lda (u5),y
+	eor u3L
+	sta u3L
 
 	; set X to the npc index
 	phx							; store the old X on the stack

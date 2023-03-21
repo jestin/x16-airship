@@ -278,6 +278,7 @@ load_pixryn_npcs:
 	ldy #1				; number of frames
 	jsr set_npc_tiles
 	lda #%00001100
+	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
 	; LoadW u1, 542
 	; LoadW u2, 376
@@ -306,30 +307,71 @@ load_pixryn_npcs:
 	; LoadW u2, 376
 	; jsr set_npc_map_location
 
-	; balloon
+	; balloon (top left)
 	lda #66
 	jsr add_npc
 	LoadW u0, balloon_file
 	LoadW u1, end_balloon_file-balloon_file
 	lda #%00000011
 	sta u2L
-	lda #%10110000		; 64x32
+	lda #%01100000		; 64x32
 	ldy #1				; number of frames
 	jsr set_npc_tiles
 	lda #%00001100
+	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
-	; LoadW u1, 542
-	; LoadW u2, 350
 	jsr set_npc_map_location
-
 	; add the balloon to the NPC group (x should be the NPC index)
 	stz u2L
 	stz u2H
 	lda ship_npc_group
 	jsr add_npc_to_group
 
-	; propeller
+	; clone balloon (top right)
 	lda #65
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001101
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	lda #32
+	sta u2L
+	stz u2H
+	lda ship_npc_group
+	jsr add_npc_to_group
+
+	; clone balloon (bottom left)
+	lda #64
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001110
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	stz u2L
+	lda #16
+	sta u2H
+	lda ship_npc_group
+	jsr add_npc_to_group
+
+	; clone balloon (bottom right)
+	lda #63
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001111
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	lda #32
+	sta u2L
+	lda #16
+	sta u2H
+	lda ship_npc_group
+	jsr add_npc_to_group
+
+	; propeller
+	lda #62
 	jsr add_npc
 	LoadW u0, propeller_file
 	LoadW u1, end_propeller_file-propeller_file
@@ -339,6 +381,7 @@ load_pixryn_npcs:
 	ldy #2				; number of frames
 	jsr set_npc_tiles
 	lda #%00001100
+	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
 	; LoadW u1, 600
 	; LoadW u2, 384

@@ -274,7 +274,7 @@ set_npc_map_location:
 ; void set_npc_map_location_depth_and_flip(byte npc_index: x,
 ;							word mapx: u1,
 ;							word mapy: u2,
-;							word mapy: u3L)
+;							word depth_flip: u3L)
 ;==================================================
 set_npc_map_location_depth_and_flip:
 

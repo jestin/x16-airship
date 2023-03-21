@@ -18,7 +18,7 @@ vram_dialog_map			= $18c00
 
 ; the charset is positioned here to be out of the way of a full screen 4bb
 ; bitmap loaded at $10000, and still be aligned properly to use as a tileset
-vram_charset_sprites	= $19800 ; goes to $1a600
+vram_charset_sprites	= $19800 ; goes to $1a800
 
 ; $5400 are available here (32 byte aligned)
 vram_npc				= $1a800
