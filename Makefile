@@ -68,7 +68,7 @@ VIMASK.BIN: visibility_mask.tmx
 	tmx2vera visibility_mask.tmx -l mask VIMASK.BIN
 
 run: all resources
-	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 512 -debug -joy1 -abufs 64 -randram)
+	(cd bin; x16emu -prg $(PROG) -run -scale 2 -ram 512 -debug -joy1 -abufs 64)
 
 box16:
 	(cd bin; box16 -prg $(PROG) -run -scale 2 -ram 512 -abufs 64)
