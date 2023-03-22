@@ -44,6 +44,8 @@ set_vera_dialog_top:
 	sta veral0vscrolllo
 	stz veral0vscrollhi
 
+	stz veractl
+
 	lda #51				; use a scale that fits exactly 32 characters on the screen
 	sta veradchscale
 
@@ -85,6 +87,8 @@ set_vera_dialog_bottom:
 
 	lda #1
 	jsr apply_scroll_offsets
+
+	stz veractl
 
 	lda #64
 	sta veradchscale

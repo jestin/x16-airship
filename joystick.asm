@@ -24,6 +24,21 @@ joystick_changed_data:		.res 3
 .segment "CODE"
 
 ;==================================================
+; initialize_joystick_memory
+;
+; void initialize_joystick_memory()
+;==================================================
+initialize_joystick_memory:
+	stz joystick_data
+	stz joystick_data+1
+	stz joystick_data+2
+	stz joystick_changed_data
+	stz joystick_changed_data+1
+	stz joystick_changed_data+2
+
+	rts
+
+;==================================================
 ; update_joystick_data
 ;
 ; Custom tick handler for the character Pixryn

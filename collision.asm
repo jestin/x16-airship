@@ -16,6 +16,14 @@ player_collision_tile:		.res 32
 .segment "CODE"
 
 ;==================================================
+; initialize_collision_memory
+;
+; void initialize_collision_memory()
+;==================================================
+initialize_collision_memory:
+
+	rts
+;==================================================
 ; check_collisions
 ;
 ; This should be called after movement is

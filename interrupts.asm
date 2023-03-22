@@ -11,10 +11,22 @@ line_trigger:		.res 1
 spr_trigger:		.res 1
 
 ; indicator for whether raster line interrupt is for the top of the dialog or
-; the bottome
+; the bottom
 start_dialog:		.res 1
 
 .segment "CODE"
+
+;==================================================
+; initialize_interrupts_memory
+;
+; void initialize_interrupts_memory()
+;==================================================
+initialize_interrupts_memory:
+	stz vsync_trigger
+	stz line_trigger
+	stz spr_trigger
+
+	rts
 
 ;==================================================
 ; check_vsync

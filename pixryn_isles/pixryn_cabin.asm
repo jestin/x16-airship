@@ -99,7 +99,7 @@ load_pixryn_cabin:
 
 	; set video mode
 	lda #%01110001		; sprites, l0, and l1 enabled
-	sta veradcvideo
+	jsr set_dcvideo
 
 	; set player sprite
 	ldx #player_sprite

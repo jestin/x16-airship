@@ -11,6 +11,19 @@ map_scroll_layers:	.res 1
 .segment "CODE"
 
 ;==================================================
+; initialize_map_memory
+;
+; void initialize_map_memory()
+;==================================================
+initialize_map_memory:
+	stz map_id
+	stz map_width
+	stz map_height
+	stz map_scroll_layers
+
+	rts
+
+;==================================================
 ; load_tiles
 ;
 ; Loads tile data

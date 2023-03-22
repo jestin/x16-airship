@@ -14,6 +14,15 @@ anim_tiles:
 .segment "CODE"
 
 ;==================================================
+; initialize_animation_memory
+;
+; void initialize_animation_memory()
+;==================================================
+initialize_animation_memory:
+	stz anim_tiles_count
+
+	rts
+;==================================================
 ; animate_player
 ;==================================================
 animate_player:

@@ -30,4 +30,18 @@ player_file_size:		.res 2
 
 .segment "CODE"
 
+;==================================================
+; initialize_player_memory
+;
+; void initialize_player_memory()
+;==================================================
+initialize_player_memory:
+	stz player_status
+	stz player_file
+	stz player_file+1
+	stz player_file_size
+	stz player_file_size+1
+
+	rts
+
 .endif ; PLAYER_ASM

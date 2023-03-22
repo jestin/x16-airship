@@ -68,6 +68,20 @@ npc_indexes:			.res MAX_NPCS
 .segment "CODE"
 
 ;==================================================
+; initialize_npc_memory
+;
+; void initialize_npc_memory()
+;==================================================
+initialize_npc_memory:
+	stz num_npcs
+	stz next_npc_ram
+	stz next_npc_ram+1
+	stz next_npc_vram
+	stz next_npc_vram+1
+	stz npc_frames_loaded
+
+	rts
+;==================================================
 ; add_npc
 ;
 ; Create an NPC in memory.  Pass it the index of

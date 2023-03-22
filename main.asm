@@ -16,6 +16,7 @@
 .include "video.asm"
 .include "text.asm"
 .include "title.asm"
+.include "initialization.asm"
 
 ; 3rd party includes
 .include "zsmplayer.inc"
@@ -38,6 +39,7 @@ tickcount:		.res 1
 .segment "CODE"
 
 main:
+	jsr initialize_memory
 
 	.ifdef CPU_MONITOR
 	lda #$02
@@ -45,10 +47,11 @@ main:
 
 	lda #159
 	sta veradchstop
-	
-	lda #$00
-	sta veractl
 	.endif
+
+	stz veractl
+
+	jsr initialize_vram
 
 	jsr init_player
 
@@ -167,7 +170,6 @@ main:
 
 	jsr show_title
 
-
 ;==================================================
 ; mainloop
 ;==================================================
@@ -205,6 +207,11 @@ init_irq:
 
 	lda #$01				; set vera to only interrupt on vsync
 	sta veraien
+
+	; initialize IRQ trigger flags
+	stz vsync_trigger
+	stz line_trigger
+	stz spr_trigger
 
 	rts
 
@@ -250,3 +257,26 @@ handle_irq:
 
 @return:
 	jmp (default_irq)
+
+;==================================================
+; initialize_vram
+; 
+; Initializes the memory behind VRAM
+;==================================================
+initialize_vram:
+	vset $1f9c0
+
+	ldx $0
+@init_loop:
+	stz veradat
+	stz veradat
+	stz veradat
+	stz veradat
+	stz veradat
+	stz veradat
+	stz veradat
+	stz veradat
+	inx
+	bne @init_loop
+	
+	rts

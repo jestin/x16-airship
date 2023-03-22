@@ -8,6 +8,15 @@ interaction_id:		.res 1
 .segment "CODE"
 
 ;==================================================
+; initialize_interaction_memory
+;
+; void initialize_interaction_memory()
+;==================================================
+initialize_interaction_memory:
+	stz interaction_id
+
+	rts
+;==================================================
 ; check_interactions
 ;
 ; void check_interactions(out byte interaction_id)

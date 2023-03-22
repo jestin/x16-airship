@@ -50,6 +50,15 @@ npc_paths:					.res .sizeof(NpcPath) * MAX_NPCS
 .segment "CODE"
 
 ;==================================================
+; initialize_npc_path_memory
+;
+; void initialize_npc_path_memory()
+;==================================================
+initialize_npc_path_memory:
+	stz num_npc_paths
+
+	rts
+;==================================================
 ; clear_npc_paths
 ;
 ; Clears the paths of NPCs and all their data

@@ -24,6 +24,14 @@ ship_npc_group = npc_group_indexes + 0
 .segment "CODE"
 
 ;==================================================
+; initialize_pixryn_memory
+;
+; void initialize_pixryn_memory()
+;==================================================
+initialize_pixryn_memory:
+	rts
+
+;==================================================
 ; load_pixryn
 ;
 ; void load_pixryn()
@@ -32,6 +40,8 @@ load_pixryn:
 
 	; stop music
 	jsr stopmusic
+
+	jsr initialize_pixryn_memory
 
 	; diable player sprite
 	ldx #player_sprite

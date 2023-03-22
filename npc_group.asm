@@ -74,6 +74,18 @@ npc_group_indexes:			.res MAX_NPCS
 .segment "CODE"
 
 ;==================================================
+; initialize_npc_group_memory
+;
+; void initialize_npc_group_memory()
+;==================================================
+initialize_npc_group_memory:
+	stz num_npc_groups
+	stz next_grouped_npc
+	stz next_grouped_npc+1
+
+	rts
+
+;==================================================
 ; clear_npc_groups
 ;
 ; Clears the groups of NPCs and all their data

@@ -29,6 +29,37 @@ player_tile:	.res 2
 .segment "CODE"
 
 ;==================================================
+; initialize_movement_memory
+;
+; void initialize_movement_memory()
+;==================================================
+initialize_movement_memory:
+	stz xoff
+	stz xoff+1
+	stz yoff
+	stz yoff+1
+	stz prev_xoff
+	stz prev_xoff+1
+	stz prev_yoff
+	stz prev_yoff+1
+	stz xplayer
+	stz xplayer+1
+	stz yplayer
+	stz yplayer+1
+	stz prev_xplayer
+	stz prev_xplayer+1
+	stz prev_yplayer
+	stz prev_yplayer+1
+
+	stz playerdir
+
+	stz active_tile
+	stz active_tile+1
+	stz player_tile
+	stz player_tile+1
+
+	rts
+;==================================================
 ; set_active_tile
 ;
 ; Based on the player's location on the map,

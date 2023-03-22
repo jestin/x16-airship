@@ -18,10 +18,25 @@ AKOKO_MAP_ID = 1
 
 .segment "CODE"
 
+;==================================================
+; initialize_akoko_memory
+;
+; void initialize_akoko_memory()
+;==================================================
+initialize_akoko_memory:
+	rts
+
+;==================================================
+; load_akoko
+;
+; void load_akoko()
+;==================================================
 load_akoko:
 
 	; stop music
 	jsr stopmusic
+
+	jsr initialize_akoko_memory
 
 	; diable player sprite
 	ldx #player_sprite

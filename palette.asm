@@ -9,6 +9,15 @@ palette_restore_flag:	.res 1
 .segment "CODE"
 
 ;==================================================
+; initialize_palette_memory
+;
+; void initialize_palette_memory()
+;==================================================
+initialize_palette_memory:
+	stz palette_restore_flag
+
+	rts
+;==================================================
 ; store_palette
 ;
 ; Stores the palette to memory so it can be

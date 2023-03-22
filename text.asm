@@ -15,6 +15,20 @@ messages_per_dialog_page:	.res 1
 .segment "CODE"
 
 ;==================================================
+; initialize_text_memory
+;
+; void initialize_text_memory()
+;==================================================
+initialize_text_memory:
+	stz next_char_sprite
+	stz dialog_pages
+	stz cur_dialog_page
+	stz next_dialog_line
+	stz messages_per_dialog_page
+
+	rts
+
+;==================================================
 ; inc_next_char_sprite
 ; 
 ; Increments the next character sprite index,

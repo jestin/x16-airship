@@ -7,6 +7,8 @@ VIDEO_ASM = 1
 set_dcvideo:
 	pha
 
+	stz veractl
+
 	lda veradcvideo
 	and #%00001111
 	sta u0L
