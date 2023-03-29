@@ -1,6 +1,6 @@
 NAME = AIRSHIP
 TITLE = Take-to-the-Skies
-VERSION = 0.0.5
+VERSION = 0.0.6
 
 ASSEMBLER6502 = cl65
 INCLUDEDIR = 3rdParty/include/
@@ -85,7 +85,7 @@ run_card: card
 	x16emu -sdcard card.img -scale 2 -ram 512 -joy1 -abufs 64 -debug
 
 $(ZIPFILE): all resources clean_zip
-	(cd bin; zip ../$(ZIPFILE) *)
+	(cd bin; zip ../$(ZIPFILE) ../manifest.json *)
 
 zip: $(ZIPFILE)
 
