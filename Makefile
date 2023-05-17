@@ -85,7 +85,9 @@ run_card: card
 	x16emu -sdcard card.img -scale 2 -ram 512 -joy1 -abufs 64 -debug
 
 $(ZIPFILE): all resources clean_zip
-	(cd bin; zip ../$(ZIPFILE) ../manifest.json *)
+	cp manifest.json bin/
+	(cd bin; zip ../$(ZIPFILE) *)
+	rm bin/manifest.json
 
 zip: $(ZIPFILE)
 
