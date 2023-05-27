@@ -456,7 +456,6 @@ move:
 @update:
 	jsr set_active_tile
 	jsr check_collisions
-	cmp #0
 	bne @position_set
 
 @restore_loc_cache:
