@@ -220,6 +220,11 @@ init_irq:
 ; Handles VERA IRQ
 ;==================================================
 handle_irq:
+
+	; upkeep
+	lda map_scroll_layers
+	jsr apply_scroll_offsets
+
 	; check for VSYNC
 	lda veraisr
 	and #$01

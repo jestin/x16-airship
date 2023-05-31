@@ -57,8 +57,6 @@ character_overworld_tick:
 
 	jsr animate_player
 	jsr move
-	lda map_scroll_layers
-	jsr apply_scroll_offsets
 	jsr set_player_tile
 	jsr check_interactions
 
