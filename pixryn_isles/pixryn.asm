@@ -19,7 +19,12 @@ PIXRYN_MAP_ID = 1
 
 .segment "BSS"
 
-ship_npc_group = npc_group_indexes + 0
+ship_propeller_index:	.res 1
+ship_hull_index:		.res 1
+ship_baloon_index:		.res 1
+
+wandering_ship_npc_group = npc_group_indexes + 0
+dagnol_ship_npc_group = npc_group_indexes + 1
 
 .segment "CODE"
 
@@ -248,7 +253,7 @@ load_pixryn:
 load_pixryn_npcs:
 
 	; test NPC
-	lda #97
+	lda #103
 	jsr add_npc
 	LoadW u0, cousin_file
 	LoadW u1, end_cousin_file-cousin_file
@@ -263,7 +268,157 @@ load_pixryn_npcs:
 	LoadW u2, 320
 	jsr set_npc_map_location
 
-	; ship group
+	jsr wandering_ship_npc
+
+	jsr dagnol_ship_npc
+
+	; example clone
+	; lda #70
+	; ; x should already be the propeller
+	; jsr clone_npc
+	; LoadW u1, 604
+	; LoadW u2, 394
+	; jsr set_npc_map_location
+
+	rts
+
+;==================================================
+; dagnol_ship_npc
+;==================================================
+dagnol_ship_npc:
+	; wandering ship group
+	lda #66
+	sta u0L
+	lda #42
+	sta u0H
+	jsr add_npc_group
+	LoadW u3, 580
+	LoadW u4, 360
+	lda #%00000000
+	sta u5L
+	jsr set_npc_group_map_location_flip
+
+	stx wandering_ship_npc_group
+
+	; ship
+	lda #102
+	ldx ship_hull_index
+	jsr clone_npc
+	lda #%00001100
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+
+	; add the ship to the NPC group (x should be the NPC index)
+	stz u2L
+	lda #26
+	sta u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; balloon (top left)
+	lda #101
+	ldx ship_baloon_index
+	jsr clone_npc
+	lda #%00001100
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	jsr set_npc_map_location
+	; add the balloon to the NPC group (x should be the NPC index)
+	stz u2L
+	stz u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; clone balloon (top right)
+	lda #100
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001101
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	lda #32
+	sta u2L
+	stz u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; clone balloon (bottom left)
+	lda #99
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001110
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	stz u2L
+	lda #16
+	sta u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; clone balloon (bottom right)
+	lda #98
+	; x should already be the balloon quarter
+	jsr clone_npc
+	; add the balloon to the NPC group (x should be the NPC index)
+	lda #%00001111
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	lda #32
+	sta u2L
+	lda #16
+	sta u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; propeller
+	lda #97
+	ldx ship_propeller_index
+	jsr clone_npc
+	lda #%00001100
+	sta u3L					; save flip for adding to group
+	jsr set_npc_depth_flip
+	; LoadW u1, 600
+	; LoadW u2, 384
+	jsr set_npc_map_location
+
+	; add the propeller to the NPC group (x should be the NPC index)
+	lda #58
+	sta u2L
+	lda #34
+	sta u2H
+	lda wandering_ship_npc_group
+	jsr add_npc_to_group
+
+	; create path for ship
+	lda wandering_ship_npc_group
+	jsr add_npc_path
+	phx					; push path index
+	ldx #%00010001
+	ldy #%1110001
+	LoadW u2, 580
+	LoadW u3, 360
+	lda #%00000000
+	sta u4L
+	pla					; pull path index
+	pha					; re-push path index
+	jsr add_stop_to_npc_path
+	ldx #%00010001
+	ldy #%1110001
+	LoadW u2, 580
+	LoadW u3, 370
+	lda #%00000000
+	sta u4L
+	pla					; pull path index
+	jsr add_stop_to_npc_path
+	rts
+	
+;==================================================
+; wandering_ship_npc
+;==================================================
+wandering_ship_npc:
+	; wandering ship group
 	lda #66
 	sta u0L
 	lda #42
@@ -275,11 +430,12 @@ load_pixryn_npcs:
 	sta u5L
 	jsr set_npc_group_map_location_flip
 
-	stx ship_npc_group
+	stx wandering_ship_npc_group
 
 	; ship
 	lda #95
 	jsr add_npc
+	stx ship_hull_index
 	LoadW u0, ship_file
 	LoadW u1, end_ship_file-ship_file
 	lda #%00000011
@@ -290,15 +446,12 @@ load_pixryn_npcs:
 	lda #%00001100
 	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
-	; LoadW u1, 542
-	; LoadW u2, 376
-	jsr set_npc_map_location
 
 	; add the ship to the NPC group (x should be the NPC index)
 	stz u2L
 	lda #26
 	sta u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; ship in water
@@ -320,6 +473,7 @@ load_pixryn_npcs:
 	; balloon (top left)
 	lda #94
 	jsr add_npc
+	stx ship_baloon_index
 	LoadW u0, balloon_file
 	LoadW u1, end_balloon_file-balloon_file
 	lda #%00000011
@@ -330,11 +484,10 @@ load_pixryn_npcs:
 	lda #%00001100
 	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
-	jsr set_npc_map_location
 	; add the balloon to the NPC group (x should be the NPC index)
 	stz u2L
 	stz u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (top right)
@@ -348,7 +501,7 @@ load_pixryn_npcs:
 	lda #32
 	sta u2L
 	stz u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (bottom left)
@@ -362,7 +515,7 @@ load_pixryn_npcs:
 	stz u2L
 	lda #16
 	sta u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (bottom right)
@@ -377,12 +530,13 @@ load_pixryn_npcs:
 	sta u2L
 	lda #16
 	sta u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; propeller
 	lda #90
 	jsr add_npc
+	stx ship_propeller_index
 	LoadW u0, propeller_file
 	LoadW u1, end_propeller_file-propeller_file
 	lda #%00000011
@@ -393,20 +547,17 @@ load_pixryn_npcs:
 	lda #%00001100
 	sta u3L					; save flip for adding to group
 	jsr set_npc_depth_flip
-	; LoadW u1, 600
-	; LoadW u2, 384
-	jsr set_npc_map_location
 
 	; add the propeller to the NPC group (x should be the NPC index)
 	lda #58
 	sta u2L
 	lda #34
 	sta u2H
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_to_group
 
 	; create path for ship
-	lda ship_npc_group
+	lda wandering_ship_npc_group
 	jsr add_npc_path
 	phx					; push path index
 	ldx #%00010001
@@ -435,18 +586,6 @@ load_pixryn_npcs:
 	sta u4L
 	pla					; pull path index
 	jsr add_stop_to_npc_path
-
-	; ldx ship_npc_group
-	; lda #%00000000
-	; jsr set_npc_group_flip
-
-	; example clone
-	; lda #70
-	; ; x should already be the propeller
-	; jsr clone_npc
-	; LoadW u1, 604
-	; LoadW u2, 394
-	; jsr set_npc_map_location
 
 	rts
 
