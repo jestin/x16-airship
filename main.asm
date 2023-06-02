@@ -216,54 +216,6 @@ init_irq:
 	rts
 
 ;==================================================
-; handle_irq
-; Handles VERA IRQ
-;==================================================
-handle_irq:
-
-	; upkeep
-	lda map_scroll_layers
-	jsr apply_scroll_offsets
-
-	; check for VSYNC
-	lda veraisr
-	and #$01
-	beq @raster_line
-	sta vsync_trigger
-	; clear vera irq flag
-	sta veraisr
-	bra @return
-
-@raster_line:
-	; check for raster line
-	lda veraisr
-	and #$02
-	beq @sprite_collision
-	sta line_trigger
-	; clear vera irq flag
-	sta veraisr
-	; return from the IRQ manually because the default_irq shouldn't be called
-	; on raster line interrupts
-	ply
-	plx
-	pla
-	rti
-	; end of line IRQ
-
-@sprite_collision:
-	; check for sprite
-	lda veraisr
-	and #$04
-	beq @return
-	sta spr_trigger
-	; clear vera irq flag
-	sta veraisr
-	bra @return
-
-@return:
-	jmp (default_irq)
-
-;==================================================
 ; initialize_vram
 ; 
 ; Initializes the memory behind VRAM
