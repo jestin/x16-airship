@@ -82,31 +82,8 @@ overworld_irq_handler:
 	jsr check_vsync
 	bne @return
 
-@raster_line:
-	; check for raster line
-	lda veraisr
-	and #$02
-	beq @sprite_collision
-	sta line_trigger
-	; clear vera irq flag
-	sta veraisr
-	; return from the IRQ manually because the default_irq shouldn't be called
-	; on raster line interrupts
-	ply
-	plx
-	pla
-	rti
-	; end of line IRQ
-
-@sprite_collision:
-	; check for sprite
-	lda veraisr
-	and #$04
-	beq @return
-	sta spr_trigger
-	; clear vera irq flag
-	sta veraisr
-	bra @return
+	jsr check_raster_line
+	jsr check_sprite_collision
 
 @return:
 	jmp (default_irq)
@@ -138,6 +115,52 @@ check_vsync:
 	sta veraisr
 
 @return:
+	rts
+
+;==================================================
+; check_raster_line
+;==================================================
+check_raster_line:
+	; check for raster line
+	lda veraisr
+	and #$02
+	bne @clear_interrupt
+	rts
+
+@clear_interrupt:
+	sta line_trigger
+	; clear vera irq flag
+	sta veraisr
+
+	; return from the IRQ manually because the default_irq shouldn't be called
+	; on raster line interrupts
+
+	; pull return from jsr off the stack
+	pla
+	pla
+
+	ply
+	plx
+	pla
+	rti
+	; end of line IRQ
+
+;==================================================
+; check_sprite_collision
+;==================================================
+check_sprite_collision:
+
+	; check for sprite
+	lda veraisr
+	and #$04
+	bne @clear_interrupt
+	rts
+
+@clear_interrupt:
+	sta spr_trigger
+	; clear vera irq flag
+	sta veraisr
+
 	rts
 
 ;==================================================
