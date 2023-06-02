@@ -691,22 +691,6 @@ update_npc:
 	cmp num_npcs
 	bcc @update_frame
 
-	; don't bother with frame updates if off the screen
-	clc
-	lda u1L
-	adc #$40			; add the largest possible sprite
-	lda u1H
-	adc #0
-	cmp #$2 ; screens can't be big enough for this to be valid
-	bcs @return
-	lda u2L
-	adc #$40			; add the largest possible sprite
-	lda u2H
-	adc #0
-	cmp #$2 ; screens can't be big enough for this to be valid
-	bcs @return
-
-
 @animate:
 	; when there's only one frame, don't bother swapping
 	ldy #Npc::size_and_frames
