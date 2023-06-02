@@ -27,6 +27,8 @@ tick_fn:		.res 2
 ;==================================================
 character_overworld_tick:
 
+	; upkeep
+	jsr update_player_sprite
 	jsr update_joystick_data
 
 	lda player_status

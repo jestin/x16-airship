@@ -502,7 +502,15 @@ move:
 @update_scroll:
 	jsr set_scroll_offset
 
-@update_sprite:
+@return: 
+	rts
+
+;==================================================
+; update_player_sprite
+; 
+; void update_player_sprite()
+;==================================================
+update_player_sprite:
 	ldx #player_sprite
 	lda xplayer
 	sprstore 2
@@ -513,7 +521,6 @@ move:
 	lda yplayer+1
 	sprstore 5
 
-@return: 
 	rts
 
 ;==================================================
