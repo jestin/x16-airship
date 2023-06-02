@@ -16,6 +16,7 @@
 .include "video.asm"
 .include "text.asm"
 .include "title.asm"
+.include "inventory.asm"
 .include "initialization.asm"
 
 ; 3rd party includes
