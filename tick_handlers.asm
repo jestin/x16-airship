@@ -94,8 +94,6 @@ character_overworld_tick:
 ; void title_screen_tick()
 ;==================================================
 title_screen_tick:
-@music:
-	jsr playmusic
 	jsr update_joystick_data
 	jsr title_screen_control
 

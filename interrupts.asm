@@ -40,13 +40,7 @@ init_irq:
 	lda IRQVec+1
 	sta default_irq+1
 
-	; replace default vector with custom one
-	sei
-	lda #<handle_irq
-	sta IRQVec
-	lda #>handle_irq
-	sta IRQVec+1
-	cli
+	jsr use_overworld_irq_handler
 
 	lda #$01				; set vera to only interrupt on vsync
 	sta veraien
@@ -59,23 +53,34 @@ init_irq:
 	rts
 
 ;==================================================
-; handle_irq
+; use_overworld_irq_handler
+;
+; Use the overworld_irq_handler as the IRQ handler
+;==================================================
+use_overworld_irq_handler:
+
+	; replace default vector with custom one
+	sei
+	lda #<overworld_irq_handler
+	sta IRQVec
+	lda #>overworld_irq_handler
+	sta IRQVec+1
+	cli
+
+	rts
+
+;==================================================
+; overworld_irq_handler
 ; Handles VERA IRQ
 ;==================================================
-handle_irq:
+overworld_irq_handler:
 
 	; upkeep
 	lda map_scroll_layers
 	jsr apply_scroll_offsets
 
-	; check for VSYNC
-	lda veraisr
-	and #$01
-	beq @raster_line
-	sta vsync_trigger
-	; clear vera irq flag
-	sta veraisr
-	bra @return
+	jsr check_vsync
+	bne @return
 
 @raster_line:
 	; check for raster line
@@ -107,9 +112,38 @@ handle_irq:
 	jmp (default_irq)
 
 ;==================================================
+; title_irq_handler
+;==================================================
+title_irq_handler:
+	jsr check_vsync
+	beq @return
+
+	jsr playmusic
+
+@return:
+	jmp (default_irq)
+	
+;==================================================
 ; check_vsync
+; void check_vsync(out vsync_triggered: A)
 ;==================================================
 check_vsync:
+
+	; check for VSYNC
+	lda veraisr
+	and #$01
+	beq @return
+	sta vsync_trigger
+	; clear vera irq flag
+	sta veraisr
+
+@return:
+	rts
+
+;==================================================
+; vsync_tick
+;==================================================
+vsync_tick:
 	lda vsync_trigger
 	beq @return
 
@@ -151,9 +185,9 @@ check_vsync:
 	rts
 
 ;==================================================
-; check_line
+; raster_line_tick
 ;==================================================
-check_line:
+raster_line_tick:
 	lda line_trigger
 	beq @return
 
@@ -178,9 +212,9 @@ check_line:
 	rts
 
 ;==================================================
-; check_sprite
+; sprite_collision_tick
 ;==================================================
-check_sprite:
+sprite_collision_tick:
 	lda spr_trigger
 	beq @return
 

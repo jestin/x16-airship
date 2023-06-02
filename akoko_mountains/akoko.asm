@@ -177,6 +177,7 @@ load_akoko:
 	sta veral0config
 	sta veral1config
 
+	jsr use_overworld_irq_handler
 	LoadW tick_fn, akoko_character_overworld_tick
 	LoadW interaction_fn, akoko_overworld_interaction_handler
 

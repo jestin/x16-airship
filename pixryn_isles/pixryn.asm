@@ -186,6 +186,7 @@ load_pixryn:
 	sta veral0config
 	sta veral1config
 
+	jsr use_overworld_irq_handler
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_overworld_interaction_handler
 

@@ -68,6 +68,7 @@ load_pixryn_cabin:
 	sta veral0config
 	sta veral1config
 
+	jsr use_overworld_irq_handler
 	LoadW tick_fn, character_overworld_tick
 	LoadW interaction_fn, pixryn_cabin_interaction_handler
 

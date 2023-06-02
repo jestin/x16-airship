@@ -176,10 +176,10 @@ main:
 mainloop:
 	wai
 
-	; check which type of interrupt occurred
-	jsr check_vsync
-	jsr check_line
-	jsr check_sprite
+	; perform the out-of-interrupt upkeep for each type of interrupt
+	jsr vsync_tick
+	jsr raster_line_tick
+	jsr sprite_collision_tick
 
 	jmp mainloop  ; loop forever
 

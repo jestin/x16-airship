@@ -85,6 +85,14 @@ load_title_music:
 ;==================================================
 show_title:
 
+	; set the title IRQ handler
+	sei
+	lda #<title_irq_handler
+	sta IRQVec
+	lda #>title_irq_handler
+	sta IRQVec+1
+	cli
+
 	LoadW tick_fn, title_screen_tick
 	
 	; title music
