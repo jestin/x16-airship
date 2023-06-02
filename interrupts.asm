@@ -221,6 +221,13 @@ vsync_tick:
 	lda #1
 	sta start_dialog
 :
+	lda player_status
+	bit #player_status_inventory_mode
+	beq :+
+
+	; in inventory mode
+
+:
 	inc tickcount
 
 	; Manually push the address of the jmp to the stack to simulate jsr
