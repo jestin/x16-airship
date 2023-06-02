@@ -186,36 +186,6 @@ mainloop:
 	rts
 
 ;==================================================
-; init_irq
-; Initializes interrupt vector
-;==================================================
-init_irq:
-
-	; backup the default interrupt vector
-	lda IRQVec
-	sta default_irq
-	lda IRQVec+1
-	sta default_irq+1
-
-	; replace default vector with custom one
-	sei
-	lda #<handle_irq
-	sta IRQVec
-	lda #>handle_irq
-	sta IRQVec+1
-	cli
-
-	lda #$01				; set vera to only interrupt on vsync
-	sta veraien
-
-	; initialize IRQ trigger flags
-	stz vsync_trigger
-	stz line_trigger
-	stz spr_trigger
-
-	rts
-
-;==================================================
 ; initialize_vram
 ; 
 ; Initializes the memory behind VRAM
