@@ -19,6 +19,7 @@ initialize_memory:
 	jsr initialize_npc_path_memory
 	jsr initialize_movement_memory
 	jsr initialize_interaction_memory
+	jsr initialize_inventory_memory
 
 	rts
 

@@ -8,7 +8,7 @@ PLAYER_ASM = 1
 ; 1 - reading text
 ; 2 - reading dialog
 ; 3 - collision
-; 4 -
+; 4 - inventory mode
 ; 5 -
 ; 6 -
 ; 7 - paused
