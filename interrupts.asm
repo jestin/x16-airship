@@ -40,8 +40,6 @@ init_irq:
 	lda IRQVec+1
 	sta default_irq+1
 
-	jsr use_overworld_irq_handler
-
 	lda #$01				; set vera to only interrupt on vsync
 	sta veraien
 
@@ -75,17 +73,21 @@ use_overworld_irq_handler:
 ;==================================================
 overworld_irq_handler:
 
+	jsr check_vsync
+	beq @check_raster_line
+
 	; upkeep
 	lda map_scroll_layers
 	jsr apply_scroll_offsets
 
-	jsr check_vsync
-	bne @return
+	jsr playmusic
 
+	jmp (default_irq)			; end custom vsync handler
+
+@check_raster_line:
 	jsr check_raster_line
 	jsr check_sprite_collision
 
-@return:
 	jmp (default_irq)
 
 ;==================================================
@@ -102,7 +104,7 @@ title_irq_handler:
 	
 ;==================================================
 ; check_vsync
-; void check_vsync(out vsync_triggered: A)
+; void check_vsync(out vsync_triggered: Z)
 ;==================================================
 check_vsync:
 
@@ -143,7 +145,6 @@ check_raster_line:
 	plx
 	pla
 	rti
-	; end of line IRQ
 
 ;==================================================
 ; check_sprite_collision
@@ -161,7 +162,17 @@ check_sprite_collision:
 	; clear vera irq flag
 	sta veraisr
 
-	rts
+	; return from the IRQ manually because the default_irq shouldn't be called
+	; on sprite collision interrupts
+
+	; pull return from jsr off the stack
+	pla
+	pla
+
+	ply
+	plx
+	pla
+	rti
 
 ;==================================================
 ; vsync_tick

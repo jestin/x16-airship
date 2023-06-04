@@ -5,6 +5,8 @@ ANIMATION_ASM = 1
 
 anim_tiles_count:		.res 1
 
+anim_player_frame:		.res 1
+
 ; Store an array of indexes of the (base) animated tiles.  The max allowed is
 ; 32 animated tiles, since the that is the most we can hold in the animation
 ; tile restore bank (32 tiles x 256 bytes per tile = 8K)
@@ -20,6 +22,7 @@ anim_tiles:
 ;==================================================
 initialize_animation_memory:
 	stz anim_tiles_count
+	stz anim_player_frame
 
 	rts
 ;==================================================
@@ -28,16 +31,16 @@ initialize_animation_memory:
 animate_player:
 	; check if the dpad was pressed
 	lda joystick_data
-	bit#$8
+	bit #$8
 	beq @calculate_frame
-	bit#$4
+	bit #$4
 	beq @calculate_frame
-	bit#$2
+	bit #$2
 	beq @calculate_frame
 	bit #$1
 	beq @calculate_frame
 
-	lda #0
+	stz anim_player_frame
 	bra @set_sprite
 
 @calculate_frame:
@@ -47,7 +50,7 @@ animate_player:
 @set_sprite:
 	; Player
 	ldx #player_sprite
-	jsr set_sprite_frame
+	jsr set_player_sprite_frame
 
 @return:
 	rts
@@ -75,35 +78,28 @@ animation_calculate_player_frame:
 	bcs @first
 @first:
 	lda #0
-	bra @return
+	sta anim_player_frame
+	rts
 @second:
 	lda #1
-	bra @return
+	sta anim_player_frame
+	rts
 @third:
 	lda #0
-	bra @return
+	sta anim_player_frame
+	rts
 @fourth:
 	lda #2
-
-@return:
+	sta anim_player_frame
 	rts
 
 ;==================================================
-; set_sprite_frame
+; set_player_sprite_frame
 ; Sets the sprite to the current frame
 ;
-; sprite_direction -
-;					0 - forward facing
-;					3 - right facing
-;					6 - left facing
-;					9 - rear facing
-;
-; void set_sprite_frame(byte animation_frame: a
-; 						byte sprite_index: x)
+; void set_player_sprite_frame(byte sprite_index: x)
 ;==================================================
-set_sprite_frame:
-	pha			; push to preseve the frame
-
+set_player_sprite_frame:
 	; This first part calculates the additional offset to apply determined by
 	; which animation frame is needed
 
@@ -114,6 +110,7 @@ set_sprite_frame:
 	; of the address offset, so we store it in memory as such for further
 	; calculations
 	clc
+	lda anim_player_frame
 	adc playerdir
 	sta u15H
 	stz u15L
@@ -140,7 +137,6 @@ set_sprite_frame:
 	lda u15H
 	ora #%10000000				; make sure to keep this sprite set to 8bpp
 	sprstore 1
-	pla			; pull to restore the frame
 
 	rts
 

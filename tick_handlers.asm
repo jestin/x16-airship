@@ -37,7 +37,7 @@ character_overworld_tick:
 
 	; the game is paused
 	jsr pause_control
-	bra @music
+	bra @call_tick
 
 @animate:
 	; if the player can't move, we don't want NPCs moving either
@@ -65,8 +65,7 @@ character_overworld_tick:
 @control:
 	jsr character_overworld_control
 
-@music:
-	jsr playmusic
+@call_tick:
 
 	; Manually push the address of the jmp to the stack to simulate jsr
 	; instruction.
