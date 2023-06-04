@@ -8,6 +8,8 @@ PIXRYN_CAVE_ASM = 1
 ;==================================================
 load_pixryn_cave:
 
+	jsr use_default_irq_handler
+
 	; diable player sprite
 	ldx #player_sprite
 	lda #0
@@ -67,9 +69,6 @@ load_pixryn_cave:
 					; color depth (2-bits) - 3 (8bpp)
 	sta veral1config
 
-	LoadW tick_fn, pixryn_cave_tick_handler
-	LoadW interaction_fn, pixryn_cave_interaction_handler
-
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
@@ -109,6 +108,10 @@ load_pixryn_cave:
 	ldx #<hi_mem
 	ldy #>hi_mem
 	jsr startmusic
+
+	jsr use_overworld_irq_handler
+	LoadW tick_fn, pixryn_cave_tick_handler
+	LoadW interaction_fn, pixryn_cave_interaction_handler
 
 	rts
 

@@ -43,6 +43,8 @@ initialize_pixryn_memory:
 ;==================================================
 load_pixryn:
 
+	jsr use_default_irq_handler
+
 	; stop music
 	jsr stopmusic
 
@@ -186,10 +188,6 @@ load_pixryn:
 	sta veral0config
 	sta veral1config
 
-	jsr use_overworld_irq_handler
-	LoadW tick_fn, character_overworld_tick
-	LoadW interaction_fn, pixryn_overworld_interaction_handler
-
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
@@ -244,6 +242,10 @@ load_pixryn:
 	ldx #<hi_mem
 	ldy #>hi_mem
 	jsr startmusic
+	
+	jsr use_overworld_irq_handler
+	LoadW tick_fn, character_overworld_tick
+	LoadW interaction_fn, pixryn_overworld_interaction_handler
 
 	rts
 

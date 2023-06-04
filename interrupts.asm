@@ -51,6 +51,22 @@ init_irq:
 	rts
 
 ;==================================================
+; use_default_irq_handler
+;
+; Use the use_default_irq_handler as the IRQ handler
+;==================================================
+use_default_irq_handler:
+	sei
+	lda default_irq
+	sta IRQVec
+	lda default_irq+1
+	sta IRQVec+1
+	cli
+
+	rts
+
+
+;==================================================
 ; use_overworld_irq_handler
 ;
 ; Use the overworld_irq_handler as the IRQ handler
@@ -79,6 +95,12 @@ overworld_irq_handler:
 	; upkeep
 	lda map_scroll_layers
 	jsr apply_scroll_offsets
+
+	jsr update_npcs
+
+	jsr update_player_sprite
+	ldx #player_sprite
+	jsr set_player_sprite_frame
 
 	jsr playmusic
 

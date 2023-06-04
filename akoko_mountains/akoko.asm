@@ -33,6 +33,8 @@ initialize_akoko_memory:
 ;==================================================
 load_akoko:
 
+	jsr use_default_irq_handler
+
 	; stop music
 	jsr stopmusic
 
@@ -177,10 +179,6 @@ load_akoko:
 	sta veral0config
 	sta veral1config
 
-	jsr use_overworld_irq_handler
-	LoadW tick_fn, akoko_character_overworld_tick
-	LoadW interaction_fn, akoko_overworld_interaction_handler
-
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
@@ -310,6 +308,10 @@ load_akoko:
 	ldx #<hi_mem
 	ldy #>hi_mem
 	jsr startmusic
+
+	jsr use_overworld_irq_handler
+	LoadW tick_fn, akoko_character_overworld_tick
+	LoadW interaction_fn, akoko_overworld_interaction_handler
 
 	rts
 

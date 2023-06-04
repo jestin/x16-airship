@@ -8,6 +8,8 @@ PIXRYN_TAVERN_ASM = 1
 ;==================================================
 load_pixryn_tavern:
 
+	jsr use_default_irq_handler
+
 	; diable player sprite
 	ldx #player_sprite
 	lda #0
@@ -68,10 +70,6 @@ load_pixryn_tavern:
 	sta veral0config
 	sta veral1config
 
-	jsr use_overworld_irq_handler
-	LoadW tick_fn, character_overworld_tick
-	LoadW interaction_fn, pixryn_tavern_interaction_handler
-
 	; always restore and clear previous animated tiles
 	jsr clear_animated_tiles
 
@@ -111,6 +109,10 @@ load_pixryn_tavern:
 	ldx #player_sprite
 	lda #(%00001000 | player_sprite_collision_mask)
 	sprstore 6
+
+	jsr use_overworld_irq_handler
+	LoadW tick_fn, character_overworld_tick
+	LoadW interaction_fn, pixryn_tavern_interaction_handler
 
 	rts
 

@@ -49,8 +49,8 @@ animate_player:
 
 @set_sprite:
 	; Player
-	ldx #player_sprite
-	jsr set_player_sprite_frame
+	; ldx #player_sprite
+	; jsr set_player_sprite_frame
 
 @return:
 	rts
@@ -132,6 +132,7 @@ set_player_sprite_frame:
 
 	; u15 now contains the address of the correct frame of the correct sprite set
 
+	stz veractl
 	lda u15L
 	sprstore 0
 	lda u15H
