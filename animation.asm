@@ -41,16 +41,11 @@ animate_player:
 	beq @calculate_frame
 
 	stz anim_player_frame
-	bra @set_sprite
+	bra @return
 
 @calculate_frame:
 	; returns the correct animation frame in A
 	jsr animation_calculate_player_frame
-
-@set_sprite:
-	; Player
-	; ldx #player_sprite
-	; jsr set_player_sprite_frame
 
 @return:
 	rts

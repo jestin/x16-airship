@@ -46,7 +46,6 @@ character_overworld_tick:
 
 	jsr update_npc_groups
 	jsr update_npc_paths
-	; jsr update_npcs
 
 @map_animation:
 	jsr animate_map
