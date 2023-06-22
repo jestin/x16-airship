@@ -42,18 +42,10 @@ character_overworld_tick:
 	; if the player can't move, we don't want NPCs moving either
 	lda player_status
 	bit #player_status_unable_to_move
-	bne @map_animation
+	bne @control
 
 	jsr update_npc_groups
 	jsr update_npc_paths
-
-@map_animation:
-	jsr animate_map
-
-	; check if player can move
-	lda player_status
-	bit #player_status_unable_to_move
-	bne @control
 
 	jsr animate_player
 	jsr move

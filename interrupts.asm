@@ -98,6 +98,8 @@ overworld_irq_handler:
 
 	jsr update_npcs
 
+	jsr animate_map
+
 	jsr update_player_sprite
 	ldx #player_sprite
 	jsr set_player_sprite_frame
