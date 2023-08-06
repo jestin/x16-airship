@@ -207,10 +207,17 @@ vsync_tick:
 
 	; VSYNC has occurred, handle
 
+	; check if the player is reading a dialog
 	lda player_status
 	bit #player_status_reading_dialog
-	beq :+
+	bne @dialog_mode
+:
+	; check if the player is in inventory mode
+	lda player_status
+	bit #player_status_inventory_mode
+	beq :+	; fall through if in inventory mode
 
+@dialog_mode:
 	; in dialog mode so set up line interrupt
 	lda #<(dialog_top)
 	sta verairqlo
@@ -220,13 +227,6 @@ vsync_tick:
 	sta veraien
 	lda #1
 	sta start_dialog
-:
-	lda player_status
-	bit #player_status_inventory_mode
-	beq :+
-
-	; in inventory mode
-
 :
 	inc tickcount
 
