@@ -30,12 +30,22 @@ character_overworld_tick:
 	; upkeep
 	jsr update_joystick_data
 
+@check_pause:
 	lda player_status
 	bit #player_status_paused
-	beq @animate
+	beq @check_inventory
 
 	; the game is paused
 	jsr pause_control
+	bra @call_tick
+
+@check_inventory:
+	lda player_status
+	bit #player_status_inventory_mode
+	beq @animate
+
+	; the game is in invetory mode
+	jsr inventory_control
 	bra @call_tick
 
 @animate:

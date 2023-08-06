@@ -62,6 +62,17 @@ character_overworld_control:
 	LoadW u2, 110
 	LoadW u3, message_sprites
 	jsr draw_string			; draw message text
+:
+	; check for inventory
+	lda joystick_data
+	eor #$ff
+	and joystick_changed_data
+	cmp #joystick_0_SEL				; checks if the select button is currently down, and wasn't before
+	bne :+
+
+	lda player_status
+	ora #player_status_inventory_mode
+	sta player_status
 
 :
 @return:
@@ -184,6 +195,29 @@ pause_control:
 
 	lda player_status
 	and #!player_status_paused
+	sta player_status
+
+@return:
+	rts
+
+;==================================================
+; inventory_control
+;
+; Hanles the player's UI choices while in inventory
+; mode.
+;
+; void inventory_control()
+;==================================================
+inventory_control:
+	; check if the button was pushed
+	lda joystick_data
+	eor #$ff						; NOT the accumulator
+	and joystick_changed_data
+	cmp #joystick_0_SEL				; checks if the select button is currently down, and wasn't before
+	bne @return
+
+	lda player_status
+	and #!player_status_inventory_mode
 	sta player_status
 
 @return:
