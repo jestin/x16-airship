@@ -9,6 +9,11 @@ MOVEMENT_ASM = 1
 xoff:			.res 2
 yoff:			.res 2
 
+; these values are always 64 less than xoff and yoff, to help know where it's
+; safe to ignore rendering sprites
+xoff_render:	.res 2
+yoff_render:	.res 2
+
 xplayer:		.res 2
 yplayer:		.res 2
 
@@ -36,8 +41,12 @@ player_tile:	.res 2
 initialize_movement_memory:
 	stz xoff
 	stz xoff+1
+	stz xoff_render
+	stz xoff_render+1
 	stz yoff
 	stz yoff+1
+	stz yoff_render
+	stz yoff_render+1
 	stz prev_xoff
 	stz prev_xoff+1
 	stz prev_yoff
@@ -333,14 +342,14 @@ set_scroll_offset:
 	lda yplayer+1
 	adc #0							; no high byte, so add 0 to account for carry
 	sta yplayer+1
-	bra @return						; if we H scrolled, we can skip to V scroll
+	bra @calculate_render_offsets	; if we H scrolled, we can skip to V scroll
 
 @check_bottom_edge:
 	; check if yplayer is higher than 176 (240-64)
 	sec
 	lda yplayer
 	sbc #$b0
-	bcc @return						; we are lower than 176 if we needed to barrow
+	bcc @calculate_render_offsets	; we are lower than 176 if we needed to barrow
 	sta u1L
 
 	; check if the scroll is already at the max
@@ -357,7 +366,7 @@ set_scroll_offset:
 	bne @scroll_down				; if not equal, don't bother checking low byte
 	lda u0L
 	cmp yoff						; if low byte of max is less than yoff low byte
-	bcc @return						; don't scroll
+	bcc @calculate_render_offsets	; don't scroll
 
 @scroll_down:
 	; add the result of the subtraction to yoff, as it's how much we need to scroll
@@ -371,6 +380,24 @@ set_scroll_offset:
 
 	lda #$b0
 	sta yplayer						; to subtract back down to 256, just zero out the low byte
+	
+@calculate_render_offsets:
+	; calculate xoff_render and yoff_render
+	sec
+	lda xoff
+	sbc #64
+	sta xoff_render
+	lda xoff+1
+	sbc #0
+	sta xoff_render+1
+
+	sec
+	lda yoff
+	sbc #64
+	sta yoff_render
+	lda yoff+1
+	sbc #0
+	sta yoff_render+1
 
 @return:
 	rts
