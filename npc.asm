@@ -684,8 +684,6 @@ update_npc:
 	; push X to stack
 	phx
 
-	jsr update_npc_position
-
 	; if not all npcs have their frames loaded, always load the frame
 	lda npc_frames_loaded
 	cmp num_npcs
@@ -722,6 +720,10 @@ update_npc:
 	lda (u0),y
 	sprstore 6
 
+@update_position:
+
+	jsr update_npc_position
+
 @return:
 	; restore X
 	plx
@@ -733,9 +735,7 @@ update_npc:
 ;
 ; Updates the position of an NPC
 ;
-; void update_npc_position(word npc_addr: u0,
-;							word xpos: u1,
-;							word ypos: u2)
+; void update_npc_position(word npc_addr: u0)
 ;==================================================
 update_npc_position:
 
@@ -752,12 +752,13 @@ update_npc_position:
 	lda (u0),y
 	sta u1H
 
+	; calculate position against render offsets, and don't render if it outside
 	sec
 	lda u1L
-	sbc xoff
+	sbc xoff_render
 	sta u1L
 	lda u1H
-	sbc xoff+1
+	sbc xoff_render+1
 	sta u1H
 
 	; check high byte first to see if we are off the map
@@ -768,31 +769,34 @@ update_npc_position:
 
 :
 
+	; subract 64 to compensate for calculating off the render offset
+	sec
+	lda u1L
+	sbc #64
+	sta u1L
+	lda u1H
+	sbc #0
+	sta u1H
+	sprstore 3
 	lda u1L
 	sprstore 2
-	lda u1H
-	sprstore 3
 
 	; set Y
 	ldy #Npc::mapy
 	lda (u0),y
-	sta u2L
+	sta u1L
 	ldy #Npc::mapy+1
 	lda (u0),y
-	sta u2H
+	sta u1H
 
+	; calculate position against render offsets, and don't render if it outside
 	sec
-	lda u2L
-	sbc yoff
-	sta u2L
-	lda u2H
-	sbc yoff+1
-	sta u2H
-
-	lda u2L
-	sprstore 4
-	lda u2H
-	sprstore 5
+	lda u1L
+	sbc yoff_render
+	sta u1L
+	lda u1H
+	sbc yoff_render+1
+	sta u1H
 
 	; check high byte first to see if we are off the map
 	cmp #$2 ; screens can't be big enough for this to be valid
@@ -801,6 +805,18 @@ update_npc_position:
 	sprstore 6
 
 :
+	; subract 64 to compensate for calculating off the render offset
+	sec
+	lda u1L
+	sbc #64
+	sta u1L
+	lda u1H
+	sbc #0
+	sta u1H
+	sprstore 5
+	lda u1L
+	sprstore 4
+
 @return:
 	rts
 
