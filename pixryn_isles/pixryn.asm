@@ -301,7 +301,7 @@ dagnol_ship_npc:
 	sta u5L
 	jsr set_npc_group_map_location_flip
 
-	stx wandering_ship_npc_group
+	stx dagnol_ship_npc_group
 
 	; ship
 	lda #102
@@ -315,7 +315,7 @@ dagnol_ship_npc:
 	stz u2L
 	lda #26
 	sta u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; balloon (top left)
@@ -329,7 +329,7 @@ dagnol_ship_npc:
 	; add the balloon to the NPC group (x should be the NPC index)
 	stz u2L
 	stz u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (top right)
@@ -343,7 +343,7 @@ dagnol_ship_npc:
 	lda #32
 	sta u2L
 	stz u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (bottom left)
@@ -357,7 +357,7 @@ dagnol_ship_npc:
 	stz u2L
 	lda #16
 	sta u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; clone balloon (bottom right)
@@ -372,7 +372,7 @@ dagnol_ship_npc:
 	sta u2L
 	lda #16
 	sta u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; propeller
@@ -391,11 +391,11 @@ dagnol_ship_npc:
 	sta u2L
 	lda #34
 	sta u2H
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_to_group
 
 	; create path for ship
-	lda wandering_ship_npc_group
+	lda dagnol_ship_npc_group
 	jsr add_npc_path
 	phx					; push path index
 	ldx #%00010001
