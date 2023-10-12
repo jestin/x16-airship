@@ -829,15 +829,23 @@ update_npc_position:
 ;==================================================
 update_npc_frame:
 
-	; first, check if this is a clone and return if so.  Clones share frames
+	; First, check if the player is reading a dialog.  If frames are loaded
+	; from hi ram while the dialog is up, it causes the dialog to flicker.
+	lda player_status
+	bit #player_status_reading_dialog
+	beq :+
+	rts
+:
+
+	; next, check if this is a clone and return if so.  Clones share frames
 	; with the original, so we won't do anything here
 	ldy #Npc::frame
 	lda (u0),y
 	cmp #$ff
-	bne @not_a_clone
+	bne :+
 	rts
 
-@not_a_clone:
+:
 
 	; set x to the sprite index
 	ldy #Npc::sprite
