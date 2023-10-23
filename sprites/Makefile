@@ -10,6 +10,7 @@ RESOURCES = AURORA.BIN \
 			ELLIOT.BIN \
 			OLLIE.BIN \
 			WILL.BIN \
+			ZELDA.BIN \
 			COUSIN.BIN \
 			SHIP.BIN \
 			SHIPWATER.BIN \
@@ -40,6 +41,9 @@ OLLIE.BIN: Ollie_Sprites.xcf
 
 WILL.BIN: Will_Sprites.xcf
 	gimp -i -d -f -b '(export-vera "Will_Sprites.xcf" "WILL.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
+
+ZELDA.BIN: Zelda_Sprites.xcf
+	gimp -i -d -f -b '(export-vera "Zelda_Sprites.xcf" "ZELDA.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 COUSIN.BIN: cousin.xcf
 	gimp -i -d -f -b '(export-vera "cousin.xcf" "COUSIN.BIN" 0 8 16 16 0 1 0)' -b '(gimp-quit 0)'

@@ -37,6 +37,9 @@ end_olliefile:
 willfile: .literal "WILL.BIN"
 end_willfile:
 
+zeldafile: .literal "ZELDA.BIN"
+end_zeldafile:
+
 collisionfile: .literal "CLSN.BIN"
 end_collisionfile:
 
