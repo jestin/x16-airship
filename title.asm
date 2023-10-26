@@ -20,7 +20,7 @@ load_title:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda #(end_titlefile-titlefile)
 	ldx #<titlefile
@@ -33,7 +33,7 @@ load_title:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda #(end_titlepalfile-titlepalfile)
 	ldx #<titlepalfile

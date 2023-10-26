@@ -73,7 +73,7 @@ main:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda #(end_charsetfile-charsetfile)
 	ldx #<charsetfile
@@ -138,7 +138,7 @@ main:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda #(end_collisionfile-collisionfile)
 	ldx #<collisionfile

@@ -53,13 +53,13 @@ resources: subresources bin $(RESOURCES)
 	cp AUTOBOOT.X16 bin 2> /dev/null
 
 CHARSET.BIN: Charset.xcf
-	gimp -i -d -f -b '(export-vera "Charset.xcf" "CHARSET.BIN" 0 4 8 8 0 0 0)' -b '(gimp-quit 0)'
+	gimp -i -d -f -b '(export-vera "Charset.xcf" "CHARSET.BIN" 0 0 4 8 8 0 0 0)' -b '(gimp-quit 0)'
 
 CLSN.BIN: airship_collision_tiles.xcf
-	gimp -i -d -f -b '(export-vera "airship_collision_tiles.xcf" "CLSN.BIN" 0 1 16 16 0 1 0)' -b '(gimp-quit 0)'
+	gimp -i -d -f -b '(export-vera "airship_collision_tiles.xcf" "CLSN.BIN" 0 0 1 16 16 0 1 0)' -b '(gimp-quit 0)'
 
 TITLE.BIN: title_screen.xcf
-	gimp -i -d -f -b '(make-vera-bitmap "title_screen.xcf" "TITLE.BIN" 1920 1080 4 1 1)' -b '(gimp-quit 0)'
+	gimp -i -d -f -b '(make-vera-bitmap "title_screen.xcf" "TITLE.BIN" 0 1920 1080 4 1 1)' -b '(gimp-quit 0)'
 
 TIPAL.BIN: TITLE.BIN
 	cp TITLE.BIN.PAL TIPAL.BIN
