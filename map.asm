@@ -68,7 +68,7 @@ load_l0_map:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
@@ -97,7 +97,7 @@ load_l1_map:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
@@ -131,7 +131,7 @@ load_collision_map:
 	; read collision tile map into memory
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
@@ -165,7 +165,7 @@ load_interaction_map:
 	; read interaction tile map into memory
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
