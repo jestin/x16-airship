@@ -39,7 +39,7 @@ load_tiles:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
@@ -228,7 +228,7 @@ load_palette:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L
@@ -255,7 +255,7 @@ load_player_sprites:
 
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u0L

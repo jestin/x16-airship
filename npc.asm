@@ -376,7 +376,7 @@ set_npc_tiles:
 	; load the frames into high RAM
 	lda #1
 	ldx #8
-	ldy #0
+	ldy #2
 	jsr SETLFS
 	lda u1
 	ldx u3L
@@ -833,6 +833,14 @@ update_npc_frame:
 	; from hi ram while the dialog is up, it causes the dialog to flicker.
 	lda player_status
 	bit #player_status_reading_dialog
+	beq :+
+	rts
+:
+
+	; Next, check if the player is viewing the inventory.  If frames are loaded
+	; from hi ram while the dialog is up, it causes the dialog to flicker.
+	lda player_status
+	bit #player_status_inventory_mode
 	beq :+
 	rts
 :
