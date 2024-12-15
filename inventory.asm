@@ -22,4 +22,27 @@ initialize_inventory_memory:
 	stz player_items
 
 	rts
+;==================================================
+; inventory_dialog
+;
+; Shows a message in the center of the screen as a
+; dialog box
+;
+; void inventory_dialog ()
+;==================================================
+inventory_dialog:
+	
+	rts
+
+;==================================================
+; clear_inventory_dialog
+;
+; Clears the dialog message tile map
+;
+; void clear_inventory_dialog()
+;==================================================
+clear_inventory_dialog:
+
+	rts
+
 .endif ; INVENTORY_ASM

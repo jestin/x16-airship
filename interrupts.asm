@@ -211,7 +211,7 @@ vsync_tick:
 	lda player_status
 	bit #player_status_reading_dialog
 	bne @dialog_mode
-:
+
 	; check if the player is in inventory mode
 	lda player_status
 	bit #player_status_inventory_mode

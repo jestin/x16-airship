@@ -74,6 +74,7 @@ character_overworld_control:
 	ora #player_status_inventory_mode
 	sta player_status
 
+	jsr inventory_dialog
 :
 @return:
 	rts
