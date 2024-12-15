@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/pixryn_isles/PITILES.BIN" tilewidth="16" tileheight="16" tilecount="256" columns="16">
- <image source="PITILES.BIN.bmp" trans="000000" width="256" height="256"/>
+<tileset version="1.8" tiledversion="1.8.2" name="/home/jestin/Projects/x16-airship/pixryn_isles/PITILES.BIN" tilewidth="16" tileheight="16" tilecount="224" columns="16">
+ <image source="PITILES.BIN.bmp" trans="000000" width="256" height="224"/>
  <tile id="1">
   <animation>
    <frame tileid="1" duration="133"/>
@@ -25,20 +25,20 @@
    <frame tileid="77" duration="133"/>
   </animation>
  </tile>
- <tile id="197">
+ <tile id="180">
   <animation>
+   <frame tileid="180" duration="100"/>
+   <frame tileid="181" duration="100"/>
+   <frame tileid="182" duration="100"/>
+   <frame tileid="183" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="196">
+  <animation>
+   <frame tileid="196" duration="100"/>
    <frame tileid="197" duration="100"/>
    <frame tileid="198" duration="100"/>
    <frame tileid="199" duration="100"/>
-   <frame tileid="200" duration="100"/>
-  </animation>
- </tile>
- <tile id="213">
-  <animation>
-   <frame tileid="213" duration="100"/>
-   <frame tileid="214" duration="100"/>
-   <frame tileid="215" duration="100"/>
-   <frame tileid="216" duration="100"/>
   </animation>
  </tile>
  <wangsets>
