@@ -3,7 +3,6 @@
  <tileset firstgid="1" source="PITILES.BIN.tsx"/>
  <tileset firstgid="257" source="../CLSN.BIN.tsx"/>
  <tileset firstgid="321" source="../INTERIOR.BIN.tsx"/>
- <tileset firstgid="577" source="Converted_Pixryn_Tiles.BIN.tsx"/>
  <layer id="1" name="regions" width="32" height="32">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
