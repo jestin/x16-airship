@@ -2,7 +2,7 @@
 	"manifest_version": "1.0.0",
 	"name": "Take to the Skies!",
 	"author": "Jestin Stoffel",
-	"app_version": "0.0.6",
+	"app_version": "0.1.0",
 	"license": "TBD",
 	"start_prg": "AIRSHIP.PRG",
 	"resources": [
