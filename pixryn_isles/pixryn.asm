@@ -198,10 +198,10 @@ load_pixryn:
 	lda #74
 	sta u0L
 	jsr add_animated_tile
-	lda #197
+	lda #180
 	sta u0L
 	jsr add_animated_tile
-	lda #213
+	lda #196
 	sta u0L
 	jsr add_animated_tile
 
