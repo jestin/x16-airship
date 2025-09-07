@@ -45,8 +45,9 @@ submessages:
 
 resources: subresources bin $(RESOURCES)
 	-for i in $(SUBDIRS); do \
-		echo "copying resources from $$i..."; \
-		cp $$i/*.BIN bin/ 2> /dev/null || :; done
+		echo -n "copying resources from $$i..."; \
+		cp $$i/*.BIN bin/ 2> /dev/null || :; \
+		echo "done"; done
 	cp *.BIN bin 2> /dev/null
 	cp sprites/*.BIN bin 2> /dev/null
 	cp music/*.ZSM bin 2> /dev/null
